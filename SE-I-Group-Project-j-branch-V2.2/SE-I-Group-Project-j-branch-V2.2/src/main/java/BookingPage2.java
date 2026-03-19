@@ -1,5 +1,11 @@
 import javax.swing.*;
 import javax.swing.table.*; // Includes DefaulTableModel
+
+import net.coderazzi.filters.OrFilter;
+import net.coderazzi.filters.gui.AutoChoices;
+import net.coderazzi.filters.gui.LooseParserModel;
+import net.coderazzi.filters.gui.TableFilterHeader;
+
 import java.awt.*; // Includes BorderLayout.*,
 import java.io.*; // Includes File
 import java.awt.event.ActionEvent;
@@ -50,7 +56,7 @@ public class BookingPage2 extends JFrame {
             			Integer.parseInt(spl[2]),
             			Double.parseDouble(spl[3]),
             			spl[4],
-            			spl[5],
+            			spl[5].replaceAll("\"", ""),
             			spl[spl.length - 2],
             			spl[spl.length - 1]
             			
@@ -100,6 +106,9 @@ public class BookingPage2 extends JFrame {
 		sorter = new TableRowSorter<DefaultTableModel>(model);
 		table = new JTable(model);
 		table.setRowSorter(sorter);
+		TableFilterHeader filterHeader = new TableFilterHeader(table, new LooseParserModel(), AutoChoices.ENABLED);
+		filterHeader.getParserModel().setIgnoreCase(true);
+//		filterHeader.addFilter(new OrFilter());
 		table.setPreferredScrollableViewportSize(new Dimension(750, 300));
 		table.setFillsViewportHeight(true);
 		scrollPane = new JScrollPane(table);
