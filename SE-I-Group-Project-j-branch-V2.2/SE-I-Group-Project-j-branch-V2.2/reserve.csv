@@ -1,11 +1,11 @@
 Unique Number	Beds	Max Occupancy	Base Daily Rate	Smoking Status	Bed Sizes	Quality Level	Room Size
-1	3	3	10	Non-Smoking	"Twin, King"	Executive	Single
-100	2	2	20.99	Non-Smoking	"Queen, King"	Economy	Deluxe
-50	7	5	13.99	Smoking	"Twin, Full"	Business	Family
-300	1	1	5000.99	Non-Smoking	Full	Comfort	Deluxe
-320	5	3	3099.99	Non-Smoking	"King, Full"	Economy	Standard
-17	4	2	14.5	Smoking	"Full, Queen"	Comfort	Double
-14	2	2	12.3	Smoking	"Queen, Full"	Business	Family
-146	4	2	24.33	Non-Smoking	King	Executive	Suite
-139	9	5	23.99	Non-Smoking	Twin	Executive	Deluxe
-19	5	4	5.5	Non-Smoking	Queen	Comfort	Double
+1	3	3	10	Prohibited	"Twin, King"	Executive	Single
+100	2	2	20.99	Permitted	"Queen, King"	Economy	Deluxe
+50	7	5	13.99	Permitted	"Twin, Full"	Business	Family
+300	1	1	5000.99	Prohibited	Full	Comfort	Deluxe
+320	5	3	3099.99	Prohibited	"King, Full"	Economy	Standard
+17	4	2	14.5	Permitted	"Full, Queen"	Comfort	Double
+14	2	2	12.3	Permitted	"Queen, Full"	Business	Family
+146	4	2	24.33	Prohibited	King	Executive	Suite
+139	9	5	23.99	Prohibited	Twin	Executive	Deluxe
+19	5	4	5.5	Prohibited	Queen	Comfort	Double
