@@ -53,7 +53,7 @@ public class HomePage extends JFrame {
         bookingButton.setBounds(10, 63, 122, 22);
         bookingButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                BookingPage newFrame = new BookingPage(); //Opening the second JFrame
+                BookingPage2 newFrame = new BookingPage2(); //Opening the second JFrame
                 dispose(); //Disposing the First JFrame
             }
         });
