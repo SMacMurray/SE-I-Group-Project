@@ -8,6 +8,11 @@ public class AccountController {
         if (!accountFound){
             return FauxAccountSystem.createAccount(username, hash);
         }
-        return 403;
+        return 1;
+    }
+
+    static int login(String username, String password){
+        int hash = password.hashCode();
+        return FauxAccountSystem.authenticate(username, hash);
     }
 }

@@ -13,12 +13,12 @@ public class LoginPage extends JFrame {
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
     private JLabel invalidLabel;
-    private JPasswordField passwordField;
-    private JPasswordField passwordField_1;
 
     static final String USERNAME_EMPTY = "Warning: username field is empty.";
     static final String PASSWORD_EMPTY = "Warning: password field is empty.";
-    static final String ACCOUNT_CREATE_SUCCESS = "Account created successfully! You are no logged in.";
+    static final String LOGIN_SUCCESS = "Successfully logged in! Redirecting you to homepage.";
+    static final String LOGIN_FAILURE = "The username and/or password you have entered are incorrect.";
+    static final String ACCOUNT_CREATE_SUCCESS = "Account created successfully! You are now logged in.";
     static final String ACCOUNT_ALREADY_EXISTS = "Account already exists! Please Sign In instead.";
     static final String FUBAR = "Whoops! Something went catastrophically wrong.";
     static final String RESPONSE_MISSING = "Missing Text";
@@ -37,7 +37,7 @@ public class LoginPage extends JFrame {
 
         JLabel lblNewLabel = new JLabel("Login features go here");
         lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        lblNewLabel.setBounds(110, 11, 416, 22);
+        lblNewLabel.setBounds((Main.WINDOW_W-400)/2, 11, 400, 22);
         contentPane.add(lblNewLabel);
         
         JButton homeButton = new JButton(Main.HOME_TEXT);
@@ -52,35 +52,45 @@ public class LoginPage extends JFrame {
 
         JLabel usernameLabel = new JLabel("Username");
         usernameLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        usernameLabel.setBounds(260, 79, 109, 14);
+        usernameLabel.setBounds((Main.WINDOW_W-110)/2, 79, 110, 14);
         contentPane.add(usernameLabel);
 
         JTextField usernameField = new JTextField();
-        usernameField.setBounds(235, 104, 168, 20);
+        usernameField.setBounds((Main.WINDOW_W-170)/2, 104, 170, 20);
         contentPane.add(usernameField);
 
         JLabel passwordLabel = new JLabel("Password");
         passwordLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        passwordLabel.setBounds(260, 135, 109, 14);
+        passwordLabel.setBounds((Main.WINDOW_W-110)/2, 135, 110, 14);
         contentPane.add(passwordLabel);
 
         JPasswordField passwordField = new JPasswordField();
-        passwordField.setBounds(235, 160, 168, 20);
+        passwordField.setBounds((Main.WINDOW_W-170)/2, 160, 170, 20);
         contentPane.add(passwordField);
+
+        JToggleButton btnShowPassword = new JToggleButton();
+        btnShowPassword.setBounds((Main.WINDOW_W-170)/2+passwordField.getWidth(), 160, 20, 20);
+        btnShowPassword.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (btnShowPassword.isSelected()) passwordField.setEchoChar((char)0);
+                else passwordField.setEchoChar('•');
+            }
+        });
+        contentPane.add(btnShowPassword);
 
         JPanel panel = new JPanel();
         panel.setBackground(new Color(160, 160, 160));
-        panel.setBounds(143, 251, 361, 101);
+        panel.setBounds(143, 251, 360, 101);
         contentPane.add(panel);
         panel.setLayout(null);
 
         JLabel lblNewLabel_3 = new JLabel("Not a member?");
         lblNewLabel_3.setHorizontalAlignment(SwingConstants.CENTER);
-        lblNewLabel_3.setBounds(68, 11, 241, 14);
+        lblNewLabel_3.setBounds((panel.getWidth()-240)/2, 11, 240, 14);
         panel.add(lblNewLabel_3);
 
         JButton btnCreateAccount = new JButton("Join Now");
-        btnCreateAccount.setBounds(134, 67, 89, 23);
+        btnCreateAccount.setBounds((panel.getWidth()-90)/2, 67, 90, 23);
         btnCreateAccount.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String username = usernameField.getText().trim();
@@ -92,56 +102,58 @@ public class LoginPage extends JFrame {
                 else if (password.isEmpty()) dialogMessage = PASSWORD_EMPTY;
                 else {
                     int res = AccountController.createAccount(username, password);
-                    switch (res){
-                        case 0:
-                            dialogMessage = ACCOUNT_CREATE_SUCCESS;
-                            usernameField.setText("");
-                            break;
-                        case 403:
-                            dialogMessage = ACCOUNT_ALREADY_EXISTS;
-                            break;
-                        case 753:
-                            dialogMessage = FUBAR;
-                            break;
-                        default:
-                            dialogMessage = RESPONSE_MISSING;
+                    dialogMessage = switch (res) {
+                        case 0 -> ACCOUNT_CREATE_SUCCESS;
+                        case 1 -> ACCOUNT_ALREADY_EXISTS;
+                        case -1 -> FUBAR;
+                        default -> RESPONSE_MISSING;
+                    };
+
+                    // Create Account Success
+                    if (res == 0){
+                        HomePage newFrame = new HomePage();
+                        dispose();
                     }
                 }
 
-                JOptionPane.showMessageDialog(btnCreateAccount, dialogMessage);
+                JOptionPane.showMessageDialog(usernameLabel, dialogMessage);
             }
         });
         panel.add(btnCreateAccount);
 
-        JButton btnNewButton_1 = new JButton("Sign In");
-        btnNewButton_1.addActionListener(new ActionListener() {
+        JButton btnSignIn = new JButton("Sign In");
+        btnSignIn.setBounds((Main.WINDOW_W-90)/2, 190, 90, 22);
+        btnSignIn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	System.out.println("Clicked Sign in.");
-            	
-            	try {
-            		boolean found = AccountSystem.searchDatabase(usernameField.getText(), // Holds the exception
-								String.valueOf(passwordField.getPassword()) );
-            		if (found) {
-            			invalidInfo("Found");
-            		}
-            		else {
-            			invalidInfo("Not Found");
-            		}
-            	}
-            	catch (SQLException exp) {
-            		exp.printStackTrace();
-            	}
+                String username = usernameField.getText().trim();
+                String password = String.valueOf(passwordField.getPassword());
+                String dialogMessage;
+                passwordField.setText("");
 
-            		// Search function from a different class because this class has different logic than what will be used there.
-            		// Will return a bool indicating if the User exists
+                if (username.isEmpty()) dialogMessage = USERNAME_EMPTY;
+                else if (password.isEmpty()) dialogMessage = PASSWORD_EMPTY;
+                else {
+                    int res = AccountController.login(username, password);
+                    dialogMessage = switch (res) {
+                        case 0 -> LOGIN_SUCCESS;
+                        case 1 -> LOGIN_FAILURE;
+                        default -> RESPONSE_MISSING;
+                    };
+
+                    // Login Success
+                    if (res == 0){
+                        HomePage newFrame = new HomePage();
+                        dispose();
+                    }
+                }
+                JOptionPane.showMessageDialog(usernameLabel, dialogMessage);
             }
         });
-        btnNewButton_1.setBounds(275, 191, 88, 22);
-        contentPane.add(btnNewButton_1);
+        contentPane.add(btnSignIn);
 
-        JButton btnNewButton_2 = new JButton("Forgot password?");
-        btnNewButton_2.setBounds(222, 224, 168, 22);
-        contentPane.add(btnNewButton_2);
+        JButton btnResetPassword = new JButton("Forgot password?");
+        btnResetPassword.setBounds((Main.WINDOW_W-170)/2, 224, 170, 22);
+        contentPane.add(btnResetPassword);
 
 
         setVisible(true);

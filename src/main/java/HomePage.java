@@ -27,6 +27,12 @@ public class HomePage extends JFrame {
         setContentPane(contentPane);
         contentPane.setLayout(null);
 
+        JLabel signedInLabel = new JLabel();
+        signedInLabel.setText((Main.SessionAccount == null) ? "Logged Out" : "Signed in as " + Main.SessionAccount.getName());
+        signedInLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        signedInLabel.setBounds(300, 0, 416, 22);
+        contentPane.add(signedInLabel);
+
         JLabel welcomeLabel = new JLabel("Welcome to my hotel storefront.");
         welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
         welcomeLabel.setBounds(110, 11, 416, 22);
