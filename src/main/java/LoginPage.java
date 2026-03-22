@@ -16,6 +16,13 @@ public class LoginPage extends JFrame {
     private JPasswordField passwordField;
     private JPasswordField passwordField_1;
 
+    static final String USERNAME_EMPTY = "Warning: username field is empty.";
+    static final String PASSWORD_EMPTY = "Warning: password field is empty.";
+    static final String ACCOUNT_CREATE_SUCCESS = "Account created successfully! You are no logged in.";
+    static final String ACCOUNT_ALREADY_EXISTS = "Account already exists! Please Sign In instead.";
+    static final String FUBAR = "Whoops! Something went catastrophically wrong.";
+    static final String RESPONSE_MISSING = "Missing Text";
+
     /**
      * Create the frame.
      */
@@ -72,13 +79,39 @@ public class LoginPage extends JFrame {
         lblNewLabel_3.setBounds(68, 11, 241, 14);
         panel.add(lblNewLabel_3);
 
-        JButton btnNewButton = new JButton("Join Now");
-        btnNewButton.addActionListener(new ActionListener() {
+        JButton btnCreateAccount = new JButton("Join Now");
+        btnCreateAccount.setBounds(134, 67, 89, 23);
+        btnCreateAccount.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                String username = usernameField.getText().trim();
+                String password = String.valueOf(passwordField.getPassword());
+                String dialogMessage;
+                passwordField.setText("");
+
+                if (username.isEmpty()) dialogMessage = USERNAME_EMPTY;
+                else if (password.isEmpty()) dialogMessage = PASSWORD_EMPTY;
+                else {
+                    int res = AccountController.createAccount(username, password);
+                    switch (res){
+                        case 0:
+                            dialogMessage = ACCOUNT_CREATE_SUCCESS;
+                            usernameField.setText("");
+                            break;
+                        case 403:
+                            dialogMessage = ACCOUNT_ALREADY_EXISTS;
+                            break;
+                        case 753:
+                            dialogMessage = FUBAR;
+                            break;
+                        default:
+                            dialogMessage = RESPONSE_MISSING;
+                    }
+                }
+
+                JOptionPane.showMessageDialog(btnCreateAccount, dialogMessage);
             }
         });
-        btnNewButton.setBounds(134, 67, 89, 23);
-        panel.add(btnNewButton);
+        panel.add(btnCreateAccount);
 
         JButton btnNewButton_1 = new JButton("Sign In");
         btnNewButton_1.addActionListener(new ActionListener() {
@@ -87,7 +120,7 @@ public class LoginPage extends JFrame {
             	
             	try {
             		boolean found = AccountSystem.searchDatabase(usernameField.getText(), // Holds the exception
-								String.valueOf(passwordField.getPassword()) ); 
+								String.valueOf(passwordField.getPassword()) );
             		if (found) {
             			invalidInfo("Found");
             		}
@@ -98,7 +131,7 @@ public class LoginPage extends JFrame {
             	catch (SQLException exp) {
             		exp.printStackTrace();
             	}
-            	
+
             		// Search function from a different class because this class has different logic than what will be used there.
             		// Will return a bool indicating if the User exists
             }

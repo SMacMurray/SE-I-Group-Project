@@ -19,6 +19,9 @@ public class Main extends JFrame {
     static String APP_TITLE = "Stop & Shop: the illustrious hotel/luxury shopping experience, for all your stop & shopping needs!";
     static String HOME_TEXT = "Store Logo Here";
 
+    // Use this to indicate what user is currently logged in, or null for logged out.
+    static User SessionAccount = null;
+
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {

@@ -11,21 +11,18 @@ public class DatabaseConnection {
 
 
 
-        public static Connection connect() {
-                Connection conn = null;
-                try {
-                    // Register the driver (optional for modern JDBC 4.0+)
-                    //Class.forName("com.mysql.cj.jdbc.Driver");
+    public static Connection connect() {
+        Connection conn = null;
+        try {
+            // Register the driver (optional for modern JDBC 4.0+)
+            //Class.forName("com.mysql.cj.jdbc.Driver");
 
-                    conn = DriverManager.getConnection(DB_URL, USER, PASS);
-                    System.out.println("Connected to the database!");
-                } catch (SQLException e) {
-                    System.out.println("Connection failed!");
-                    e.printStackTrace();
-                }
-                return conn;
-
-
-
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            System.out.println("Connected to the database!");
+        } catch (SQLException e) {
+            System.out.println("Connection failed!");
+            e.printStackTrace();
+        }
+        return conn;
     }
 }
