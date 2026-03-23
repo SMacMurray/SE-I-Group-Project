@@ -81,6 +81,7 @@ public class BookingPage2 extends JFrame {
 	public BookingPage2(List<Room> rooms) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize( Main.WINDOW_W + 600, Main.WINDOW_H + 50);
+		setLocationRelativeTo(null); // Centers the JFrame on the screen
 		
 		mainPane = new JPanel();
 		setContentPane(mainPane);
