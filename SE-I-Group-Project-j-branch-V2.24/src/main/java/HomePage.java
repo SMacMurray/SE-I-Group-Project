@@ -21,6 +21,7 @@ public class HomePage extends JFrame {
     public HomePage() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, Main.WINDOW_W, Main.WINDOW_H);
+        setLocationRelativeTo(null); // Centers the JFrame on the screen
         setTitle(Main.APP_TITLE);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
