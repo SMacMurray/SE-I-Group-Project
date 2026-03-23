@@ -20,6 +20,7 @@ public class SearchRoomPage extends JFrame{
     SearchRoomPage() {
     	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize( Main.WINDOW_W + 500, Main.WINDOW_H + 50);
+		setLocationRelativeTo(null); // Centers the JFrame on the screen
 		
 		mainPane = new JPanel();
 		mainPane.setLayout(new BorderLayout());
