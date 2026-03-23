@@ -51,7 +51,7 @@ public class LoadCSV {
             for (String s : spl) {
             	bedTypes.add(Room.BedType.valueOf(s));
             }
-            boolean smokingStatus = ( ((String)a[4] == "Permitted") ? false : true);
+            boolean smokingStatus = ( ((String)a[4] == "Permitted") ? true : false);
         	GlobalVariables.rs.createRoom((int)a[0], (int)a[1], (int)a[2], (double)a[3],
         								smokingStatus, bedTypes,
         								Room.QualityLevel.valueOf((String)a[6]), 
