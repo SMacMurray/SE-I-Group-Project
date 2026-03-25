@@ -20,7 +20,8 @@ public class HomePage extends JFrame {
      */
     public HomePage() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(Main.WINDOW_OFFSET_X, Main.WINDOW_OFFSET_Y, Main.WINDOW_W, Main.WINDOW_H);
+        setSize(Main.WINDOW_W, Main.WINDOW_H);
+        setLocationRelativeTo(null);
         setTitle(Main.APP_TITLE);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -59,7 +60,7 @@ public class HomePage extends JFrame {
         bookingButton.setBounds(10, 63, 122, 22);
         bookingButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                BookingPage2 newFrame = new BookingPage2(); //Opening the second JFrame
+            	SearchRoomPage newFrame = new SearchRoomPage(); //Opening the second JFrame
                 dispose(); //Disposing the First JFrame
             }
         });

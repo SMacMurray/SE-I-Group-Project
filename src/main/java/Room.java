@@ -8,10 +8,19 @@ public class Room {
 		King
 	}
 	public enum QualityLevel {
-		Executive,
-		Business,
-		Comfort,
-		Economy
+		Economy(0),
+		Comfort(3),
+		Business(5.5),
+		Executive(10.99);
+		
+		private double price;
+		QualityLevel(double p) {
+			price = p;
+		}
+		
+		public double getPrice() {
+			return price;
+		}
 	}
 	public enum RoomSize {
 		Single,
@@ -27,7 +36,7 @@ public class Room {
 	int maxOccupancy = 0;
 	double baseDailyRate = 0;
 	boolean smokingStatus = false;
-	List<BedType> bedType = new ArrayList<>();
+	List<BedType> bedTypes = new ArrayList<>();
 	QualityLevel qualityLevel = QualityLevel.Executive;
 	RoomSize roomSize = RoomSize.Single;
 	
@@ -37,7 +46,7 @@ public class Room {
 		maxOccupancy = p;
 		baseDailyRate = r;
 		smokingStatus = s;
-		bedType = t;
+		bedTypes = t;
 		qualityLevel = q;
 		roomSize = rs;
 	}
@@ -46,7 +55,7 @@ public class Room {
 	public int getMaxOccupancy() { return maxOccupancy; }
 	public double getBaseDailyRate() { return baseDailyRate; }
 	public boolean getSmokingStatus() { return smokingStatus; }
-	public List<BedType> getBedTypes() { return bedType; }
+	public List<BedType> getBedTypes() { return bedTypes; }
 	public QualityLevel getQualityLevel() { return qualityLevel; }
 	public RoomSize getRoomSize() { return roomSize; }
 	
@@ -55,7 +64,19 @@ public class Room {
 	public void setMaxOccupancy(int p) { maxOccupancy = p; }
 	public void setBaseDailyRate(double r) { baseDailyRate = r; }
 	public void setSmokingStatus(boolean s) { smokingStatus = s; }
-	public void addBedType(BedType t) { bedType.add(t); }
+	public void addBedType(BedType t) { bedTypes.add(t); }
 	public void setQualityLevel(QualityLevel q) {qualityLevel = q; }
 	public void setRoomSize(RoomSize rs) { roomSize = rs; }
+	
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true; 
+		if (!(o instanceof Room)) return false;
+		Room temp = (Room)o;
+		return number == temp.number;
+	}
+	@Override
+	public int hashCode() {
+		return Objects.hash(number);
+	}
 }

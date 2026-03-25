@@ -15,7 +15,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import java.util.Scanner;
-
+import java.util.Calendar;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class BookingPage2 extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -27,6 +30,12 @@ public class BookingPage2 extends JFrame {
 	private TableRowSorter<DefaultTableModel> sorter;
 	private JTable table;
 	private JPanel descriptionPane;
+	private JTextField startDateBox;
+	private JTextField endDateBox;
+	private JTextField guestsBox;
+	private JTextField nameBox;
+	private JTextField emailBox;
+	private JTextField creditCardBox;
 	
 	private String[] columnNames = {
 			"Room Number",
@@ -39,46 +48,40 @@ public class BookingPage2 extends JFrame {
 			"Room Size"
 	};
 	
-	public Object[][] initArray() {
-		List<List<Object>> csvData = new ArrayList<>();
+	
+	public Object[][] formatRoomsAsArray(List<Room> rooms) {
+		Object[][] roomsArray = new Object[rooms.size()][8];
 		
-        try (Scanner scanner = new Scanner(new File("reserve.csv")) ) {
-            scanner.nextLine();
-            while (scanner.hasNextLine()) {
-            	String[] spl = scanner.nextLine().split("\t");
-            	
-            	for( int i = spl.length - 8; i > 0; --i) {
-            		spl[5] = spl[5] + "," + spl[5 + i];
-            		System.out.println("rich");
-            	}
-            	csvData.add(new ArrayList<>(Arrays.asList(
-            			Integer.parseInt(spl[0]),
-            			Integer.parseInt(spl[1]),
-            			Integer.parseInt(spl[2]),
-            			Double.parseDouble(spl[3]),
-            			spl[4],
-            			spl[5].replaceAll("\"", ""),
-            			spl[spl.length - 2],
-            			spl[spl.length - 1]
-            			
-            	)));
-            }
-        }
-        catch(FileNotFoundException e) {
-            System.out.println("File not found");
-        }
-
-        
-        return csvData.stream()
-                .map(l -> l.stream().toArray(Object[]::new))
-                .toArray(Object[][]::new);
-    }
-	
-	
-	public BookingPage2() {
-		Object[][] array = initArray();
+		int i = 0;
+		for (Room r : rooms) {
+			roomsArray[i][0] = r.number; 
+			roomsArray[i][1] = r.beds;
+			roomsArray[i][2] = r.maxOccupancy;
+			roomsArray[i][3] = r.baseDailyRate;
+			roomsArray[i][4] = r.smokingStatus ? "Permitted" : "Prohibited";
+			for (int j = 0; j < r.bedTypes.size(); ++j) {				
+				if (r.bedTypes.size() - j == 1) {
+					roomsArray[i][5] += r.bedTypes.get(j).toString();
+				}
+				else {
+					roomsArray[i][5] += r.bedTypes.get(j).name() + ", ";
+				}
+			}
+			// The 'null' comes from the array I made. Not from parsing the files incorrectly.
+			roomsArray[i][5] = ((String)roomsArray[i][5]).replaceAll("null", "");
+			roomsArray[i][6] = r.qualityLevel.toString();
+			roomsArray[i][7] = r.roomSize.toString();
+			++i;
+		}
+		return roomsArray;
+	}
+	public void makeReservation() {
+		
+	}
+	public BookingPage2(List<Room> rooms) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize( Main.WINDOW_W + 300, Main.WINDOW_H + 50);
+		setSize( Main.WINDOW_W + 600, Main.WINDOW_H + 50);
+		setLocationRelativeTo(null); // Centers the JFrame on the screen
 		
 		mainPane = new JPanel();
 		setContentPane(mainPane);
@@ -94,7 +97,7 @@ public class BookingPage2 extends JFrame {
                 Integer.class, Integer.class, Integer.class, Double.class, String.class,
                 String.class, String.class, String.class
         };
-		DefaultTableModel model = new DefaultTableModel(array, columnNames) {
+		DefaultTableModel model = new DefaultTableModel(formatRoomsAsArray(rooms), columnNames) {
 			@Override
             public boolean isCellEditable(int row, int column)
             {
@@ -133,43 +136,133 @@ public class BookingPage2 extends JFrame {
         alignHomePane.add(homeButton);
         mainPane.add(alignHomePane, BorderLayout.PAGE_START);
 		
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 0;
+        c.anchor = GridBagConstraints.LINE_START;
+        startDateBox = new JTextField(16);
+        JPanel startDatePanel = new JPanel(new FlowLayout());
+        startDatePanel.add(new JLabel("Start Date(yyyy/MM/dd): "));
+        startDatePanel.add(startDateBox);
+        descriptionPane.add(startDatePanel, c);
+        c.gridx = 0;
+        c.gridy = 1;
+        endDateBox = new JTextField(16);
+        JPanel endDatePanel = new JPanel(new FlowLayout());
+        endDatePanel.add(new JLabel("End Date(yyyy/MM/dd): "));
+        endDatePanel.add(endDateBox);
+        descriptionPane.add(endDatePanel, c);
+        c.gridx = 0;
+        c.gridy = 2;
+        guestsBox = new JTextField(16);
+        JPanel guestsPanel = new JPanel(new FlowLayout());
+        guestsPanel.add(new JLabel("Guest Amount: "));
+        guestsPanel.add(guestsBox);
+        descriptionPane.add(guestsPanel, c);
+        nameBox = new JTextField(16);
+        JPanel namePanel = new JPanel(new FlowLayout());
+        namePanel.add(new JLabel("First and Last Name: "));
+        namePanel.add(nameBox);
+        c.gridx = 0;
+        c.gridy = 3;
+        descriptionPane.add(namePanel, c);
+        emailBox = new JTextField(16);
+        JPanel emailPanel = new JPanel(new FlowLayout());
+        emailPanel.add(new JLabel("Email: "));
+        emailPanel.add(emailBox);
+        c.gridx = 0;
+        c.gridy = 4;
+        descriptionPane.add(emailPanel, c);
+        creditCardBox = new JTextField(16);
+        JPanel creditCardPanel = new JPanel(new FlowLayout());
+        creditCardPanel.add(new JLabel("Credit Card Number: "));
+        creditCardPanel.add(creditCardBox);
+        c.gridx = 0;
+        c.gridy = 5;
+        descriptionPane.add(creditCardPanel, c);
+        
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
         addRoomButton = new JButton("Add Room");
         addRoomButton.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		// Adding this is only for Iteration 2 / Project Deliverable 9 purposes
-        		if (table.getSelectedRow() > -1) {
-        			int y = table.getSelectedRow();
-        			List<Room.BedType> bedTypes = new ArrayList<>();
-        			String str = ((String)table.getValueAt(y, 5)).replaceAll(" ", "");
-        			String[] spl = str.split(",");
-        			for (String s : spl) {
-        				bedTypes.add(Room.BedType.valueOf(s));
-        			}
-        			boolean smokingStatus = ( ((String)table.getValueAt(y, 4) == "Permitted") ? false : true);
-        			GlobalVariables.rs.createRoom((int)table.getValueAt(y, 0), (int)table.getValueAt(y, 1), (int)table.getValueAt(y, 2),
-        					(double)table.getValueAt(y, 3), smokingStatus, bedTypes,
-        					Room.QualityLevel.valueOf((String)table.getValueAt(y, 6)), Room.RoomSize.valueOf((String)table.getValueAt(y, 7))
-        					);
-        			System.out.println(GlobalVariables.rs.getRoom((int)table.getValueAt(y, 0)).number );
-        			
-        			
-        			//reS.reserveRoom(GlobalVariables.rs.getRoom((int)table.getValueAt(y, 0)), )
+        		int y = table.getSelectedRow();
+        		
+        		if (y < 0) {
+        			JOptionPane.showMessageDialog(null, "You have not selected a row!");
         		}
         		else {
-        			
+        			// Parsing the input
+        			Calendar startDate = Calendar.getInstance();
+            		Calendar endDate = Calendar.getInstance();
+            		int guests = 0;
+            		Room room = null;
+            		String guestName = "";
+            		String guestEmail = "";
+            		String creditCardNumber = "";
+	        		try {
+	            		startDate.setTime(formatter.parse(startDateBox.getText()));
+	            		endDate.setTime(formatter.parse(endDateBox.getText()));
+	            		
+	            		room = GlobalVariables.rs.getRoom((int)table.getValueAt(y, 0));
+	            		guests = Integer.parseInt(guestsBox.getText());
+	            		guestName = nameBox.getText();
+	            		guestEmail = emailBox.getText();
+	            		creditCardNumber = creditCardBox.getText();
+	        		}
+	        		catch(ParseException exp) {
+	        			JOptionPane.showMessageDialog(null, "Invalid Date Format or Number");
+	        		}
+	        		
+	        		// Checking for exceptions
+	        		if (endDate.getTimeInMillis() < startDate.getTimeInMillis()) {
+	        			JOptionPane.showMessageDialog(null, "The Start Date is more than the End Date!");
+	        			
+	        			return;
+	        		}
+	        		if (guests > room.maxOccupancy) {
+	        			JOptionPane.showMessageDialog(null, "Can't have more guests than a room's max occupancy");
+	        			
+	        			return;
+	        		}
+	        		if (guests == 0) {
+	        			JOptionPane.showMessageDialog(null, "Can't have a room with zero guests!");
+	        			return;
+	        		}
+	        		if (guestName.isEmpty() || creditCardNumber.isEmpty() || guestEmail.isEmpty()) {
+	        			JOptionPane.showMessageDialog(null, "Please fill in the unfilled containers");
+	        			return;
+	        		}
+	        		
+	        		// Reserving the room (Did not implement with the presence of Guest accounts yet)
+	        		// Assuming no sign in is needed.
+	        		int reply = JOptionPane.showConfirmDialog(
+	        				null,
+	        				"Are you sure you want to reserve this room?",
+	        				"Reserve Room?",
+	        				JOptionPane.YES_NO_OPTION
+	        				);
+	        		if (reply == JOptionPane.YES_OPTION) {
+	        			GlobalVariables.reS.reserveRoom(room, startDate, endDate, guests, guestName, guestEmail, creditCardNumber);
+	        			JOptionPane.showMessageDialog(null, "Reservation Successful!");
+	        			
+	        			HomePage newFrame = new HomePage();
+	        			dispose();
+	        			
+	        		}
         		}
+        		
         		
         	}
         });
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
-        c.gridy = 0;
+        c.gridy = 6;
         c.anchor = GridBagConstraints.CENTER;
         descriptionPane.add(addRoomButton, c);
         // Add an Alternative Case where the User can't register for a room they already registered for.
 		
 		mainPane.add(alignScrollPane, BorderLayout.LINE_START);
-		descriptionPane.setSize(new Dimension(100, table.getHeight() - 100));
+		//descriptionPane.setSize(new Dimension(100, table.getHeight() - 100));
 		mainPane.add(descriptionPane, BorderLayout.CENTER);
 		
 		setVisible(true);

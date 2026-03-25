@@ -28,7 +28,8 @@ public class LoginPage extends JFrame {
      */
     public LoginPage() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(Main.WINDOW_OFFSET_X, Main.WINDOW_OFFSET_Y, Main.WINDOW_W, Main.WINDOW_H);
+        setSize(Main.WINDOW_W, Main.WINDOW_H);
+        setLocationRelativeTo(null);
         setTitle(Main.APP_TITLE);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -101,6 +102,7 @@ public class LoginPage extends JFrame {
                 if (username.isEmpty()) dialogMessage = USERNAME_EMPTY;
                 else if (password.isEmpty()) dialogMessage = PASSWORD_EMPTY;
                 else {
+//                	JOptionPane.showMessageDialog(usernameLabel, dialogMessage);
                     int res = AccountController.createAccount(username, password);
                     dialogMessage = switch (res) {
                         case 0 -> ACCOUNT_CREATE_SUCCESS;
