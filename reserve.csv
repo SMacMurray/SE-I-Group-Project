@@ -9,3 +9,4 @@ Unique Number	Beds	Max Occupancy	Base Daily Rate	Smoking Status	Bed Sizes	Qualit
 246	4	2	24.33	Prohibited	King	Executive	Suite
 239	9	5	23.99	Prohibited	Twin	Executive	Deluxe
 119	5	4	5.5	Prohibited	Queen	Comfort	Double
+209	3	5	100.0	Permitted	Twin,Twin,Twin	Executive	Single

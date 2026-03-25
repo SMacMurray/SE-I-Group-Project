@@ -38,41 +38,75 @@ public class BookingPage2 extends JFrame {
 			"Quality Level",
 			"Room Size"
 	};
-	
-	public Object[][] initArray() {
-		List<List<Object>> csvData = new ArrayList<>();
-		
-        try (Scanner scanner = new Scanner(new File("reserve.csv")) ) {
-            scanner.nextLine();
-            while (scanner.hasNextLine()) {
-            	String[] spl = scanner.nextLine().split("\t");
-            	
-            	for( int i = spl.length - 8; i > 0; --i) {
-            		spl[5] = spl[5] + "," + spl[5 + i];
-            		System.out.println("rich");
-            	}
-            	csvData.add(new ArrayList<>(Arrays.asList(
-            			Integer.parseInt(spl[0]),
-            			Integer.parseInt(spl[1]),
-            			Integer.parseInt(spl[2]),
-            			Double.parseDouble(spl[3]),
-            			spl[4],
-            			spl[5].replaceAll("\"", ""),
-            			spl[spl.length - 2],
-            			spl[spl.length - 1]
-            			
-            	)));
-            }
-        }
-        catch(FileNotFoundException e) {
-            System.out.println("File not found");
-        }
 
-        
-        return csvData.stream()
-                .map(l -> l.stream().toArray(Object[]::new))
-                .toArray(Object[][]::new);
-    }
+	public Object[][] initArray() {
+		List<List<Object>> roomData = new ArrayList<>();
+
+		// First load rooms from reserve.csv
+		try (Scanner scanner = new Scanner(new File("reserve.csv"))) {
+			scanner.nextLine();
+
+			while (scanner.hasNextLine()) {
+				String[] spl = scanner.nextLine().split("\t");
+
+				for (int i = spl.length - 8; i > 0; --i) {
+					spl[5] = spl[5] + "," + spl[5 + i];
+				}
+
+				roomData.add(new ArrayList<>(Arrays.asList(
+						Integer.parseInt(spl[0]),
+						Integer.parseInt(spl[1]),
+						Integer.parseInt(spl[2]),
+						Double.parseDouble(spl[3]),
+						spl[4],
+						spl[5].replaceAll("\"", ""),
+						spl[spl.length - 2],
+						spl[spl.length - 1]
+				)));
+			}
+		} catch (FileNotFoundException e) {
+			System.out.println("File not found");
+		}
+
+		// Then also load any rooms added dynamically to RoomService
+		for (Room room : GlobalVariables.rs.rooms) {
+			if (room != null) {
+				boolean alreadyExists = false;
+
+				for (List<Object> row : roomData) {
+					if ((int) row.get(0) == room.number) {
+						alreadyExists = true;
+						break;
+					}
+				}
+
+				if (!alreadyExists) {
+					StringBuilder bedSizes = new StringBuilder();
+					for (int i = 0; i < room.bedType.size(); i++) {
+						bedSizes.append(room.bedType.get(i).name());
+						if (i < room.bedType.size() - 1) {
+							bedSizes.append(",");
+						}
+					}
+
+					roomData.add(new ArrayList<>(Arrays.asList(
+							room.number,
+							room.beds,
+							room.maxOccupancy,
+							room.baseDailyRate,
+							room.smokingStatus ? "Permitted" : "Not Permitted",
+							bedSizes.toString(),
+							room.qualityLevel.name(),
+							room.roomSize.name()
+					)));
+				}
+			}
+		}
+
+		return roomData.stream()
+				.map(l -> l.toArray(new Object[0]))
+				.toArray(Object[][]::new);
+	}
 	
 	
 	public BookingPage2() {
@@ -132,7 +166,7 @@ public class BookingPage2 extends JFrame {
         alignHomePane.setLayout(new FlowLayout(FlowLayout.LEFT));
         alignHomePane.add(homeButton);
         mainPane.add(alignHomePane, BorderLayout.PAGE_START);
-		
+
         addRoomButton = new JButton("Add Room");
         addRoomButton.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
@@ -145,7 +179,7 @@ public class BookingPage2 extends JFrame {
         			for (String s : spl) {
         				bedTypes.add(Room.BedType.valueOf(s));
         			}
-        			boolean smokingStatus = ( ((String)table.getValueAt(y, 4) == "Permitted") ? false : true);
+        			boolean smokingStatus = ( (((String)table.getValueAt(y, 4)).equals("Permitted")) ? false : true);
         			GlobalVariables.rs.createRoom((int)table.getValueAt(y, 0), (int)table.getValueAt(y, 1), (int)table.getValueAt(y, 2),
         					(double)table.getValueAt(y, 3), smokingStatus, bedTypes,
         					Room.QualityLevel.valueOf((String)table.getValueAt(y, 6)), Room.RoomSize.valueOf((String)table.getValueAt(y, 7))
@@ -161,6 +195,7 @@ public class BookingPage2 extends JFrame {
         		
         	}
         });
+
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
         c.gridy = 0;

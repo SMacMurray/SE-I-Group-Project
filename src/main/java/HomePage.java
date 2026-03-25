@@ -80,6 +80,16 @@ public class HomePage extends JFrame {
         contentPane.add(loginButton);
 
         setVisible(true);
+
+        JButton clerkAddRoomButton = new JButton("Clerk Add Room");
+        clerkAddRoomButton.setBounds(10, 100, 160, 22);
+        clerkAddRoomButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                ClerkAddRoomPage newFrame = new ClerkAddRoomPage();
+                dispose();
+            }
+        });
+        contentPane.add(clerkAddRoomButton);
     }
 
 }
