@@ -61,7 +61,7 @@ In order to use the database with the class DatabaseConnection (in IntelliJ) wit
 4. Under the already given Module (mine is called "GroupProject"), click on the
    "Dependencies" tab
 5. Click the "+" button, then click "JAR or Directories"
-6. Look for the file your looking for then choose that one.
+6. Look for the file your looking(whatever version of mysql-connector you need) for then choose that one.
 7. Click "Ok" or "Apply" when you are done.
 
 In order to change the information in DatabaseConnection connect to a different database:
