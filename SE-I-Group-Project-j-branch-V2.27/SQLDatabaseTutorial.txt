@@ -1,0 +1,82 @@
+In order to add data into the MySQL Database:
+
+1. Download MySQL Workbench
+2. If not already in it, click the Dolphin with Coins icon.
+3. If you were not the one to make the connection, there will be no 'MySQL Connections' when you scroll down, so:
+	3a.  Click the plus sign.
+	3b.  Give the connection any name.
+	3c.  Based on the information of the database that someone downloaded, change the 
+	     Username(if needed) and then the Password (through 'store in keychain') to what 
+	     that someone decided it to be. The 
+	     hostname and Port should be the same if the person didn't change it.
+4. If you see an error message about the server version, continue anyway.
+5. Now, the databases in SQL are called 'schemas.' If there is no schema:
+	5a.  Go to the 'Schemas' tab next to the 'Administration' tab
+	5b.  Right click under the 'Schemas' side bar, and then create a schema. The default 
+	     settings in it should be fine.
+6. Click the drop-down of one of the schemas you are using as the database.
+7. Click the dropdown for 'Tables' if available. If there are no tables that you are intending to use:
+	7a.  Right Click Tables, then create a table
+	7b.  Give the table a name at the top.
+	7c.  Under the 'Column' column, double click the '<click to edit>', then change the name 
+	     of the column. Continue doing this for how many columns you need.
+	7d.  Set the datatype of the column. To make it a String for java, set it to VARCHAR().
+	7e.  You most likely won't need the settings for a column such as "Primary key" and "Not 
+	     NULL," so leave them all blank.
+	7f.  When done, click 'Apply' at around the bottom right of the screen.
+	7g.  Review the code MySQL Workbench gives you. Then click 'Apply.' If it was a success, 
+	     good for you. If it's not, use ChatGPT to help you make the code correct, or just
+	     use your knowledge on SQL code.
+8. Now, navigate to 'Query 1' or whatever number is generated for the Query in the Tabs above with 'Administration' and 'Schemas'.
+9. Use code similar to this to insert test/actual data into the table of your choice:
+	
+	INSERT INTO table_name (column1, column2, column3)
+	VALUES
+	(valueA1, valueA2, valueA3),
+	(valueB1, valueB2, valueB3),
+	(valueC1, valueC2, valueC3);
+
+9.1. If there was an error, the program will indicate it to you below.
+10. If you don't see your data, right click the table you want to see the data of (on the side bar on the left), then choose 'Select Rows - Limit 1000'.
+
+
+In order to use the database with the class DatabaseConnection (in Eclipse) with MySQL:
+
+1. Download MySQL Connector (the latest version) jar. Remember what it's path is / where it is.
+1.1. For the operating system (if you are Mac/Windows), choose 'Platform Independent'.
+2. In Eclipse, right click the Project folder that you are using the MySQL database in.
+3. Select 'Properties' at the bottom.
+4. Select 'Java Build Path'.
+5. Select the 'Libraries' tab.
+6. Click 'Classpath'.
+7. On the right of the screen, click 'Add External JARs'.
+8. Navigate to the mysql-connector's jar, and then click it.
+9. Click 'Apply and Close' once you are done.
+Here is a video relating to this: https://www.youtube.com/watch?v=lRuTRWxU4z0
+
+In order to use the database with the class DatabaseConnection (in IntelliJ) with MySQL:
+1. Select "File"
+2. Select "Project Structure"
+3. Under "Project Settings", select "Modules"
+4. Under the already given Module (mine is called "GroupProject"), click on the
+   "Dependencies" tab
+5. Click the "+" button, then click "JAR or Directories"
+6. Look for the file your looking(whatever version of mysql-connector you need) for then choose that one.
+7. Click "Ok" or "Apply" when you are done.
+
+In order to change the information in DatabaseConnection connect to a different database:
+
+1. The format for the DB_URL you will likely use is:
+
+	jdbc:mysql://localhost:3306/yourdb
+
+   Replace 'yourdb' with the database/schema name.
+2. The USER and PASS are the information you needed to connect to the database/schema.
+
+In order to make a MySQL Connection:
+
+1. You can "install" MySQL Community Edition to get a free database. Navigate to https://www.mysql.com/products/community/
+2. Click 'Download MySQL Community Edition.'
+3. Download 'MySQL Community Server,' then choose which one to download.
+4. Through the process, you will be prompted to make a password. The password will be to the Connection.
+Here is the MySQL Community Server installer: https://dev.mysql.com/downloads/mysql/
