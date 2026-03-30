@@ -170,7 +170,7 @@ public class ClerkAddRoomPage extends JFrame {
                         return;
                     }
 
-                    if (beds < 1 || beds > 4) {
+                    if (beds < 1) {
                         JOptionPane.showMessageDialog(null,
                                 "Number of beds must be between 1 and 4.");
                         return;
