@@ -5,3 +5,4 @@ Made initRooms() parse by ","
 Altered ClerkAddRoom implementation to make it look like an actual CSV since my implementation didn't do it aswell.  
 # SE-I-Group-Project V 2.27
 Added Errors for SearchRoom
+Allowed for a room with more than one bed to be created
