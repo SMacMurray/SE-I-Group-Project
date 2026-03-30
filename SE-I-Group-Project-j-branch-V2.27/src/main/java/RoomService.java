@@ -2,6 +2,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class RoomService {
 	public static Room[] rooms = new Room[300]; // Might need to fix the size
@@ -9,6 +10,7 @@ public class RoomService {
 	public void createRoom(int number, int beds, int maxOccupancy, double baseDailyRate, 
 			boolean smokingStatus, List<Room.BedType> bedTypes, Room.QualityLevel qualityLevel,
 			Room.RoomSize roomSize) {
+		bedTypes = bedTypes.stream().distinct().collect(Collectors.toList());
 		rooms[number - 100] = (new Room (number, beds, maxOccupancy, baseDailyRate, smokingStatus,
 							bedTypes, qualityLevel, roomSize));
 	}
