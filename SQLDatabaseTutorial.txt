@@ -6,7 +6,7 @@ In order to add data into the MySQL Database:
 	3a.  Click the plus sign.
 	3b.  Give the connection any name.
 	3c.  Based on the information of the database that someone downloaded, change the 
-	     Username(if needed) and then the Password (through 'store in keychain') to what 
+	     Username(if needed) and then the Password (through 'stay_and_shop_system.store in keychain') to what
 	     that someone decided it to be. The 
 	     hostname and Port should be the same if the person didn't change it.
 4. If you see an error message about the server version, continue anyway.
@@ -53,6 +53,16 @@ In order to use the database with the class DatabaseConnection (in Eclipse) with
 8. Navigate to the mysql-connector's jar, and then click it.
 9. Click 'Apply and Close' once you are done.
 Here is a video relating to this: https://www.youtube.com/watch?v=lRuTRWxU4z0
+
+In order to use the database with the class DatabaseConnection (in IntelliJ) with MySQL:
+1. Select "File"
+2. Select "Project Structure"
+3. Under "Project Settings", select "Modules"
+4. Under the already given Module (mine is called "GroupProject"), click on the
+   "Dependencies" tab
+5. Click the "+" button, then click "JAR or Directories"
+6. Look for the file your looking(whatever version of mysql-connector you need) for then choose that one.
+7. Click "Ok" or "Apply" when you are done.
 
 In order to change the information in DatabaseConnection connect to a different database:
 
