@@ -1,4 +1,8 @@
-In order to add data into the MySQL Database:
+NOTICE:
+Joel's computer made the database, so people can only connect to the database once his computer is on.
+
+
+In order to add data into the MySQL Database and connect to a Database:
 
 1. Download MySQL Workbench
 2. If not already in it, click the Dolphin with Coins icon.
@@ -6,9 +10,11 @@ In order to add data into the MySQL Database:
 	3a.  Click the plus sign.
 	3b.  Give the connection any name.
 	3c.  Based on the information of the database that someone downloaded, change the 
-	     Username(if needed) and then the Password (through 'stay_and_shop_system.store in keychain') to what
+	     Username(if needed) and then the Password (through 'store in keychain') to what
 	     that someone decided it to be. The 
 	     hostname and Port should be the same if the person didn't change it.
+		 The User and Password will be found in the DatabaseConnection class for the current database
+		 we are using.
 4. If you see an error message about the server version, continue anyway.
 5. Now, the databases in SQL are called 'schemas.' If there is no schema:
 	5a.  Go to the 'Schemas' tab next to the 'Administration' tab
@@ -40,7 +46,7 @@ In order to add data into the MySQL Database:
 10. If you don't see your data, right click the table you want to see the data of (on the side bar on the left), then choose 'Select Rows - Limit 1000'.
 
 
-In order to use the database with the class DatabaseConnection (in Eclipse) with MySQL:
+In order to use the database with the class DatabaseConnection (in Eclipse) with MySQL (if the mysql-connector jar defined in the pom.xml and found in the libs folder is missing):
 
 1. Download MySQL Connector (the latest version) jar. Remember what it's path is / where it is.
 1.1. For the operating system (if you are Mac/Windows), choose 'Platform Independent'.
