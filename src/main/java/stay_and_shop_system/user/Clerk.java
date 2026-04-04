@@ -24,7 +24,7 @@ public class Clerk implements ClerkInterface {
 		return false;
 	}
 
-	public void modifyInformation(Clerk clerk) {
+	public void modifyOwnInformation(Clerk clerk) {
 
 	}
 }

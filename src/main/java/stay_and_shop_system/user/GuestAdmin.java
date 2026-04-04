@@ -3,6 +3,7 @@ package stay_and_shop_system.user;
 import stay_and_shop_system.occupancy.Reservation;
 import stay_and_shop_system.occupancy.Room;
 
+import java.util.List;
 import java.util.Objects;
 
 public class GuestAdmin implements GuestInterface, AdminInterface{
@@ -41,6 +42,7 @@ public class GuestAdmin implements GuestInterface, AdminInterface{
     public void removeReservation(Reservation r) {
         reservations.remove(r);
     }
+    public List<Reservation> findReservations(){ return res.findReservationsOfName(name); }
 
     public void createClerkAccount(Clerk clerk) {
 

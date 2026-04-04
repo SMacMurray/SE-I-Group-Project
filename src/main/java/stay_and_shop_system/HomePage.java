@@ -91,6 +91,16 @@ public class HomePage extends JFrame {
         });
         contentPane.add(loginButton);
 
+        JButton userHomeButton = new JButton("User Home");
+        userHomeButton.setBounds(483, 100, 133, 22);
+        userHomeButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                UserHomePage newFrame = new UserHomePage(); //Opening the second JFrame
+                dispose(); //Disposing the First JFrame
+            }
+        });
+        contentPane.add(userHomeButton);
+
         JButton clerkAddRoomButton = new JButton("Clerk Add Room");
         clerkAddRoomButton.setBounds(10, 100, 160, 22);
         clerkAddRoomButton.addActionListener(new ActionListener() {

@@ -6,7 +6,7 @@ In order to add data into the MySQL Database:
 	3a.  Click the plus sign.
 	3b.  Give the connection any name.
 	3c.  Based on the information of the database that someone downloaded, change the 
-	     Username(if needed) and then the Password (through 'store in keychain') to what 
+	     Username(if needed) and then the Password (through 'stay_and_shop_system.store in keychain') to what
 	     that someone decided it to be. The 
 	     hostname and Port should be the same if the person didn't change it.
 4. If you see an error message about the server version, continue anyway.

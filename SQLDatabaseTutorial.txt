@@ -1,35 +1,41 @@
-In order to add data into the MySQL Database:
+NOTICE:
+Joel's computer made the database, so people can only connect to the database once his computer is on.
+
+
+In order to add data into the MySQL Database and connect to a Database:
 
 1. Download MySQL Workbench
 2. If not already in it, click the Dolphin with Coins icon.
 3. If you were not the one to make the connection, there will be no 'MySQL Connections' when you scroll down, so:
 	3a.  Click the plus sign.
 	3b.  Give the connection any name.
-	3c.  Based on the information of the database that someone downloaded, change the 
-	     Username(if needed) and then the Password (through 'stay_and_shop_system.store in keychain') to what
-	     that someone decided it to be. The 
+	3c.  Based on the information of the database that someone downloaded, change the
+	     Username(if needed) and then the Password (through 'store in keychain') to what
+	     that someone decided it to be. The
 	     hostname and Port should be the same if the person didn't change it.
+		 The User and Password will be found in the DatabaseConnection class for the current database
+		 we are using.
 4. If you see an error message about the server version, continue anyway.
 5. Now, the databases in SQL are called 'schemas.' If there is no schema:
 	5a.  Go to the 'Schemas' tab next to the 'Administration' tab
-	5b.  Right click under the 'Schemas' side bar, and then create a schema. The default 
+	5b.  Right click under the 'Schemas' side bar, and then create a schema. The default
 	     settings in it should be fine.
 6. Click the drop-down of one of the schemas you are using as the database.
 7. Click the dropdown for 'Tables' if available. If there are no tables that you are intending to use:
 	7a.  Right Click Tables, then create a table
 	7b.  Give the table a name at the top.
-	7c.  Under the 'Column' column, double click the '<click to edit>', then change the name 
+	7c.  Under the 'Column' column, double click the '<click to edit>', then change the name
 	     of the column. Continue doing this for how many columns you need.
 	7d.  Set the datatype of the column. To make it a String for java, set it to VARCHAR().
-	7e.  You most likely won't need the settings for a column such as "Primary key" and "Not 
+	7e.  You most likely won't need the settings for a column such as "Primary key" and "Not
 	     NULL," so leave them all blank.
 	7f.  When done, click 'Apply' at around the bottom right of the screen.
-	7g.  Review the code MySQL Workbench gives you. Then click 'Apply.' If it was a success, 
+	7g.  Review the code MySQL Workbench gives you. Then click 'Apply.' If it was a success,
 	     good for you. If it's not, use ChatGPT to help you make the code correct, or just
 	     use your knowledge on SQL code.
 8. Now, navigate to 'Query 1' or whatever number is generated for the Query in the Tabs above with 'Administration' and 'Schemas'.
 9. Use code similar to this to insert test/actual data into the table of your choice:
-	
+
 	INSERT INTO table_name (column1, column2, column3)
 	VALUES
 	(valueA1, valueA2, valueA3),
@@ -40,7 +46,7 @@ In order to add data into the MySQL Database:
 10. If you don't see your data, right click the table you want to see the data of (on the side bar on the left), then choose 'Select Rows - Limit 1000'.
 
 
-In order to use the database with the class DatabaseConnection (in Eclipse) with MySQL:
+In order to use the database with the class DatabaseConnection (in Eclipse) with MySQL (if the mysql-connector jar defined in the pom.xml and found in the libs folder is missing):
 
 1. Download MySQL Connector (the latest version) jar. Remember what it's path is / where it is.
 1.1. For the operating system (if you are Mac/Windows), choose 'Platform Independent'.

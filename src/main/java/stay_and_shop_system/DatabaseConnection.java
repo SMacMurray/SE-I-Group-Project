@@ -9,6 +9,8 @@ public class DatabaseConnection {
     private static final String DB_URL = "jdbc:mysql://localhost:3306/yummers";
     private static final String USER = "root";
     private static final String PASS = "ch@rl1eK1rk#GoD";
+    // New user: newUser
+    // New password: p0p-lock3@d
     // public static void main( String[] args ) {
 
 

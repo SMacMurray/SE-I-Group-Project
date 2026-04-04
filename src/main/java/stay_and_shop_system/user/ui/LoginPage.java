@@ -47,7 +47,7 @@ public class LoginPage extends JFrame {
         homeButton.setBounds(0, 0, 140, 22);
         homeButton.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		HomePage newFrame = new HomePage(); //Opening the second JFrame
+        		UserHomePage newFrame = new UserHomePage(); //Opening the second JFrame
         		dispose(); //Disposing the First JFrame
         	}
         });
@@ -115,7 +115,7 @@ public class LoginPage extends JFrame {
 
                     // Create Account Success
                     if (res == 0){
-                        HomePage newFrame = new HomePage();
+                        UserHomePage newFrame = new UserHomePage();
                         dispose();
                     }
                 }
@@ -146,7 +146,7 @@ public class LoginPage extends JFrame {
 
                     // Login Success
                     if (res == 0){
-                        HomePage newFrame = new HomePage();
+                        UserHomePage newFrame = new UserHomePage();
                         dispose();
                     }
                 }

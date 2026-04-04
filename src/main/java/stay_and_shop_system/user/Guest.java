@@ -11,11 +11,11 @@ public class Guest implements GuestInterface {
     // private List<Reservation> reservations = new ArrayList<>();
     
     
-    Guest(String n, String e) {
+    public Guest(String n, String e) {
     	name = n;
     	email = e;
     }
-    Guest(String n, int h) {
+    public Guest(String n, int h) {
     	name = n;
     	hash = h;
     }
@@ -39,7 +39,7 @@ public class Guest implements GuestInterface {
     public void removeReservation(Reservation r) {
     	reservations.remove(r);
     }
-    
+    public List<Reservation> findReservations(){ return res.findReservationsOfName(name); }
     
     
     // Did not hash or use equals by 'name' because names can be the same,

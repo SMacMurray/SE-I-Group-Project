@@ -6,6 +6,7 @@ import stay_and_shop_system.user.User;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import com.formdev.flatlaf.FlatLightLaf;
 
 // Welcome to my big ball of mud design for making JFrames.
 
@@ -25,13 +26,13 @@ public class Main extends JFrame {
     }
 
     public static void main(String[] args) {
+        FlatLightLaf.setup();
     	initRooms();
-        rdt.loadReservations();
     	
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    HomePage frame = new HomePage();
+                    HomePage2 frame = new HomePage2();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

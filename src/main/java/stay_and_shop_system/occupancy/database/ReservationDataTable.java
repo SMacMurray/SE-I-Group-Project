@@ -3,6 +3,7 @@ package stay_and_shop_system.occupancy.database;
 import stay_and_shop_system.occupancy.*;
 import stay_and_shop_system.*;
 
+import java.util.*;
 import java.sql.*;
 import java.text.ParseException;
 import java.util.Calendar;
@@ -19,15 +20,18 @@ import javax.swing.JOptionPane;
 
 public class ReservationDataTable {
 	static Connection connection = DatabaseConnection.connect();
-	ReservationService reS = new ReservationService();
+	//ReservationService reS = new ReservationService();
 	RoomService rs = new RoomService();
 	static SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy/MM/dd");
 
-	public void loadReservations() {
+	// Assuming rooms are already loaded
+	// Joel: Im conflicted on if I want to combine loadReservations and loadReservationsOfName
+	public List<Reservation> loadReservations() {
 		String loadSQL = "SELECT * FROM Reservations";
+		List<Reservation> reservations = null;
 
-		// Assuming rooms are already loaded
 		try (ResultSet rSet = connection.createStatement().executeQuery(loadSQL)) {
+			reservations = new ArrayList<>();
 			while (rSet.next()) {
 				int reservationId = rSet.getInt("reservationId");
 				int roomNumber = rSet.getInt("roomNumber");
@@ -44,20 +48,23 @@ public class ReservationDataTable {
 				double rate = rSet.getDouble("rate");
 				double cost = rSet.getDouble("cost");
 
-				if (rs.getRoom(roomNumber) == null) {
-					JOptionPane.showMessageDialog(null, "The reservation's room " + roomNumber + " does not exist. : ReservationDataTable");
+				Room r = rs.getRoom(roomNumber);
+				if (r == null) {
+					System.out.println("The reservation's room " + roomNumber + " does not exist. : ReservationDataTable");
+					System.out.println("Skipping reservation at room " + roomNumber + ". : ReservationDataTable");
 //					deleteReservation(roomNumber, guestName);
 				}
 				else {
-					reS.loadReservation(new Reservation(rs.getRoom(roomNumber), start, end, guestNumber, guestName, cc));
+					reservations.add(new Reservation(r, start, end, guestNumber, guestName, cc));
 				}
 			}
 		}
 		catch (SQLException | ParseException e) {
-			JOptionPane.showMessageDialog(null, e + " : ReservationDataTable");
+			e.printStackTrace();
+			// JOptionPane.showMessageDialog(null, e + " : ReservationDataTable");
 		}
 		catch (NullPointerException e) {
-			System.out.println("You likely did not add the mysql-connecter. You have not connected to the server.");
+			System.out.println("You have not connected to the server.");
 			e.printStackTrace();
 			System.exit(1);
 		}
@@ -65,6 +72,57 @@ public class ReservationDataTable {
         for (Reservation reserve : ReservationService.reservations) {
 			reserve.print();
 		}
+
+		return reservations;
+	}
+	public List<Reservation> loadReservationsOfName(String name) {
+		String loadSQL = " SELECT * FROM Reservations WHERE guestName = " + name;
+		List<Reservation> reservations = null;
+
+		try (ResultSet rSet = connection.createStatement().executeQuery(loadSQL)) {
+			reservations = new ArrayList<>();
+			while (rSet.next()) {
+				int reservationId = rSet.getInt("reservationId");
+				int roomNumber = rSet.getInt("roomNumber");
+				int guestNumber = rSet.getInt("guestNumber");
+
+				Calendar start = Calendar.getInstance();
+				start.setTime(dateFormatter.parse(rSet.getString("startDate")) );
+				Calendar end = Calendar.getInstance();
+				end.setTime(dateFormatter.parse(rSet.getString("endDate")) );
+
+				String guestName = rSet.getString("guestName");
+				String cc = rSet.getString("creditCardNumber");
+
+				double rate = rSet.getDouble("rate");
+				double cost = rSet.getDouble("cost");
+
+				Room r = rs.getRoom(roomNumber);
+				if (r == null) {
+					System.out.println("The reservation's room " + roomNumber + " does not exist. : ReservationDataTable");
+					System.out.println("Skipping reservation at room " + roomNumber + ". : ReservationDataTable");
+//					deleteReservation(roomNumber, guestName);
+				}
+				else {
+					reservations.add(new Reservation(r, start, end, guestNumber, guestName, cc));
+				}
+			}
+		}
+		catch (SQLException | ParseException e) {
+			e.printStackTrace();
+			// JOptionPane.showMessageDialog(null, e + " : ReservationDataTable");
+		}
+		catch (NullPointerException e) {
+			System.out.println("You have not connected to the server.");
+			e.printStackTrace();
+			System.exit(1);
+		}
+
+		for (Reservation reserve : ReservationService.reservations) {
+			reserve.print();
+		}
+
+		return reservations;
 	}
 	public static void addReservation(Reservation re) {
 		// insert is SQL code.

@@ -22,6 +22,24 @@
             <version>5.3.1</version>
             <scope>compile</scope>
         </dependency>
+        <!--Was able to do this through this command:
+            mvn install:install-file -Dfile=libs/mysql-connector-j-9.6.0.jar -DgroupId=libs.database
+            -DartifactId=mysql-connector-j-9.6.0-jar -Dversion=1.0 -Dpackaging=jar
+            -->
+        <dependency>
+            <groupId>libs.database</groupId>
+            <artifactId>mysql-connector-j-9.6.0-jar</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <!-- Source: https://mvnrepository.com/artifact/com.formdev/flatlaf -->
+        <dependency>
+            <groupId>com.formdev</groupId>
+            <artifactId>flatlaf</artifactId>
+            <version>3.7.1</version>
+        </dependency>
     </dependencies>
+
+
     
 </project>

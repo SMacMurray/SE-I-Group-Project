@@ -8,6 +8,7 @@ import net.coderazzi.filters.gui.LooseParserModel;
 import net.coderazzi.filters.gui.TableFilterHeader;
 import stay_and_shop_system.GlobalVariables;
 import stay_and_shop_system.HomePage;
+import stay_and_shop_system.HomePage2;
 import stay_and_shop_system.Main;
 import stay_and_shop_system.occupancy.Room;
 
@@ -246,7 +247,7 @@ public class BookingPage2 extends JFrame {
 	        			GlobalVariables.reS.reserveRoom(room, startDate, endDate, guests, guestName, guestEmail, creditCardNumber);
 	        			JOptionPane.showMessageDialog(null, "Reservation Successful!");
 	        			
-	        			HomePage newFrame = new HomePage();
+	        			HomePage2 newFrame = new HomePage2();
 	        			dispose();
 	        			
 	        		}

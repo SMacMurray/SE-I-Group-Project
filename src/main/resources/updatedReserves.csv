@@ -21,3 +21,5 @@
 130,34,1,19932.99,Permitted,"King, Full",Economy,Single
 210,5,10000,500.99,Permitted,"Twin, Queen, King",Comfort,Deluxe
 201,100,150,0.99,Permitted,"Queen, King, Twin",Comfort,Family
+250,10,9,5.99,Permitted,"Twin, King, Full, Queen",Business,Single
+249,10,4,5.0,Prohibited,"Twin, Full, Queen",Business,Double

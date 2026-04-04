@@ -10,11 +10,12 @@ public class ReservationService {
 	// Won't stop saying can't make a type of ArrayList or smth, had to cut the entire code than paste it
 	public static List<Reservation> reservations  = new ArrayList<>();
 
+	ReservationDataTable rdt = new ReservationDataTable();
 	private RoomService rs = new RoomService();
 	GuestService gs = new GuestService();
 
-	public void loadReservation(Reservation re) {
-		reservations.add(re);
+	public void loadReservations() {
+		reservations = rdt.loadReservations();
 	}
 	public void reserveRoom(Room room, Calendar start, Calendar end, int guestNum, String guestName, String email, String creditCardNumber ) {
 		Reservation reservation = new Reservation(room, start, end, guestNum, guestName, creditCardNumber);
@@ -32,7 +33,12 @@ public class ReservationService {
 		
 		guest.addReservation(reservation);
 	}
+	public List<Reservation> findReservationsOfName(String name) {
+		return rdt.loadReservationsOfName(name);
+	}
 	public List<Room> deleteOverlapRooms(List<Room> rooms) {
+		loadReservations();
+
 		for (Reservation re : reservations) {
 			rooms.remove(re.room);
 		}

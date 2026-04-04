@@ -3,6 +3,7 @@ package stay_and_shop_system.user;
 import stay_and_shop_system.occupancy.Reservation;
 import stay_and_shop_system.occupancy.Room;
 
+import java.util.List;
 import java.util.Objects;
 
 public class GuestClerk implements GuestInterface, ClerkInterface{
@@ -13,11 +14,11 @@ public class GuestClerk implements GuestInterface, ClerkInterface{
     // private List<Reservation> reservations = new ArrayList<>();
 
     // Fix when needed
-    GuestClerk(String n, String e) {
+    public GuestClerk(String n, String e) {
         name = n;
         email = e;
     }
-    GuestClerk(String n, int h) {
+    public GuestClerk(String n, int h) {
         name = n;
         hash = h;
     }
@@ -41,12 +42,13 @@ public class GuestClerk implements GuestInterface, ClerkInterface{
     public void removeReservation(Reservation r) {
         reservations.remove(r);
     }
+    public List<Reservation> findReservations(){ return res.findReservationsOfName(name); }
 
     public boolean addRoom(Room r) {
         return false;
     }
 
-    public void modifyInformation(Clerk clerk) {
+    public void modifyOwnInformation(Clerk clerk) {
 
     }
 
