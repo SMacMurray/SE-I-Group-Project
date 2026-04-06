@@ -3,17 +3,17 @@ package stay_and_shop_system.user.ui;
 import stay_and_shop_system.*;
 import stay_and_shop_system.user.*;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import java.awt.Color;
-import java.awt.Dimension;
 
 public class LoginPage extends JFrame {
     private static final long serialVersionUID = 1L;
-    private JPanel contentPane;
+    private JPanel popupPane;
+    private JPanel mainPane;
     private JLabel invalidLabel;
 
     static final String USERNAME_EMPTY = "Warning: username field is empty.";
@@ -30,6 +30,166 @@ public class LoginPage extends JFrame {
      */
     public LoginPage() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(1000, 800);
+        setLocationRelativeTo(null);
+        setTitle(Main.APP_TITLE);
+
+        // Made SetupUI to make this code more readable, and also since we will be using this throughout the website
+        Object[] uiObjects = SetupUI.initializeScreen(popupPane, mainPane, this);
+        popupPane = (JPanel) uiObjects[0];
+        mainPane = (JPanel) uiObjects[1];
+
+        JLabel usernameLabel = new JLabel("Username");
+        usernameLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        usernameLabel.setBounds((Main.WINDOW_W-110)/2, 25, 110, 14);
+        mainPane.add(usernameLabel);
+
+        JTextField usernameField = new JTextField();
+        usernameField.setBounds((Main.WINDOW_W-170)/2, 50, 170, 20);
+        mainPane.add(usernameField);
+
+        JLabel passwordLabel = new JLabel("Password");
+        passwordLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        passwordLabel.setBounds((Main.WINDOW_W-110)/2, 75, 110, 14);
+        mainPane.add(passwordLabel);
+
+        JPasswordField passwordField = new JPasswordField();
+        passwordField.setBounds((Main.WINDOW_W-170)/2, 100, 170, 20);
+        mainPane.add(passwordField);
+
+        JToggleButton btnShowPassword = new JToggleButton();
+        btnShowPassword.setBounds((Main.WINDOW_W-170)/2+passwordField.getWidth(), 100, 20, 20);
+        btnShowPassword.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (btnShowPassword.isSelected()) passwordField.setEchoChar((char)0);
+                else passwordField.setEchoChar('•');
+            }
+        });
+        mainPane.add(btnShowPassword);
+
+        JLabel emailLabel = new JLabel("Email");
+        passwordLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        passwordLabel.setBounds((Main.WINDOW_W-110)/2, 125, 110, 14);
+        mainPane.add(emailLabel);
+
+        JPasswordField emailField = new JPasswordField();
+        passwordField.setBounds((Main.WINDOW_W-170)/2, 150, 170, 20);
+        mainPane.add(emailField);
+
+        JLabel phoneNumberLabel = new JLabel("Phone Number");
+        passwordLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        passwordLabel.setBounds((Main.WINDOW_W-110)/2, 175, 110, 14);
+        mainPane.add(phoneNumberLabel);
+
+        JPasswordField phoneNumberField = new JPasswordField();
+        passwordField.setBounds((Main.WINDOW_W-170)/2, 200, 170, 20);
+        mainPane.add(phoneNumberField);
+
+        JPanel panel = new JPanel();
+        panel.setBackground(new Color(160, 160, 160));
+        panel.setBounds(143, 251, 360, 101);
+        mainPane.add(panel);
+        panel.setLayout(null);
+
+        JLabel lblNewLabel_3 = new JLabel("Not a member?");
+        lblNewLabel_3.setHorizontalAlignment(SwingConstants.CENTER);
+        lblNewLabel_3.setBounds((panel.getWidth()-240)/2, 11, 240, 14);
+        panel.add(lblNewLabel_3);
+
+        JButton btnCreateAccount = new JButton("Join Now");
+        btnCreateAccount.setBounds((panel.getWidth()-90)/2, 67, 90, 23);
+        btnCreateAccount.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String username = usernameField.getText().trim();
+                String password = String.valueOf(passwordField.getPassword());
+                String email = String.valueOf(emailField.getPassword());
+                String phoneNumber = String.valueOf(phoneNumberField.getPassword());
+                String dialogMessage;
+                passwordField.setText("");
+
+                if (username.isEmpty()) dialogMessage = USERNAME_EMPTY;
+                else if (password.isEmpty()) dialogMessage = PASSWORD_EMPTY;
+                else {
+//                	JOptionPane.showMessageDialog(usernameLabel, dialogMessage);
+                    int res = AccountController.createAccount(username, password, email, phoneNumber);
+                    dialogMessage = switch (res) {
+                        case 0 -> ACCOUNT_CREATE_SUCCESS;
+                        case 1 -> ACCOUNT_ALREADY_EXISTS;
+                        case -1 -> FUBAR;
+                        default -> RESPONSE_MISSING;
+                    };
+
+                    // Create Account Success
+                    if (res == 0){
+                        UserHomePage newFrame = new UserHomePage();
+                        dispose();
+                    }
+                }
+
+                JOptionPane.showMessageDialog(usernameLabel, dialogMessage);
+            }
+        });
+        panel.add(btnCreateAccount);
+
+        JButton btnSignIn = new JButton("Sign In");
+        btnSignIn.setBounds((Main.WINDOW_W-90)/2, 190, 90, 22);
+        btnSignIn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String username = usernameField.getText().trim();
+                String password = String.valueOf(passwordField.getPassword());
+                String dialogMessage;
+                passwordField.setText("");
+
+                if (username.isEmpty()) dialogMessage = USERNAME_EMPTY;
+                else if (password.isEmpty()) dialogMessage = PASSWORD_EMPTY;
+                else {
+                    int res = AccountController.login(username, password);
+                    dialogMessage = switch (res) {
+                        case 0 -> LOGIN_SUCCESS;
+                        case 1 -> LOGIN_FAILURE;
+                        default -> RESPONSE_MISSING;
+                    };
+
+                    // Login Success
+                    if (res == 0){
+                        UserHomePage newFrame = new UserHomePage();
+                        dispose();
+                    }
+                }
+                JOptionPane.showMessageDialog(usernameLabel, dialogMessage);
+            }
+        });
+        mainPane.add(btnSignIn);
+
+        JButton btnResetPassword = new JButton("Forgot password?");
+        btnResetPassword.setBounds((Main.WINDOW_W-170)/2, 224, 170, 22);
+        mainPane.add(btnResetPassword);
+
+        setVisible(true);
+    }
+    public void invalidInfo(String label) {
+    	if (!mainPane.isAncestorOf(invalidLabel) || invalidLabel.getText() != label) { // If contentPane does not contain invalidLabel
+    		if (mainPane.isAncestorOf(invalidLabel)) { // For testing purposes
+                mainPane.remove(invalidLabel);
+    		}
+    		
+    		invalidLabel = new JLabel(label);
+    		invalidLabel.setHorizontalAlignment(SwingConstants.CENTER);
+    		Dimension prefSize = invalidLabel.getPreferredSize(); // So the text fits exactly in the box more properly
+    		invalidLabel.setBounds(280, 40, prefSize.width, prefSize.height);
+    		invalidLabel.setForeground(Color.RED);
+
+            mainPane.add(invalidLabel);
+            mainPane.revalidate();
+            mainPane.repaint();
+    		
+    		// Note to self: I need to find a user based on the Username, then check if the password is right
+    		// This means that there can only be one Username for each person.
+    	}
+    }
+}
+
+/*setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(Main.WINDOW_W, Main.WINDOW_H);
         setLocationRelativeTo(null);
         setTitle(Main.APP_TITLE);
@@ -38,11 +198,7 @@ public class LoginPage extends JFrame {
         setContentPane(contentPane);
         contentPane.setLayout(null);
 
-        JLabel lblNewLabel = new JLabel("Login features go here");
-        lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        lblNewLabel.setBounds((Main.WINDOW_W-400)/2, 11, 400, 22);
-        contentPane.add(lblNewLabel);
-        
+
         JButton homeButton = new JButton(Main.HOME_TEXT);
         homeButton.setBounds(0, 0, 140, 22);
         homeButton.addActionListener(new ActionListener() {
@@ -55,24 +211,24 @@ public class LoginPage extends JFrame {
 
         JLabel usernameLabel = new JLabel("Username");
         usernameLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        usernameLabel.setBounds((Main.WINDOW_W-110)/2, 79, 110, 14);
+        usernameLabel.setBounds((Main.WINDOW_W-110)/2, 25, 110, 14);
         contentPane.add(usernameLabel);
 
         JTextField usernameField = new JTextField();
-        usernameField.setBounds((Main.WINDOW_W-170)/2, 104, 170, 20);
+        usernameField.setBounds((Main.WINDOW_W-170)/2, 50, 170, 20);
         contentPane.add(usernameField);
 
         JLabel passwordLabel = new JLabel("Password");
         passwordLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        passwordLabel.setBounds((Main.WINDOW_W-110)/2, 135, 110, 14);
+        passwordLabel.setBounds((Main.WINDOW_W-110)/2, 75, 110, 14);
         contentPane.add(passwordLabel);
 
         JPasswordField passwordField = new JPasswordField();
-        passwordField.setBounds((Main.WINDOW_W-170)/2, 160, 170, 20);
+        passwordField.setBounds((Main.WINDOW_W-170)/2, 100, 170, 20);
         contentPane.add(passwordField);
 
         JToggleButton btnShowPassword = new JToggleButton();
-        btnShowPassword.setBounds((Main.WINDOW_W-170)/2+passwordField.getWidth(), 160, 20, 20);
+        btnShowPassword.setBounds((Main.WINDOW_W-170)/2+passwordField.getWidth(), 100, 20, 20);
         btnShowPassword.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (btnShowPassword.isSelected()) passwordField.setEchoChar((char)0);
@@ -80,6 +236,24 @@ public class LoginPage extends JFrame {
             }
         });
         contentPane.add(btnShowPassword);
+
+        JLabel emailLabel = new JLabel("Email");
+        passwordLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        passwordLabel.setBounds((Main.WINDOW_W-110)/2, 125, 110, 14);
+        contentPane.add(emailLabel);
+
+        JPasswordField emailField = new JPasswordField();
+        passwordField.setBounds((Main.WINDOW_W-170)/2, 150, 170, 20);
+        contentPane.add(emailField);
+
+        JLabel phoneNumberLabel = new JLabel("Phone Number");
+        passwordLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        passwordLabel.setBounds((Main.WINDOW_W-110)/2, 175, 110, 14);
+        contentPane.add(phoneNumberLabel);
+
+        JPasswordField phoneNumberField = new JPasswordField();
+        passwordField.setBounds((Main.WINDOW_W-170)/2, 200, 170, 20);
+        contentPane.add(phoneNumberField);
 
         JPanel panel = new JPanel();
         panel.setBackground(new Color(160, 160, 160));
@@ -98,6 +272,8 @@ public class LoginPage extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String username = usernameField.getText().trim();
                 String password = String.valueOf(passwordField.getPassword());
+                String email = String.valueOf(emailField.getPassword());
+                String phoneNumber = String.valueOf(phoneNumberField.getPassword());
                 String dialogMessage;
                 passwordField.setText("");
 
@@ -105,7 +281,7 @@ public class LoginPage extends JFrame {
                 else if (password.isEmpty()) dialogMessage = PASSWORD_EMPTY;
                 else {
 //                	JOptionPane.showMessageDialog(usernameLabel, dialogMessage);
-                    int res = AccountController.createAccount(username, password);
+                    int res = AccountController.createAccount(username, password, email, phoneNumber);
                     dialogMessage = switch (res) {
                         case 0 -> ACCOUNT_CREATE_SUCCESS;
                         case 1 -> ACCOUNT_ALREADY_EXISTS;
@@ -160,26 +336,4 @@ public class LoginPage extends JFrame {
         contentPane.add(btnResetPassword);
 
 
-        setVisible(true);
-    }
-    public void invalidInfo(String label) {
-    	if (!contentPane.isAncestorOf(invalidLabel) || invalidLabel.getText() != label) { // If contentPane does not contain invalidLabel
-    		if (contentPane.isAncestorOf(invalidLabel)) { // For testing purposes
-    			contentPane.remove(invalidLabel);
-    		}
-    		
-    		invalidLabel = new JLabel(label);
-    		invalidLabel.setHorizontalAlignment(SwingConstants.CENTER);
-    		Dimension prefSize = invalidLabel.getPreferredSize(); // So the text fits exactly in the box more properly
-    		invalidLabel.setBounds(280, 40, prefSize.width, prefSize.height);
-    		invalidLabel.setForeground(Color.RED);
-    		
-    		contentPane.add(invalidLabel);
-    		contentPane.revalidate();
-    		contentPane.repaint();
-    		
-    		// Note to self: I need to find a user based on the Username, then check if the password is right
-    		// This means that there can only be one Username for each person.
-    	}
-    }
-}
+        setVisible(true);*/

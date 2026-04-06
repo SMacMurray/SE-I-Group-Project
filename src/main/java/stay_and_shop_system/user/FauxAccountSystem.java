@@ -35,7 +35,7 @@ public class FauxAccountSystem {
             User user = new Guest(username, passwordHash);
 
             writer.append(data);
-            Main.SessionAccount = user;
+            AccountSystem.SessionAccount = user;
             return 0;
         } catch (IOException e){
             System.out.println(DATABASE_NOT_FOUND);
@@ -53,7 +53,7 @@ public class FauxAccountSystem {
                 data = scanner.nextLine().split(",");
                 if (username.equals(data[0])){
                     if (hash.equals(data[1])){
-                        Main.SessionAccount = new Guest(username, passwordHash);
+                        AccountSystem.SessionAccount = new Guest(username, passwordHash);
                         return 0;
                     }
                     else {

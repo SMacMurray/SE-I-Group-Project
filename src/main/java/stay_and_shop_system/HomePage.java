@@ -2,6 +2,7 @@ package stay_and_shop_system;
 
 import stay_and_shop_system.occupancy.ui.*;
 import stay_and_shop_system.store.ui.*;
+import stay_and_shop_system.user.AccountSystem;
 import stay_and_shop_system.user.ui.*;
 
 import java.awt.event.ActionEvent;
@@ -34,7 +35,7 @@ public class HomePage extends JFrame {
         contentPane.setLayout(null);
 
         JLabel signedInLabel = new JLabel();
-        signedInLabel.setText((Main.SessionAccount == null) ? "Logged Out" : "Signed in as " + Main.SessionAccount.getName());
+        signedInLabel.setText((AccountSystem.SessionAccount == null) ? "Logged Out" : "Signed in as " + AccountSystem.SessionAccount.getName());
         signedInLabel.setHorizontalAlignment(SwingConstants.CENTER);
         signedInLabel.setBounds(300, 0, 416, 22);
         contentPane.add(signedInLabel);

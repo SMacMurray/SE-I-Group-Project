@@ -3,6 +3,7 @@ package stay_and_shop_system;
 import stay_and_shop_system.occupancy.ui.SearchRoomPage;
 import stay_and_shop_system.user.*;
 import stay_and_shop_system.user.ui.CancelReservationPage;
+import stay_and_shop_system.user.ui.LoginPage;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicScrollBarUI;
@@ -32,7 +33,16 @@ public class SetupUI {
 
         Font font = new Font("Serif", Font.PLAIN, 23);
         if (user instanceof ClerkInterface) {
-            JButton addRoomButton = setupSideBarButton("Add Room", 0, 0);
+            JButton loginButton = setupSideBarButton((AccountSystem.SessionAccount == null ? "Sign In" : "Log Out"), 0, 0);
+            loginButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    LoginPage newFrame = new LoginPage();
+                    frame.dispose();
+                }
+            });
+            buttonsPane.add(loginButton);
+
+            JButton addRoomButton = setupSideBarButton("Add Room", 1, 0);
             buttonsPane.add(addRoomButton);
 
             JButton viewRoomsButton = setupSideBarButton("View All Rooms", 2, 0);
@@ -95,8 +105,8 @@ public class SetupUI {
         JLabel accountStatusLabel = new JLabel("Logged out");
         accountStatusLabel.setFont(new Font("Serif", Font.PLAIN, 16));
         accountStatusLabel.setForeground(ColorPalette.OCEAN_LIGHTBLUE);
-        if (Main.SessionAccount != null) {
-            accountStatusLabel.setText("Logged in: " + Main.SessionAccount.getName());
+        if (AccountSystem.SessionAccount != null) {
+            accountStatusLabel.setText("Logged in: " + AccountSystem.SessionAccount.getName());
         }
         c.gridx = 0;
         c.gridy = 0;
