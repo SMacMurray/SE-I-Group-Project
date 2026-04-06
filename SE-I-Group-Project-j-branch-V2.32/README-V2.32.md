@@ -22,7 +22,7 @@ Added SetupUI to make universal UI functions.
 Changed Header and Sidebar design a bit.
 # SE-I-Group-Project V 2.32
 Added getters and setters for Reservation and ReservationService  
-Making Guest have an Id so it's easier to search for them in the database.  
+Allowed for search by Email for Reservation  
 Almost Finished Use Case Cancel Reservation(Waiting on Scott to finish his Sign in).  
 Updated UI for SideBarPanel from the popup bar.  
 Updated SetupUI for easy altering of MenuButton
