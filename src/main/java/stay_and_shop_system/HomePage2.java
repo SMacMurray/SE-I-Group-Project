@@ -20,7 +20,7 @@ public class HomePage2 extends JFrame{
     public HomePage2() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1000, 800);
-        setLocationRelativeTo(null);
+        setLocationRelativeTo(null); // Centers the screen
         setTitle(Main.APP_TITLE);
 
         // Made SetupUI to make this code more readable, and also since we will be using this throughout the website

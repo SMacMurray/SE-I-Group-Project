@@ -9,6 +9,7 @@ public class Reservation {
 	public Calendar start;
 	public Calendar end;
 	public String guestName = "John Doe";
+	public String guestEmail = "johnDoe@gmail.com";
 	public String creditCardNumber = "9999-9999-9997";
 	public double rate = 0;
 	public double cost = 0;
@@ -36,13 +37,14 @@ public class Reservation {
 		System.out.println("Cost: " + cost);
 	}
 
-	public Reservation(Room r, Calendar s, Calendar e, int g, String n, String cc) {
+	public Reservation(Room r, Calendar s, Calendar e, int g, String n, String em, String cc) {
 		room = r;
 		roomNumber = r.number;
 		start = s;
 		end = e;
 		guestNum = g;
 		guestName = n;
+		guestEmail = em;
 		creditCardNumber = cc;
 		// Rounding it to 2 decimal places (you need to put 100.0 to make it work correctly instead of 100)
 		rate = Math.round(100.0 * (r.baseDailyRate + r.qualityLevel.getPrice())) / 100.0;
@@ -52,4 +54,42 @@ public class Reservation {
 		System.out.println(rate + " : Reservation");
 		System.out.println(reservationId + " : Reservation");
 	}
+
+	public Room getRoom() { return room; }
+	public int getRoomNumber() { return roomNumber; }
+	public Calendar getStartDate() { return start; }
+	public Calendar getEndDate() { return end; }
+	public int getGuestNumber() { return guestNum; }
+	public String getGuestName() { return guestName; }
+	public String getGuestEmail() { return guestEmail; }
+	public String getCreditCardNumber() { return creditCardNumber; }
+	public Double getRate() { return rate; }
+	public Double getCost() { return cost; }
+	public int getReservationId() {return reservationId; }
+
+	public void setRoom(Room r) {
+		r = room;
+		updateRate();
+		updateRoomNumber();
+		updateReservationId();
+	}
+	public void setStartDate(Calendar s) { s = start; }
+	public void updateRoomNumber() { roomNumber = room.getNumber(); }
+	public void setEndDate(Calendar e) { e = end; }
+	public void setGuestNumber(int g) { g  = guestNum; }
+	public void setGuestName(String n) {
+		n = guestName;
+		updateReservationId();
+	}
+	public void setGuestEmail(String email) { guestEmail = email; }
+	// TODO: MAKE INPUT VALIDATION FOR CREDIT CARD NUMBER
+	public void setCreditCardNumber(String cc) { cc = creditCardNumber; }
+	private void updateRate() {
+		rate = Math.round(100.0 * (room.baseDailyRate + room.qualityLevel.getPrice())) / 100.0;
+	}
+	public void setCost(double c) { c = cost; }
+	public void updateReservationId() {
+		reservationId = Objects.hash(room.number + guestName);
+	}
+
 }

@@ -20,3 +20,9 @@ Updated UI in general to follow FlatLaf theme in Main
 # SE-I-Group-Project V 2.31
 Added SetupUI to make universal UI functions.   
 Changed Header and Sidebar design a bit.
+# SE-I-Group-Project V 2.32
+Added getters and setters for Reservation and ReservationService  
+Allowed for search by Email for Reservation  
+Almost Finished Use Case Cancel Reservation(Waiting on Scott to finish his Sign in).  
+Updated UI for SideBarPanel from the popup bar.  
+Updated SetupUI for easy altering of MenuButton

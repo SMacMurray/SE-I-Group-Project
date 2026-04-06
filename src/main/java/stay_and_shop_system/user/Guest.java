@@ -3,9 +3,12 @@ package stay_and_shop_system.user;
 import stay_and_shop_system.occupancy.Reservation;
 import java.util.*;
 
+// USer needs Email and Name at minimum for reservation; email and password  at minimum for account
+// Need to make sure the user's name lines up with the one they make as the reservation
 public class Guest implements GuestInterface {
 	private String name = "John Doe";
     private String email = "dummyEmail@gmail.com";
+    private int id = 0;
     private String phoneNumber;
     private int hash; // Stores the hash of the password, not the password.
     // private List<Reservation> reservations = new ArrayList<>();
@@ -18,6 +21,7 @@ public class Guest implements GuestInterface {
     public Guest(String n, int h) {
     	name = n;
     	hash = h;
+        throw new RuntimeException("TODO: Make sure creating an account requires putting an email also");
     }
 	public void setName(String x) {
 		name = x;
@@ -37,9 +41,9 @@ public class Guest implements GuestInterface {
     	reservations.add(r);
     }
     public void removeReservation(Reservation r) {
-    	reservations.remove(r);
+        res.deleteReservation(r);
     }
-    public List<Reservation> findReservations(){ return res.findReservationsOfName(name); }
+    public List<Reservation> findReservations(){ throw new RuntimeException("TODO: Finish findReservations()"); }
     
     
     // Did not hash or use equals by 'name' because names can be the same,

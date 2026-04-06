@@ -42,7 +42,7 @@ public class GuestClerk implements GuestInterface, ClerkInterface{
     public void removeReservation(Reservation r) {
         reservations.remove(r);
     }
-    public List<Reservation> findReservations(){ return res.findReservationsOfName(name); }
+    public List<Reservation> findReservations(){ throw new RuntimeException("TODO: Finish findReservations()"); }
 
     public boolean addRoom(Room r) {
         return false;

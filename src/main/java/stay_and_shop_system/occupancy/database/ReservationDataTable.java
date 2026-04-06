@@ -24,39 +24,44 @@ public class ReservationDataTable {
 	RoomService rs = new RoomService();
 	static SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy/MM/dd");
 
+	public void createTable() {
+		String sql = """
+                CREATE TABLE IF NOT EXISTS Reservations (
+                    reservationId INTEGER PRIMARY KEY,
+                    roomNumber INTEGER NOT NULL,
+                    guestNumber INTEGER NOT NULL,
+                    startDate TEXT NOT NULL,
+                    endDate TEXT NOT NULL,
+                    guestName TEXT NOT NULL,
+                    guestEmail TEXT NOT NULL,
+                    creditCardNumber TEXT NOT NULL,
+                    rate DOUBLE NOT NULL,
+                    cost DOUBLE NOT NULL
+                );
+                """;
+		try (Statement stmt = connection.createStatement()) {
+			stmt.execute(sql);
+		} catch (SQLException e) {
+			throw new RuntimeException("Failed to create table : ReservationDataTable", e);
+		}
+	}
+	public void dropTable() {
+		String sql = "DROP TABLE IF EXISTS Reservations";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.execute(sql);
+		} catch (SQLException e) {
+			throw new RuntimeException("Failed to drop table : ReservationDataTable", e);
+		}
+	}
 	// Assuming rooms are already loaded
 	// Joel: Im conflicted on if I want to combine loadReservations and loadReservationsOfName
 	public List<Reservation> loadReservations() {
 		String loadSQL = "SELECT * FROM Reservations";
-		List<Reservation> reservations = null;
+		List<Reservation> reservations = new ArrayList<>();
 
 		try (ResultSet rSet = connection.createStatement().executeQuery(loadSQL)) {
-			reservations = new ArrayList<>();
 			while (rSet.next()) {
-				int reservationId = rSet.getInt("reservationId");
-				int roomNumber = rSet.getInt("roomNumber");
-				int guestNumber = rSet.getInt("guestNumber");
-
-				Calendar start = Calendar.getInstance();
-				start.setTime(dateFormatter.parse(rSet.getString("startDate")) );
-				Calendar end = Calendar.getInstance();
-				end.setTime(dateFormatter.parse(rSet.getString("endDate")) );
-
-				String guestName = rSet.getString("guestName");
-				String cc = rSet.getString("creditCardNumber");
-
-				double rate = rSet.getDouble("rate");
-				double cost = rSet.getDouble("cost");
-
-				Room r = rs.getRoom(roomNumber);
-				if (r == null) {
-					System.out.println("The reservation's room " + roomNumber + " does not exist. : ReservationDataTable");
-					System.out.println("Skipping reservation at room " + roomNumber + ". : ReservationDataTable");
-//					deleteReservation(roomNumber, guestName);
-				}
-				else {
-					reservations.add(new Reservation(r, start, end, guestNumber, guestName, cc));
-				}
+				reservations.add(mapResultSetToReservation(rSet));
 			}
 		}
 		catch (SQLException | ParseException e) {
@@ -69,43 +74,21 @@ public class ReservationDataTable {
 			System.exit(1);
 		}
 
-        for (Reservation reserve : ReservationService.reservations) {
+
+        for (Reservation reserve : reservations) {
 			reserve.print();
 		}
 
 		return reservations;
 	}
-	public List<Reservation> loadReservationsOfName(String name) {
-		String loadSQL = " SELECT * FROM Reservations WHERE guestName = " + name;
-		List<Reservation> reservations = null;
+	public List<Reservation> loadReservationsOfEmail(String email) {
+		String loadSQL = " SELECT * FROM Reservations WHERE guestEmail = \'" + email + "\'";
+		List<Reservation> reservations = new ArrayList<>();
 
 		try (ResultSet rSet = connection.createStatement().executeQuery(loadSQL)) {
 			reservations = new ArrayList<>();
 			while (rSet.next()) {
-				int reservationId = rSet.getInt("reservationId");
-				int roomNumber = rSet.getInt("roomNumber");
-				int guestNumber = rSet.getInt("guestNumber");
-
-				Calendar start = Calendar.getInstance();
-				start.setTime(dateFormatter.parse(rSet.getString("startDate")) );
-				Calendar end = Calendar.getInstance();
-				end.setTime(dateFormatter.parse(rSet.getString("endDate")) );
-
-				String guestName = rSet.getString("guestName");
-				String cc = rSet.getString("creditCardNumber");
-
-				double rate = rSet.getDouble("rate");
-				double cost = rSet.getDouble("cost");
-
-				Room r = rs.getRoom(roomNumber);
-				if (r == null) {
-					System.out.println("The reservation's room " + roomNumber + " does not exist. : ReservationDataTable");
-					System.out.println("Skipping reservation at room " + roomNumber + ". : ReservationDataTable");
-//					deleteReservation(roomNumber, guestName);
-				}
-				else {
-					reservations.add(new Reservation(r, start, end, guestNumber, guestName, cc));
-				}
+				reservations.add(mapResultSetToReservation(rSet));
 			}
 		}
 		catch (SQLException | ParseException e) {
@@ -118,27 +101,48 @@ public class ReservationDataTable {
 			System.exit(1);
 		}
 
-		for (Reservation reserve : ReservationService.reservations) {
+		for (Reservation reserve : reservations) {
 			reserve.print();
 		}
 
 		return reservations;
+	}
+	public Reservation loadReservationOfId(int id) {
+		String loadSQL = " SELECT * FROM Reservations WHERE reservationId = " + id;
+		Reservation reservation = null;
+
+		try (ResultSet rSet = connection.createStatement().executeQuery(loadSQL)) {
+			rSet.next();
+
+			reservation = mapResultSetToReservation(rSet);
+		}
+		catch (SQLException | ParseException e) {
+			e.printStackTrace();
+			// JOptionPane.showMessageDialog(null, e + " : ReservationDataTable");
+		} catch (NullPointerException e) {
+			System.out.println("You have not connected to the server.");
+			e.printStackTrace();
+			System.exit(1);
+		}
+
+		return reservation;
 	}
 	public static void addReservation(Reservation re) {
 		// insert is SQL code.
-		String insert = "INSERT INTO Reservations (reservationId, roomNumber, guestNumber, startDate, endDate, guestName, creditCardNumber, rate, cost) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String insert = "INSERT INTO Reservations (reservationId, roomNumber, guestNumber, startDate, endDate, guestName, guestEmail, creditCardNumber, rate, cost) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		try (PreparedStatement ps = connection.prepareStatement(insert)) {
 			//JOptionPane.showMessageDialog(null, "Successful Connection! : ReservationDataTable");
 			
-			ps.setInt(1, re.reservationId);
-			ps.setInt(2, re.roomNumber);
-			ps.setInt(3, re.guestNum);
-			ps.setString(4, dateFormatter.format(re.start.getTime()));
-			ps.setString(5, dateFormatter.format(re.end.getTime()));
-			ps.setString(6, re.guestName);
-			ps.setString(7, re.creditCardNumber);
-			ps.setDouble(8, re.rate);
-			ps.setDouble(9, re.cost);
+			ps.setInt(1, re.getReservationId());
+			ps.setInt(2, re.getRoomNumber());
+			ps.setInt(3, re.getGuestNumber());
+			ps.setString(4, dateFormatter.format(re.getStartDate().getTime()));
+			ps.setString(5, dateFormatter.format(re.getEndDate().getTime()));
+			ps.setString(6, re.getGuestName());
+			ps.setString(7, re.getGuestEmail());
+			ps.setString(8, re.getCreditCardNumber());
+			ps.setDouble(9, re.getRate());
+			ps.setDouble(10, re.getCost());
 			
 			int rowAdded = ps.executeUpdate();
 			if (rowAdded > 0) {
@@ -180,18 +184,19 @@ public class ReservationDataTable {
 		}
 	}
 	public void modifyReservation(int roomNumber, String name, Reservation re) {
-		String modifySQL = "UPDATE Reservations SET roomNumber = ?, guestNumber = ?, startDate = ?, endDate = ?, guestName = ?, creditCardNumber = ?, rate = ?, cost = ? WHERE reservationId = ?";
+		String modifySQL = "UPDATE Reservations SET roomNumber = ?, guestNumber = ?, startDate = ?, endDate = ?, guestName = ?, guestEmail = ?, creditCardNumber = ?, rate = ?, cost = ? WHERE reservationId = ?";
 		try (PreparedStatement ps = connection.prepareStatement(modifySQL)) {
 
-			ps.setInt(1, re.roomNumber);
-			ps.setInt(2, re.guestNum);
-			ps.setString(3, dateFormatter.format(re.start.getTime()) );
-			ps.setString(4, dateFormatter.format(re.end.getTime()) );
-			ps.setString(5, re.guestName );
-			ps.setString(6, re.creditCardNumber );
-			ps.setDouble(7, re.rate );
-			ps.setDouble(8, re.cost );
-			ps.setInt(9, Objects.hash(roomNumber + name));
+			ps.setInt(1, re.getRoomNumber());
+			ps.setInt(2, re.getGuestNumber());
+			ps.setString(3, dateFormatter.format(re.getStartDate().getTime()) );
+			ps.setString(4, dateFormatter.format(re.getEndDate().getTime()) );
+			ps.setString(5, re.getGuestName() );
+			ps.setString(6, re.getGuestEmail() );
+			ps.setString(7, re.getCreditCardNumber() );
+			ps.setDouble(8, re.getRate() );
+			ps.setDouble(9, re.getCost() );
+			ps.setInt(10, Objects.hash(roomNumber + name));
 
 			int rowAdded = ps.executeUpdate();
 			if (rowAdded > 0) {
@@ -205,6 +210,36 @@ public class ReservationDataTable {
 		catch(SQLException e) {
 			JOptionPane.showMessageDialog(null, e + " : ReservationDataTable");
 		}
+	}
+	public Reservation mapResultSetToReservation(ResultSet rSet) throws SQLException, ParseException{
+		Reservation re = null;
+
+		int reservationId = rSet.getInt("reservationId");
+		int roomNumber = rSet.getInt("roomNumber");
+		int guestNumber = rSet.getInt("guestNumber");
+
+		Calendar start = Calendar.getInstance();
+		start.setTime(dateFormatter.parse(rSet.getString("startDate")));
+		Calendar end = Calendar.getInstance();
+		end.setTime(dateFormatter.parse(rSet.getString("endDate")));
+
+		String guestName = rSet.getString("guestName");
+		String guestEmail = rSet.getString("guestEmail");
+		String cc = rSet.getString("creditCardNumber");
+
+		double rate = rSet.getDouble("rate");
+		double cost = rSet.getDouble("cost");
+
+		Room r = rs.getRoom(roomNumber);
+		if (r == null) {
+			System.out.println("The reservation's room " + roomNumber + " does not exist. : ReservationDataTable");
+			System.out.println("Skipping reservation at room " + roomNumber + ". : ReservationDataTable");
+//				deleteReservation(roomNumber, guestName);
+		} else {
+			re = new Reservation(r, start, end, guestNumber, guestName, guestEmail, cc);
+		}
+
+		return re;
 	}
 	// getReservation
 	// addReservation
