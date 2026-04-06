@@ -1,5 +1,6 @@
 package stay_and_shop_system;
 
+import stay_and_shop_system.occupancy.ReservationService;
 import stay_and_shop_system.occupancy.database.ReservationDataTable;
 import stay_and_shop_system.user.User;
 
@@ -17,7 +18,9 @@ public class Main extends JFrame {
     public static String APP_TITLE = "Stop & Shop: the illustrious hotel/luxury shopping experience, for all your stop & shopping needs!";
     public static String HOME_TEXT = "Store Logo Here";
     static ReservationDataTable rdt = new ReservationDataTable();
-    
+ // Use this to indicate what user is currently logged in, or null for logged out.
+    public static User SessionAccount = null;
+
     public static void initRooms() {
     	LoadCSV.loadRooms(); // Cant do this outside a function.
     	
@@ -26,7 +29,10 @@ public class Main extends JFrame {
     public static void main(String[] args) {
         FlatLightLaf.setup();
     	initRooms();
-    	
+        SetupUI.setUpJOptionPaneDesign();
+//        rdt.dropTable();
+    	rdt.createTable();
+
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {

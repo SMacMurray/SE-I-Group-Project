@@ -10,6 +10,7 @@ import stay_and_shop_system.GlobalVariables;
 import stay_and_shop_system.HomePage;
 import stay_and_shop_system.HomePage2;
 import stay_and_shop_system.Main;
+import stay_and_shop_system.occupancy.ReservationService;
 import stay_and_shop_system.occupancy.Room;
 
 import java.awt.*; // Includes BorderLayout.*,
@@ -37,7 +38,8 @@ public class BookingPage2 extends JFrame {
 	private JTextField nameBox;
 	private JTextField emailBox;
 	private JTextField creditCardBox;
-	
+
+	private ReservationService reS = new ReservationService();
 	private String[] columnNames = {
 			"Room Number",
 			"Beds",
@@ -244,7 +246,7 @@ public class BookingPage2 extends JFrame {
 	        				JOptionPane.YES_NO_OPTION
 	        				);
 	        		if (reply == JOptionPane.YES_OPTION) {
-	        			GlobalVariables.reS.reserveRoom(room, startDate, endDate, guests, guestName, guestEmail, creditCardNumber);
+	        			reS.reserveRoom(room, startDate, endDate, guests, guestName, guestEmail, creditCardNumber);
 	        			JOptionPane.showMessageDialog(null, "Reservation Successful!");
 	        			
 	        			HomePage2 newFrame = new HomePage2();

@@ -3,16 +3,16 @@ package stay_and_shop_system.user;
 import java.util.*;
 
 public class GuestService {
-	private static List<Guest> guests = new ArrayList<>();
+	private static List<GuestInterface> guests = new ArrayList<>();
 	
-	public Guest addGuest(String name, String email) {
-		Guest guest = new Guest(name, email);
+	public GuestInterface addGuest(String name, String email) {
+		GuestInterface guest = new Guest(name, email);
 		guests.add(guest);
 		return guest;
 	}
-	public Guest findGuest(String name, String email) {
-		Guest guest = new Guest(name, email);
-		for (Guest g : guests) {
+	public GuestInterface findGuest(String name, String email) {
+		GuestInterface guest = new Guest(name, email);
+		for (GuestInterface g : guests) {
 			if (g.equals(guest)) {
 				guest = g;
 			}

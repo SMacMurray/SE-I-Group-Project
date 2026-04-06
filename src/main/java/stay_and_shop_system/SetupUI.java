@@ -3,7 +3,6 @@ package stay_and_shop_system;
 import stay_and_shop_system.occupancy.ui.SearchRoomPage;
 import stay_and_shop_system.user.*;
 import stay_and_shop_system.user.ui.CancelReservationPage;
-import stay_and_shop_system.user.ui.LoginPage;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicScrollBarUI;
@@ -14,11 +13,57 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class SetupUI {
+    public static void setUpJOptionPaneDesign() {
+        UIManager.put("OptionPane.background", ColorPalette.OCEAN_DARKBLUE);
+        UIManager.put("OptionPane.messageForeground", ColorPalette.OCEAN_LIGHTBLUE);
+    }
+    public static JLabel getScaledImage(String imgPath, Double xSize, Double ySize) {
+        ImageIcon icon = new ImageIcon(imgPath);
+        ImageIcon newIcon = new ImageIcon(icon.getImage().getScaledInstance((int)(icon.getIconWidth() * xSize), (int)(icon.getIconHeight() * ySize), Image.SCALE_SMOOTH));
+        JLabel jLabel = new JLabel(newIcon);
+
+        return jLabel;
+    }
+    public static void alterMenuButtonMouseEvent(JPanel headerPane, MouseAdapter ma) {
+        JLabel menuButton = null;
+        for (Component c : headerPane.getComponents()) {
+            if (c.getName() != null) {
+                if (c.getName().equals("MenuButton")) {
+                    menuButton = (JLabel) c;
+                }
+            }
+        }
+
+        if (menuButton != null) {
+            menuButton.addMouseListener(ma);
+        }
+        else {
+            throw new RuntimeException("Could not find MenuButton : SetupUI");
+        }
+    }
+    public static JPanel makeSearchBar() {
+        JPanel jp = new JPanel();
+        JTextField jtf = new JTextField(13);
+        jtf.setFont(new Font("Serif", Font.PLAIN, 14));
+        jtf.setForeground(ColorPalette.OCEAN_DARKBLUE); // Sets text color
+        JLabel searchImg = getScaledImage("src/main/resources/searchBarImg.png", 0.05, 0.05);
+        jp.add(jtf);
+        jp.add(searchImg);
+
+        jp.setBackground(ColorPalette.DESATURATED_LIGHTBLUE);
+        jtf.setOpaque(false);
+        jtf.setBorder(null);
+
+        return jp;
+    }
+
+
     private static JButton setupSideBarButton(String text, int top, int bottom) {
         JButton button = new JButton(text);
         button.setForeground(ColorPalette.OCEAN_LIGHTBLUE);
         button.setFont(new Font("Serif", Font.PLAIN, 23));
         button.setBackground(ColorPalette.SATURATED_BLUE);
+        button.setPreferredSize(new Dimension(300, 40));
         button.setBorder(BorderFactory.createMatteBorder(top, 0, bottom, 0, ColorPalette.OCEAN_DARKBLUE));
 
         return button;
@@ -26,40 +71,49 @@ public class SetupUI {
 
     private static JPanel setupButtonsPane(JFrame frame) {
         int buttonCount = 0;
-        JPanel buttonsPane = new JPanel(new GridLayout(0, 1));
+        JPanel buttonsPane = new JPanel(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.CENTER;
         User user = new GuestClerk("Johnny Test", "johnnyTest@gmail.com");
 
         Font font = new Font("Serif", Font.PLAIN, 23);
         if (user instanceof ClerkInterface) {
-            JButton loginButton = setupSideBarButton((AccountSystem.SessionAccount == null ? "Sign In" : "Log Out"), 0, 0);
-            loginButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    LoginPage newFrame = new LoginPage();
-                    frame.dispose();
-                }
-            });
-            buttonsPane.add(loginButton);
+            JButton addRoomButton = setupSideBarButton("Add Room", 0, 0);
+            c.gridx = 0;
+            c.gridy = buttonCount;
+            buttonCount++;
+            buttonsPane.add(addRoomButton, c);
 
-            JButton addRoomButton = setupSideBarButton("Add Room", 1, 0);
-            buttonsPane.add(addRoomButton);
+            JButton viewRoomsButton = setupSideBarButton("View All Rooms", 4, 0);
+            c.gridx = 0;
+            c.gridy = buttonCount;
+            buttonCount++;
+            buttonsPane.add(viewRoomsButton, c);
 
-            JButton viewRoomsButton = setupSideBarButton("View All Rooms", 2, 0);
-            buttonsPane.add(viewRoomsButton);
+            JButton modifyRoomButton = setupSideBarButton("Modify Room", 4, 0);
+            c.gridx = 0;
+            c.gridy = buttonCount;
+            buttonCount++;
+            buttonsPane.add(modifyRoomButton, c);
 
-            JButton modifyRoomButton = setupSideBarButton("Modify Room", 2, 0);
-            buttonsPane.add(modifyRoomButton);
+            JButton modifyMyInformationButton = setupSideBarButton("Modify My Information", 4, 0);
+            c.gridx = 0;
+            c.gridy = buttonCount;
+            buttonCount++;
+            buttonsPane.add(modifyMyInformationButton, c);
 
-            JButton modifyMyInformationButton = setupSideBarButton("Modify My Information", 2, 0);
-            buttonsPane.add(modifyMyInformationButton);
-
-            JButton modifyReservationButton = setupSideBarButton("Modify My Information", 2, 0);
-            buttonsPane.add(modifyReservationButton);
+            JButton modifyReservationButton = setupSideBarButton("Modify Guest Information", 4, 0);
+            c.gridx = 0;
+            c.gridy = buttonCount;
+            buttonCount++;
+            buttonsPane.add(modifyReservationButton, c);
 
             // Make a JPanel that prompts for a user's name to search for.
-            JButton cancelReservationButton = new JButton("Cancel Guest Reservation");
-            buttonsPane.add(cancelReservationButton);
+            JButton cancelReservationButton = setupSideBarButton("Cancel Guest Reservation", 4, 0);
+            c.gridx = 0;
+            c.gridy = buttonCount;
+            buttonCount++;
+            buttonsPane.add(cancelReservationButton, c);
             cancelReservationButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     CancelReservationPage newFrame = new CancelReservationPage((GuestInterface)user);
@@ -67,22 +121,35 @@ public class SetupUI {
                 }
             });
 
-            JButton checkGuestBill = new JButton("Check Guest's Bill");
-            buttonsPane.add(checkGuestBill);
+            JButton checkGuestBill = setupSideBarButton("Check Guest Bill", 4, 0);
+            c.gridx = 0;
+            c.gridy = buttonCount;
+            buttonCount++;
+            buttonsPane.add(checkGuestBill, c);
 
         }
         if (user instanceof AdminInterface) {
 
         }
         if (user instanceof GuestInterface) {
-            JButton checkGuestBill = new JButton("Check My Bill");
-            buttonsPane.add(checkGuestBill);
+            int topBorder = (user instanceof AdminInterface || user instanceof ClerkInterface) ? 4 : 0;
+            JButton checkGuestBill = setupSideBarButton("Check My Bill", topBorder, 0);
+            c.gridx = 0;
+            c.gridy = buttonCount;
+            buttonCount++;
+            buttonsPane.add(checkGuestBill, c);
 
-            JButton modifyReservationButton = new JButton("Modify My Reservation");
-            buttonsPane.add(modifyReservationButton);
+            JButton modifyReservationButton = setupSideBarButton("Modify My Reservation", 4, 0);
+            c.gridx = 0;
+            c.gridy = buttonCount;
+            buttonCount++;
+            buttonsPane.add(modifyReservationButton, c);
 
-            JButton cancelReservationButton = new JButton("Cancel My Reservation");
-            buttonsPane.add(cancelReservationButton);
+            JButton cancelReservationButton = setupSideBarButton("Cancel My Reservation", 4, 0);
+            c.gridx = 0;
+            c.gridy = buttonCount;
+            buttonCount++;
+            buttonsPane.add(cancelReservationButton, c);
             cancelReservationButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     CancelReservationPage newFrame = new CancelReservationPage((GuestInterface)user);
@@ -102,20 +169,45 @@ public class SetupUI {
         sidebarPanel.setPreferredSize(new Dimension(350, sidebarPanel.getHeight()));
         sidebarPanel.setBackground(ColorPalette.DESATURATED_DARKBLUE);
 
-        JLabel accountStatusLabel = new JLabel("Logged out");
-        accountStatusLabel.setFont(new Font("Serif", Font.PLAIN, 16));
-        accountStatusLabel.setForeground(ColorPalette.OCEAN_LIGHTBLUE);
-        if (AccountSystem.SessionAccount != null) {
-            accountStatusLabel.setText("Logged in: " + AccountSystem.SessionAccount.getName());
-        }
+
+        JLabel userImg = getScaledImage("src/main/resources/userImg.png", 0.2, 0.2);
         c.gridx = 0;
         c.gridy = 0;
-        sidebarPanel.add(accountStatusLabel, c);
+        // The 2 below lines allow me to anchor it to the left
+        c.fill = GridBagConstraints.NONE; // Stops GridBagLayout from stretching horizontally to the container's width
+        c.anchor = GridBagConstraints.LINE_START;
+        c.insets = new Insets(0, 0, 5, 0);
+        sidebarPanel.add(userImg, c);
+
+        // JTextArea and not JLabel to allow for textWrapping
+        JTextArea accountStatusTextArea = new JTextArea("NOT LOGGED IN");
+        accountStatusTextArea.setLineWrap(true);       // Enable wrapping
+        accountStatusTextArea.setWrapStyleWord(false); // ALlow wrapping in a word and not only on spaces.
+        accountStatusTextArea.setOpaque(false);
+        accountStatusTextArea.setEditable(false);
+        accountStatusTextArea.setFont(new Font("Serif", Font.PLAIN, 18));
+        accountStatusTextArea.setForeground(ColorPalette.OCEAN_LIGHTBLUE);
+        if (Main.SessionAccount != null) {
+            accountStatusTextArea.setText("LOGGED IN AS: " + Main.SessionAccount.getName());
+        }
+        c.gridx = 0;
+        c.gridy = 1;
+        c.insets = new Insets(0, 0, 10, 0);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.anchor = GridBagConstraints.CENTER;
+        sidebarPanel.add(accountStatusTextArea, c);
+
+        JSeparator horizontalLine = new JSeparator(SwingConstants.HORIZONTAL);
+        horizontalLine.setForeground(ColorPalette.OCEAN_LIGHTBLUE);
+        c.gridx = 0;
+        c.gridy = 2;
+        c.insets = new Insets(0, 0, 30, 0);
+        sidebarPanel.add(horizontalLine, c);
 
         JPanel buttonsPane = setupButtonsPane(frame);
         JScrollPane buttonsScrollPane = new JScrollPane(buttonsPane);
         buttonsPane.setPreferredSize(new Dimension(300, 400));
-        buttonsScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        buttonsScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         buttonsScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         buttonsScrollPane.setBorder(null);
         buttonsScrollPane.setViewportBorder(null);
@@ -127,8 +219,15 @@ public class SetupUI {
             }
         });
         c.gridx = 0;
-        c.gridy = 1;
+        c.gridy = 3;
+        c.insets = new Insets(0, 0, 0, 0);
         sidebarPanel.add(buttonsScrollPane, c);
+
+        JPanel searchPane = makeSearchBar();
+        c.gridx = 0;
+        c.gridy = 4;
+        c.fill = GridBagConstraints.NONE;
+        sidebarPanel.add(searchPane, c);
 
         return sidebarPanel;
 //        throw new RuntimeException("TODO: finish setupPopup");
@@ -149,23 +248,21 @@ public class SetupUI {
         headerPane.setPreferredSize(new Dimension(headerPane.getWidth(), headerPane.getHeight() + 50));
 
         // Was playing with weightx and Insets in order to center the title
-        ImageIcon menuButtonIcon = new ImageIcon("src/main/resources/menuButton.png");
-        ImageIcon newMenuButtonIcon = new ImageIcon(menuButtonIcon.getImage().getScaledInstance((int)(menuButtonIcon.getIconWidth() * 0.6), (int)(menuButtonIcon.getIconHeight() * 0.6), Image.SCALE_SMOOTH));
-        JLabel menuButtonLabel = new JLabel(newMenuButtonIcon);
+        JLabel menuButtonLabel = getScaledImage("src/main/resources/menuButton.png", 0.6, 0.6);
         menuButtonLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        JPanel test = setupPopup(frame);
-//        test.add(new JLabel("MOOOOOOOOMM"));
-        popupPane.add(test, BorderLayout.LINE_START);
-//        popupPane.setComponentZOrder(test, 0);
-        test.setVisible(false);
+        menuButtonLabel.setName("MenuButton");
+        JPanel sideBarPane = setupPopup(frame);
+        popupPane.add(sideBarPane, BorderLayout.LINE_START);
+        sideBarPane.setVisible(false);
         menuButtonLabel.addMouseListener(new MouseAdapter() { // JLabel doesnt have actionListener
             @Override
             public void mousePressed(MouseEvent e) {
                 System.out.println("test menuButton was clicked!");
-                if (test.isVisible()) {
-                    test.setVisible(false);
+                if (sideBarPane.isVisible()) {
+                    sideBarPane.setVisible(false);
+                    sideBarPane.repaint();
                 }
-                else test.setVisible(true);
+                else sideBarPane.setVisible(true);
             }
         });
         c.gridy = 0;
@@ -209,6 +306,6 @@ public class SetupUI {
         c.fill = GridBagConstraints.NONE;
         headerPane.add(bookRoomButton, c);
 
-        return new Object[] {popupPane, mainPane};
+        return new Object[] {popupPane, mainPane, headerPane};
     }
 }
