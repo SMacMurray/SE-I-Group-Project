@@ -37,17 +37,12 @@ public class LoginPage extends JFrame {
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
         contentPane.setLayout(null);
-
-        JLabel lblNewLabel = new JLabel("Login features go here");
-        lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        lblNewLabel.setBounds((Main.WINDOW_W-400)/2, 11, 400, 22);
-        contentPane.add(lblNewLabel);
         
         JButton homeButton = new JButton(Main.HOME_TEXT);
         homeButton.setBounds(0, 0, 140, 22);
         homeButton.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		UserHomePage newFrame = new UserHomePage(); //Opening the second JFrame
+        		HomePage2 newFrame = new HomePage2(); //Opening the second JFrame
         		dispose(); //Disposing the First JFrame
         	}
         });
@@ -55,24 +50,24 @@ public class LoginPage extends JFrame {
 
         JLabel usernameLabel = new JLabel("Username");
         usernameLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        usernameLabel.setBounds((Main.WINDOW_W-110)/2, 79, 110, 14);
+        usernameLabel.setBounds((Main.WINDOW_W-170)/2, 20, 170, 20);
         contentPane.add(usernameLabel);
 
         JTextField usernameField = new JTextField();
-        usernameField.setBounds((Main.WINDOW_W-170)/2, 104, 170, 20);
+        usernameField.setBounds((Main.WINDOW_W-170)/2, 40, 170, 20);
         contentPane.add(usernameField);
 
         JLabel passwordLabel = new JLabel("Password");
         passwordLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        passwordLabel.setBounds((Main.WINDOW_W-110)/2, 135, 110, 14);
+        passwordLabel.setBounds((Main.WINDOW_W-110)/2, 60, 110, 14);
         contentPane.add(passwordLabel);
 
         JPasswordField passwordField = new JPasswordField();
-        passwordField.setBounds((Main.WINDOW_W-170)/2, 160, 170, 20);
+        passwordField.setBounds((Main.WINDOW_W-170)/2, 80, 170, 20);
         contentPane.add(passwordField);
 
         JToggleButton btnShowPassword = new JToggleButton();
-        btnShowPassword.setBounds((Main.WINDOW_W-170)/2+passwordField.getWidth(), 160, 20, 20);
+        btnShowPassword.setBounds((Main.WINDOW_W-170)/2+passwordField.getWidth(), 80, 20, 20);
         btnShowPassword.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (btnShowPassword.isSelected()) passwordField.setEchoChar((char)0);
@@ -80,6 +75,24 @@ public class LoginPage extends JFrame {
             }
         });
         contentPane.add(btnShowPassword);
+
+        JLabel emailLabel = new JLabel("Email");
+        emailLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        emailLabel.setBounds((Main.WINDOW_W-110)/2, 100, 110, 14);
+        contentPane.add(emailLabel);
+
+        JTextField emailField = new JTextField();
+        emailField.setBounds((Main.WINDOW_W-170)/2, 120, 170, 20);
+        contentPane.add(emailField);
+
+        JLabel phoneNumberLabel = new JLabel("Phone Number");
+        phoneNumberLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        phoneNumberLabel.setBounds((Main.WINDOW_W-110)/2, 140, 110, 14);
+        contentPane.add(phoneNumberLabel);
+
+        JTextField phoneNumberField = new JTextField();
+        phoneNumberField.setBounds((Main.WINDOW_W-170)/2, 160, 170, 20);
+        contentPane.add(phoneNumberField);
 
         JPanel panel = new JPanel();
         panel.setBackground(new Color(160, 160, 160));
@@ -98,6 +111,9 @@ public class LoginPage extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String username = usernameField.getText().trim();
                 String password = String.valueOf(passwordField.getPassword());
+                String email = emailField.getText().trim();
+                String phoneNumber = phoneNumberField.getText().trim();
+
                 String dialogMessage;
                 passwordField.setText("");
 
@@ -105,7 +121,7 @@ public class LoginPage extends JFrame {
                 else if (password.isEmpty()) dialogMessage = PASSWORD_EMPTY;
                 else {
 //                	JOptionPane.showMessageDialog(usernameLabel, dialogMessage);
-                    int res = AccountController.createAccount(username, password);
+                    int res = AccountController.createAccount(username, password, email, phoneNumber);
                     dialogMessage = switch (res) {
                         case 0 -> ACCOUNT_CREATE_SUCCESS;
                         case 1 -> ACCOUNT_ALREADY_EXISTS;
@@ -115,7 +131,7 @@ public class LoginPage extends JFrame {
 
                     // Create Account Success
                     if (res == 0){
-                        UserHomePage newFrame = new UserHomePage();
+                        HomePage2 newFrame = new HomePage2();
                         dispose();
                     }
                 }
@@ -146,7 +162,7 @@ public class LoginPage extends JFrame {
 
                     // Login Success
                     if (res == 0){
-                        UserHomePage newFrame = new UserHomePage();
+                        HomePage2 newFrame = new HomePage2();
                         dispose();
                     }
                 }

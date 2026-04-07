@@ -22,6 +22,12 @@ public class GuestAdmin implements GuestInterface, AdminInterface{
         name = n;
         hash = h;
     }
+    public GuestAdmin(String n, int h, String e, String p) {
+        name = n;
+        hash = h;
+        email = e;
+        phoneNumber = p;
+    }
     public void setName(String x) {
         name = x;
     }

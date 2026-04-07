@@ -3,6 +3,7 @@ package stay_and_shop_system;
 import stay_and_shop_system.occupancy.ui.SearchRoomPage;
 import stay_and_shop_system.user.*;
 import stay_and_shop_system.user.ui.CancelReservationPage;
+import stay_and_shop_system.user.ui.LoginPage;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicScrollBarUI;
@@ -78,7 +79,26 @@ public class SetupUI {
 
         Font font = new Font("Serif", Font.PLAIN, 23);
         if (user instanceof ClerkInterface) {
-            JButton addRoomButton = setupSideBarButton("Add Room", 0, 0);
+            JButton loginButton = setupSideBarButton((AccountSystem.getSessionAccount() == null ? "Sign In" : "Log Out"), 4, 0);
+            c.gridx = 0;
+            c.gridy = buttonCount;
+            buttonCount++;
+            buttonsPane.add(loginButton, c);
+            loginButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    if (AccountSystem.getSessionAccount() == null){
+                        LoginPage newFrame = new LoginPage();
+                        frame.dispose();
+                    }
+                    else {
+                        AccountController.logout();
+                        HomePage2 newFrame = new HomePage2();
+                        frame.dispose();
+                    }
+                }
+            });
+
+            JButton addRoomButton = setupSideBarButton("Add Room", 4, 0);
             c.gridx = 0;
             c.gridy = buttonCount;
             buttonCount++;
@@ -187,8 +207,8 @@ public class SetupUI {
         accountStatusTextArea.setEditable(false);
         accountStatusTextArea.setFont(new Font("Serif", Font.PLAIN, 18));
         accountStatusTextArea.setForeground(ColorPalette.OCEAN_LIGHTBLUE);
-        if (Main.SessionAccount != null) {
-            accountStatusTextArea.setText("LOGGED IN AS: " + Main.SessionAccount.getName());
+        if (AccountSystem.SessionAccount != null) {
+            accountStatusTextArea.setText("LOGGED IN AS: " + AccountSystem.SessionAccount.getName());
         }
         c.gridx = 0;
         c.gridy = 1;
@@ -206,7 +226,7 @@ public class SetupUI {
 
         JPanel buttonsPane = setupButtonsPane(frame);
         JScrollPane buttonsScrollPane = new JScrollPane(buttonsPane);
-        buttonsPane.setPreferredSize(new Dimension(300, 400));
+        buttonsPane.setPreferredSize(new Dimension(300, 440));
         buttonsScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         buttonsScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         buttonsScrollPane.setBorder(null);

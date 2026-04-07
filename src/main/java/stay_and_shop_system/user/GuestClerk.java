@@ -22,6 +22,12 @@ public class GuestClerk implements GuestInterface, ClerkInterface{
         name = n;
         hash = h;
     }
+    public GuestClerk(String n, int h, String e, String p) {
+        name = n;
+        hash = h;
+        email = e;
+        phoneNumber = p;
+    }
     public void setName(String x) {
         name = x;
     }

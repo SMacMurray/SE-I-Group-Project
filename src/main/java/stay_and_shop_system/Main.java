@@ -18,8 +18,6 @@ public class Main extends JFrame {
     public static String APP_TITLE = "Stop & Shop: the illustrious hotel/luxury shopping experience, for all your stop & shopping needs!";
     public static String HOME_TEXT = "Store Logo Here";
     static ReservationDataTable rdt = new ReservationDataTable();
- // Use this to indicate what user is currently logged in, or null for logged out.
-    public static User SessionAccount = null;
 
     public static void initRooms() {
     	LoadCSV.loadRooms(); // Cant do this outside a function.

@@ -23,6 +23,12 @@ public class Guest implements GuestInterface {
     	hash = h;
         throw new RuntimeException("TODO: Make sure creating an account requires putting an email also");
     }
+    public Guest(String n, int h, String e, String p) {
+        name = n;
+        hash = h;
+        email = e;
+        phoneNumber = p;
+    }
 	public void setName(String x) {
 		name = x;
 	}
