@@ -7,37 +7,21 @@
     <list default="true" id="428cf44f-7588-43e7-9bd3-c1681c4f300e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/54608f67-07e3-4945-8474-7db6b2e40004.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/54608f67-07e3-4945-8474-7db6b2e40004.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/data_sources_history.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/data_sources_history.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/stay_and_shop_system/HomePage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/stay_and_shop_system/HomePage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data.db" beforeDir="false" afterPath="$PROJECT_DIR$/data.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/stay_and_shop_system/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/stay_and_shop_system/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/stay_and_shop_system/SetupUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/stay_and_shop_system/SetupUI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/stay_and_shop_system/user/AccountController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/stay_and_shop_system/user/AccountController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/stay_and_shop_system/user/AccountSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/stay_and_shop_system/user/AccountSystem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/stay_and_shop_system/user/FauxAccountSystem.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/stay_and_shop_system/user/Guest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/stay_and_shop_system/user/Guest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/stay_and_shop_system/user/GuestAdmin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/stay_and_shop_system/user/GuestAdmin.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/stay_and_shop_system/user/GuestClerk.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/stay_and_shop_system/user/GuestClerk.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/stay_and_shop_system/user/ui/LoginPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/stay_and_shop_system/user/ui/LoginPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/HomePage$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/HomePage$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/HomePage$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/HomePage$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/HomePage$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/HomePage$3.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/HomePage$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/HomePage$4.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/HomePage$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/HomePage$5.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/HomePage$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/HomePage$6.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/HomePage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/HomePage.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/Main$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/Main$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/SetupUI$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/SetupUI$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/SetupUI$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/SetupUI$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/SetupUI$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/SetupUI$3.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/SetupUI$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/SetupUI$4.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/SetupUI$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/SetupUI$5.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/SetupUI$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/SetupUI$6.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/SetupUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/SetupUI.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/user/AccountController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/user/AccountController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/user/AccountSystem.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/user/AccountSystem.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/user/FauxAccountSystem.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/user/Guest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/user/Guest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/user/GuestAdmin.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/user/GuestAdmin.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/user/GuestClerk.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/user/GuestClerk.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/user/ui/LoginPage$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/user/ui/LoginPage$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/user/ui/LoginPage$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/user/ui/LoginPage$2.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/user/ui/LoginPage$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/user/ui/LoginPage$3.class" afterDir="false" />
@@ -80,10 +64,12 @@
     "Repository.Attach.JavaDocs": "false",
     "Repository.Attach.Sources": "false",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "codeWithMe.voiceChat.enabledByDefault": "false",
-    "git-widget-placeholder": "scott",
+    "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
     "nodejs_package_manager_path": "npm",
     "project.structure.last.edited": "Libraries",
@@ -101,6 +87,7 @@
       <option name="presentableId" value="Default" />
       <updated>1775403596738</updated>
       <workItem from="1775518818417" duration="5900000" />
+      <workItem from="1775610133260" duration="1626000" />
     </task>
     <task id="LOCAL-00001">
       <option name="closed" value="true" />

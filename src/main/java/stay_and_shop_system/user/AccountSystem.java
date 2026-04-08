@@ -4,6 +4,7 @@ import stay_and_shop_system.DatabaseConnection;
 
 import java.io.*;
 import java.sql.*; // Imports SQLException
+import java.util.UUID;
 
 public class AccountSystem {
 	// Use this to indicate what user is currently logged in, or null for logged out.
@@ -17,10 +18,11 @@ public class AccountSystem {
 	// Used to create the account table
 	static void initAccountTable(){
 		String sql = "CREATE TABLE IF NOT EXISTS Accounts ("
-				+ "	name text PRIMARY KEY,"
+				+ "	email text PRIMARY KEY,"
+				+ "	name text NOT NULL,"
 				+ "	password int NOT NULL,"
-				+ "	email text NOT NULL,"
 				+ "	phoneNumber text NOT NULL,"
+				+ " paymentId text NOT NULL,"
 				+ " priveleges int NOT NULL" // 0: guest, 1: clerk, 2: admin
 				+ ");";
 		try (var connection = DriverManager.getConnection(DatabaseURL)) {
@@ -48,11 +50,11 @@ public class AccountSystem {
 	}
 
 	// Confirms whether a given user exists in the system.
-	static boolean findAccount(String username) {
-		String sql = "SELECT EXISTS(SELECT 1 FROM Accounts WHERE name = ?)";
+	static boolean findAccount(String email) {
+		String sql = "SELECT EXISTS(SELECT 1 FROM Accounts WHERE email = ?)";
 		try (var connection = connectToDatabase();
 			 var stmt = connection.prepareStatement(sql)) {
-			stmt.setString(1, username);
+			stmt.setString(1, email);
 			ResultSet res = stmt.executeQuery();
 			if (res.next()) {
 				return res.getBoolean(1);
@@ -65,16 +67,17 @@ public class AccountSystem {
 	}
 
 	// Handles account creation for guests alone.
-	static boolean createAccount(String username, int passwordHash, String email, String phoneNumber){
-		String sql = "INSERT INTO Accounts (name, password, email, phoneNumber, priveleges)"
-				+" VALUES (?,?,?,?,0)"
+	static boolean createAccount(String email, String username, int passwordHash, String phoneNumber){
+		String sql = "INSERT INTO Accounts (email, name, password, phoneNumber, paymentId, priveleges)"
+				+" VALUES (?,?,?,?,?,0)"
 				+" RETURNING *";
 		try (var connection = connectToDatabase();
 			 var stmt = connection.prepareStatement(sql)) {
-			stmt.setString(1, username);
-			stmt.setInt(2, passwordHash);
-			stmt.setString(3, email);
+			stmt.setString(1, email);
+			stmt.setString(2, username);
+			stmt.setInt(3, passwordHash);
 			stmt.setString(4, phoneNumber);
+			stmt.setString(5, UUID.randomUUID().toString());
 			ResultSet res = stmt.executeQuery();
 			return setSessionAccount(res);
 		} catch (SQLException e) {
@@ -85,11 +88,11 @@ public class AccountSystem {
 	}
 
 	// Validates a sign in, and sets SessionAccount if successful.
-	static boolean authenticate(String username, int passwordHash){
-		String sql = "SELECT * FROM Accounts WHERE name = ? and password = ?";
+	static boolean authenticate(String email, int passwordHash){
+		String sql = "SELECT * FROM Accounts WHERE email = ? and password = ?";
 		try (var connection = connectToDatabase();
 			 var stmt = connection.prepareStatement(sql)){
-			stmt.setString(1, username);
+			stmt.setString(1, email);
 			stmt.setInt(2, passwordHash);
 			ResultSet res = stmt.executeQuery();
 			return setSessionAccount(res);
@@ -111,25 +114,28 @@ public class AccountSystem {
 				case 1:
 					AccountSystem.SessionAccount = new GuestClerk(
 							res.getString(1),
-							res.getInt(2),
-							res.getString(3),
-							res.getString(4)
+							res.getString(2),
+							res.getInt(3),
+							res.getString(4),
+							res.getString(5)
 					);
 					break;
 				case 2:
 					AccountSystem.SessionAccount = new GuestAdmin(
 							res.getString(1),
-							res.getInt(2),
-							res.getString(3),
-							res.getString(4)
+							res.getString(2),
+							res.getInt(3),
+							res.getString(4),
+							res.getString(5)
 					);
 					break;
 				default:
 					AccountSystem.SessionAccount = new Guest(
 							res.getString(1),
-							res.getInt(2),
-							res.getString(3),
-							res.getString(4)
+							res.getString(2),
+							res.getInt(3),
+							res.getString(4),
+							res.getString(5)
 					);
 					break;
 			}

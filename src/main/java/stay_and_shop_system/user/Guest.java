@@ -8,7 +8,7 @@ import java.util.*;
 public class Guest implements GuestInterface {
 	private String name = "John Doe";
     private String email = "dummyEmail@gmail.com";
-    private int id = 0;
+    private String paymentId;
     private String phoneNumber;
     private int hash; // Stores the hash of the password, not the password.
     // private List<Reservation> reservations = new ArrayList<>();
@@ -23,11 +23,12 @@ public class Guest implements GuestInterface {
     	hash = h;
         throw new RuntimeException("TODO: Make sure creating an account requires putting an email also");
     }
-    public Guest(String n, int h, String e, String p) {
+    public Guest(String e, String n, int h, String p, String i) {
+        email = e;
         name = n;
         hash = h;
-        email = e;
         phoneNumber = p;
+        paymentId = i;
     }
 	public void setName(String x) {
 		name = x;

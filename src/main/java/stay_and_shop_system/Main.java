@@ -9,13 +9,11 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import com.formdev.flatlaf.FlatLightLaf;
 
-// Welcome to my big ball of mud design for making JFrames.
-
 public class Main extends JFrame {
 	//static Dimension ScreenSize = Toolkit.getDefaultToolkit().getScreenSize();
     public static int WINDOW_W = 640;
     public static int WINDOW_H = 400;
-    public static String APP_TITLE = "Stop & Shop: the illustrious hotel/luxury shopping experience, for all your stop & shopping needs!";
+    public static String APP_TITLE = "The Ocean's Waters Hotel: the illustrious hotel/luxury shopping experience!";
     public static String HOME_TEXT = "Store Logo Here";
     static ReservationDataTable rdt = new ReservationDataTable();
 

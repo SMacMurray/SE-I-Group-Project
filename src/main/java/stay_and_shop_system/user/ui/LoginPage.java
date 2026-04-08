@@ -16,8 +16,10 @@ public class LoginPage extends JFrame {
     private JPanel contentPane;
     private JLabel invalidLabel;
 
+    static final String EMAIL_EMPTY = "Warning: email field is empty.";
     static final String USERNAME_EMPTY = "Warning: username field is empty.";
     static final String PASSWORD_EMPTY = "Warning: password field is empty.";
+    static final String PHONENUMBER_EMPTY = "Warning: phone number field is empty.";
     static final String LOGIN_SUCCESS = "Successfully logged in! Redirecting you to homepage.";
     static final String LOGIN_FAILURE = "The username and/or password you have entered are incorrect.";
     static final String ACCOUNT_CREATE_SUCCESS = "Account created successfully! You are now logged in.";
@@ -119,9 +121,11 @@ public class LoginPage extends JFrame {
 
                 if (username.isEmpty()) dialogMessage = USERNAME_EMPTY;
                 else if (password.isEmpty()) dialogMessage = PASSWORD_EMPTY;
+                else if (email.isEmpty()) dialogMessage = EMAIL_EMPTY;
+                else if (phoneNumber.isEmpty()) dialogMessage = PHONENUMBER_EMPTY;
                 else {
 //                	JOptionPane.showMessageDialog(usernameLabel, dialogMessage);
-                    int res = AccountController.createAccount(username, password, email, phoneNumber);
+                    int res = AccountController.createAccount(email, username, password, phoneNumber);
                     dialogMessage = switch (res) {
                         case 0 -> ACCOUNT_CREATE_SUCCESS;
                         case 1 -> ACCOUNT_ALREADY_EXISTS;
@@ -145,15 +149,15 @@ public class LoginPage extends JFrame {
         btnSignIn.setBounds((Main.WINDOW_W-90)/2, 190, 90, 22);
         btnSignIn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String username = usernameField.getText().trim();
+                String email = emailField.getText().trim();
                 String password = String.valueOf(passwordField.getPassword());
                 String dialogMessage;
                 passwordField.setText("");
 
-                if (username.isEmpty()) dialogMessage = USERNAME_EMPTY;
+                if (email.isEmpty()) dialogMessage = EMAIL_EMPTY;
                 else if (password.isEmpty()) dialogMessage = PASSWORD_EMPTY;
                 else {
-                    int res = AccountController.login(username, password);
+                    int res = AccountController.login(email, password);
                     dialogMessage = switch (res) {
                         case 0 -> LOGIN_SUCCESS;
                         case 1 -> LOGIN_FAILURE;

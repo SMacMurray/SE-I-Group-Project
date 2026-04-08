@@ -5,18 +5,18 @@ import java.sql.SQLException;
 // Handler for account related tasks.
 public class AccountController {
     // Ignore email and phone numbers fields for now for simplicity.
-    public static int createAccount(String username, String password, String email, String phoneNumber){
+    public static int createAccount(String email, String username, String password, String phoneNumber){
         int hash = password.hashCode();
-        boolean accountFound = AccountSystem.findAccount(username);
+        boolean accountFound = AccountSystem.findAccount(email);
         if (!accountFound){
-            return (AccountSystem.createAccount(username, hash, email, phoneNumber) ? 0 : -1);
+            return (AccountSystem.createAccount(email, username, hash, phoneNumber) ? 0 : -1);
         }
         return 1;
     }
 
-    public static int login(String username, String password){
+    public static int login(String email, String password){
         int hash = password.hashCode();
-        return (AccountSystem.authenticate(username, hash) ? 0 : 1);
+        return (AccountSystem.authenticate(email, hash) ? 0 : 1);
     }
 
     public static int logout(){
