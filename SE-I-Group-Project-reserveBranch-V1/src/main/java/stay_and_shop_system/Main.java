@@ -29,6 +29,7 @@ public class Main extends JFrame {
 
     }
 
+    // Mama
     public static void main(String[] args) {
         FlatLightLaf.setup();
         initRooms();
