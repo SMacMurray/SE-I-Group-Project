@@ -45,15 +45,7 @@ public class Guest implements GuestInterface {
     public String getPaymentId() { return paymentId; }
 
 
-    // reservations is in the GuestInterface
-    public void addReservation(Reservation r) {
-    	reservations.add(r);
-    }
-    public void removeReservation(Reservation r) {
-        res.deleteReservation(r);
-    }
-    public List<Reservation> findReservations(){ throw new RuntimeException("TODO: Finish findReservations()"); }
-    
+
     
     // Did not hash or use equals by 'name' because names can be the same,
     // but emails can't.

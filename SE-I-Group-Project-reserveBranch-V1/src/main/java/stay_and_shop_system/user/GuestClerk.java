@@ -44,14 +44,6 @@ public class GuestClerk implements GuestInterface, ClerkInterface{
     public int getPassword() { return hash; }
     public String getPaymentId() { return paymentId; }
 
-    // reservations is in the GuestInterface
-    public void addReservation(Reservation r) {
-        reservations.add(r);
-    }
-    public void removeReservation(Reservation r) {
-        reservations.remove(r);
-    }
-    public List<Reservation> findReservations(){ throw new RuntimeException("TODO: Finish findReservations()"); }
 
     public boolean addRoom(Room r) {
         return false;

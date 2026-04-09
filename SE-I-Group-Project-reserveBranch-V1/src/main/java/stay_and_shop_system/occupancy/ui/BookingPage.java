@@ -380,9 +380,6 @@ public class BookingPage extends JFrame{
 				if (spl[i].length() == 1 && !Character.isLetter(spl[i].charAt(0))) { // when consecutive '..'
 					invalidEmail = true;
 				}
-				else {
-
-				}
 			}
 		}
 
@@ -405,7 +402,7 @@ public class BookingPage extends JFrame{
 		int i = 0;
 		for (Room r : rooms) {
 			JPanel roomPanel = new JPanel(new GridBagLayout());
-			roomPanel.setPreferredSize(new Dimension(700, 300));
+			roomPanel.setPreferredSize(new Dimension(700, 440));
 			GridBagConstraints c2 = new GridBagConstraints();
 
 			JLabel roomTitle = new JLabel("ROOM" + r.getNumber());

@@ -45,13 +45,6 @@ public class GuestAdmin implements GuestInterface, AdminInterface{
     public String getPaymentId() { return paymentId; }
 
 
-    // reservations is in the GuestInterface
-    public void addReservation(Reservation r) {
-        reservations.add(r);
-    }
-    public void removeReservation(Reservation r) {
-        reservations.remove(r);
-    }
     //public List<Reservation> findReservations(){ return res.findReservationsOfName(name); }
 
     public void createClerkAccount(Clerk clerk) {
@@ -61,7 +54,6 @@ public class GuestAdmin implements GuestInterface, AdminInterface{
     public void resetUserPassword(User user) {
 
     }
-    public List<Reservation> findReservations(){ throw new RuntimeException("TODO: Finish findReservations()"); }
 
 
     // Did not hash or use equals by 'name' because names can be the same,
