@@ -5,4 +5,8 @@ import stay_and_shop_system.occupancy.*;
 
 public interface GuestInterface extends User {
     PaymentMethod pm = new PaymentMethod();
+
+    void setPaymentId(String pId);
+    String getPaymentId();
+
 }

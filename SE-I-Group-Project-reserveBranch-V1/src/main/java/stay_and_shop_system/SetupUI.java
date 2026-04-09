@@ -86,7 +86,7 @@ public class SetupUI {
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.CENTER;
         // TODO: Allow ButtonsPane to work with currently signed in User
-        User user = new GuestClerk("Johnny Test", "johnnyTest@gmail.com");
+        User user = new GuestClerk("Johnny Test", "johnnyTest@gmail.com", "", 0, new PaymentMethod());
 
         Font font = new Font("Serif", Font.PLAIN, 23);
         if (user instanceof ClerkInterface) {

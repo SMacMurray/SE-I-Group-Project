@@ -12,17 +12,17 @@ public class GuestClerk implements GuestInterface, ClerkInterface{
     private String phoneNumber;
     private int hash; // Stores the hash of the password, not the password.
     private String paymentId;
-    // private List<Reservation> reservations = new ArrayList<>();
+    private UserType id = UserType.GUEST_CLERK;
 
     // Fix when needed
-    public GuestClerk(String n, String e) {
+    public GuestClerk(String n, String e, String pn, int h, PaymentMethod pm) {
         name = n;
         email = e;
-    }
-    public GuestClerk(String n, int h) {
-        name = n;
+        phoneNumber = pn;
         hash = h;
+        GuestInterface.pm.setPaymentMethod(pm);
     }
+    // When a new Guest Account as a clerk is created/logged in.
     public GuestClerk(String e, String n, int h, String p, String i) {
         email = e;
         name = n;
@@ -38,12 +38,15 @@ public class GuestClerk implements GuestInterface, ClerkInterface{
     }
     public void setPhoneNumber(String x) { phoneNumber = x; }
     public void setPassword(String x) { hash = x.hashCode(); }
+    public void setPaymentId(String pId) { paymentId = pId; }
+    public void setId(UserType id) { this.id = id; }
+
     public String getName() { return name; }
     public String getEmail() { return email; }
     public String getPhoneNumber() { return phoneNumber; }
     public int getPassword() { return hash; }
     public String getPaymentId() { return paymentId; }
-
+    public UserType getId() { return id; }
 
     public boolean addRoom(Room r) {
         return false;

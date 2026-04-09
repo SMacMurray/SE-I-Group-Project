@@ -6,6 +6,7 @@ import com.google.i18n.phonenumbers.Phonenumber;
 import org.apache.commons.validator.routines.checkdigit.LuhnCheckDigit;
 import stay_and_shop_system.*;
 import stay_and_shop_system.occupancy.*;
+import stay_and_shop_system.user.PaymentMethod;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -14,6 +15,8 @@ import javax.swing.event.DocumentListener;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -22,6 +25,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Calendar;
 
+
+// Reasoning behind Reserving room while an account of varying types exists, or an account does not exist.
+// In order to convert a class to a guest, they need a paymentMethod at minimum(be a part of the guest Interface)
 public class BookingPage extends JFrame{
 	private static final long serialVersionUID = 1L;
 	private JPanel popupPane;
@@ -405,19 +411,106 @@ public class BookingPage extends JFrame{
 			roomPanel.setPreferredSize(new Dimension(700, 440));
 			GridBagConstraints c2 = new GridBagConstraints();
 
-			JLabel roomTitle = new JLabel("ROOM" + r.getNumber());
-			roomTitle.setFont(new Font("Serif", Font.ITALIC, 20));
+			// 4 X 4
+			JLabel roomTitle = new JLabel("ROOM #" + r.getNumber() + " " + floorNumberToString(r.getNumber()) + " " + r.getRoomSize().toString());
+			roomTitle.setFont(new Font("Serif", Font.ITALIC, 25));
 			roomTitle.setForeground(ColorPalette.DESATURATED_DARKBLUE);
 			c2.gridx = 0;
 			c2.gridy = 0;
+			c2.weightx = 2;
 			roomPanel.add(roomTitle, c2);
 			// return button's name to find room
-			
-			c.gridx = 0;
-			c.gridy = i;
-			++i;
-			roomsPane.add(roomPanel, c);
+
+			JPanel roomInfoPanel = new JPanel(new GridBagLayout());
+			roomInfoPanel.setOpaque(false);
+			GridBagConstraints c3 = new GridBagConstraints();
+			c2.gridx = 1;
+			c2.gridy = 1;
+			c2.weightx = 0;
+			roomPanel.add(roomInfoPanel, c2);
+
+			JLabel bedsLabel = new JLabel("Bed Types: " + makeBedTypesString(r.getBedTypes()));
+			bedsLabel.setFont(new Font("Serif", Font.ITALIC, 15));
+			bedsLabel.setPreferredSize(new Dimension(300, 50));
+			bedsLabel.setForeground(ColorPalette.DESATURATED_DARKBLUE);
+			c3.gridx = 0;
+			c3.gridy = 0;
+			roomInfoPanel.add(bedsLabel, c3);
+
+			JLabel costLabel = new JLabel("Cost: $" + r.getDailyRate() + " per night");
+			costLabel.setFont(new Font("Serif", Font.ITALIC, 15));
+			costLabel.setPreferredSize(new Dimension(300, 50));
+			costLabel.setForeground(ColorPalette.DESATURATED_DARKBLUE);
+			c3.gridx = 0;
+			c3.gridy = 1;
+			roomInfoPanel.add(costLabel, c3);
+
+			JButton bookButton = new JButton("BOOK NOW");
+			bookButton.setFont(new Font("Serif", Font.ITALIC, 20));
+			bookButton.setForeground(ColorPalette.OCEAN_BLUE);
+			bookButton.setPreferredSize(new Dimension(250, 50));
+			bookButton.setBackground(ColorPalette.OCEAN_DARKBLUE);
+			c2.gridx = 1;
+			c2.gridy = 2;
+			c2.insets = new Insets(20, 0, 0, 0);
+			roomPanel.add(bookButton, c2);
+
+			JLabel roomImg = new JLabel("Loading...");
+			roomImg.setPreferredSize(new Dimension(325, 225));
+			roomImg.setOpaque(true);
+			roomImg.setBackground(ColorPalette.INVALID_RED);
+			c2.gridx = 0;
+			c2.gridy = 1;
+			c2.insets = new Insets(10, 0, 0, 0);
+			roomPanel.add(roomImg, c2);
+
+			loadImageForRoom(roomImg, r.getNumber());
+//			c.gridx = 0;
+//			c.gridy = i;
+//			++i;
+//			roomsPane.add(roomPanel, c);
+			roomsPane.add(roomPanel);
 		}
+	}
+	public String floorNumberToString(int number) {
+		if (number >= 100 && number < 200) {
+			return "Nature Retreat";
+		}
+		else if (number >= 200 && number < 300) {
+			return "Urban Elegance";
+		}
+		else if (number >= 300 && number < 400) {
+			return "Vintage Charm";
+		}
+		else {
+			return "NULL";
+		}
+	}
+	public String makeBedTypesString(List<Room.BedType> bTs) {
+		String bStr = bTs.getFirst().toString();
+		for (int i = 1; i < bTs.size(); ++i) {
+			bStr += ", " + bTs.get(i);
+		}
+
+		return bStr;
+	}
+	public void loadImageForRoom(JLabel img, int roomNumber) {
+
+		if (roomNumber >= 100 && roomNumber < 200) {
+			ImageWorker iw = new ImageWorker("src/main/resources/small_pexels-luis-zambrano-3782493-16436919.jpg", img, 325, 225);
+			iw.execute();
+		} else if (roomNumber >= 200 && roomNumber < 300) {
+			ImageWorker iw = new ImageWorker("src/main/resources/small_pexels-quang-nguyen-vinh-222549-14021928.jpg", img, 325, 225);
+			iw.execute();
+		} else if (roomNumber >= 300 && roomNumber < 400) {
+			ImageWorker iw = new ImageWorker("src/main/resources/small_mohamed-jamil-latrach-2YgoP7wLq8k-unsplash.jpg.jpg", img, 325, 225);
+			iw.execute();
+		}
+		else {
+			img.setText("ROOM NUMBER NOT IN RANGE");
+		}
+
+
 	}
 	public BookingPage(List<Room> rooms) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -432,7 +525,7 @@ public class BookingPage extends JFrame{
 		JLabel background = createBackground();
 		background.setLayout(new BorderLayout());
 
-		roomsPane = new JPanel(new GridBagLayout());
+		roomsPane = new JPanel(new GridLayout(0, 1));
 		roomsPane.setOpaque(false);
 		loadReservationsOnScreen(rooms);
 
@@ -485,14 +578,20 @@ public class BookingPage extends JFrame{
 
 		private final String imgPath;
 		private final JLabel imgContainer;
-		public ImageWorker(String imgPath, JLabel imgContainer) {
+//		private final int scaleX, scaleY;
+		private final int sizeX, sizeY;
+
+		public ImageWorker(String imgPath, JLabel imgContainer,int sX, int sY) {
 			this.imgPath = imgPath;
 			this.imgContainer = imgContainer;
+			sizeX = sX;
+			sizeY = sY;
 		}
 		@Override
 		protected Image doInBackground() throws IOException {
-			Image image = ImageIO.read(new URL(imgPath));
-			return image.getScaledInstance(640, -1, Image.SCALE_SMOOTH);
+			System.out.println("DoInBackground");
+			BufferedImage image = ImageIO.read(new File(imgPath));
+			return image.getScaledInstance(sizeX, sizeY, Image.SCALE_SMOOTH);
 		}
 
 		@Override
@@ -501,6 +600,10 @@ public class BookingPage extends JFrame{
 				// get() - get's the image of the ImageWorker
 				ImageIcon icon = new ImageIcon(get());
 				imgContainer.setIcon(icon);
+				System.out.println("done()");
+
+				roomsPane.revalidate();
+				roomsPane.repaint();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

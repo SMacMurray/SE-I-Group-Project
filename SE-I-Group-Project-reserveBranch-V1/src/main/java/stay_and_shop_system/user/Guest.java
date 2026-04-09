@@ -11,9 +11,15 @@ public class Guest implements GuestInterface {
     private String paymentId = "";
     private String phoneNumber;
     private int hash; // Stores the hash of the password, not the password.
-    // private List<Reservation> reservations = new ArrayList<>();
-    
-    
+    private UserType id = UserType.GUEST;
+
+
+    public Guest(String n, String e, String p, PaymentMethod pm) {
+        name = n;
+        email = e;
+        phoneNumber = p;
+        GuestInterface.pm.setPaymentMethod(pm);
+    }
     public Guest(String n, String e) {
     	name = n;
     	email = e;
@@ -38,11 +44,15 @@ public class Guest implements GuestInterface {
     }
     public void setPhoneNumber(String x) { phoneNumber = x; }
     public void setPassword(String x) { hash = x.hashCode(); }
+    public void setPaymentId(String pId) { paymentId = pId; }
+    public void setId(UserType id) { this.id = id; }
     public String getName() { return name; }
     public String getEmail() { return email; }
     public String getPhoneNumber() { return phoneNumber; }
     public int getPassword() { return hash; }
     public String getPaymentId() { return paymentId; }
+    public UserType getId() { return id; }
+
 
 
 

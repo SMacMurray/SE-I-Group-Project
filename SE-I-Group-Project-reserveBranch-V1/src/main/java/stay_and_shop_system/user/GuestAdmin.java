@@ -12,16 +12,16 @@ public class GuestAdmin implements GuestInterface, AdminInterface{
     private String phoneNumber;
     private int hash; // Stores the hash of the password, not the password.
     private String paymentId;
+    private UserType id = UserType.GUEST_ADMIN;
     // private List<Reservation> reservations = new ArrayList<>();
 
     // Fix when needed
-    GuestAdmin(String n, String e) {
+    public GuestAdmin(String n, String e, String pn, int h, PaymentMethod pm) {
         name = n;
         email = e;
-    }
-    GuestAdmin(String n, int h) {
-        name = n;
+        phoneNumber = pn;
         hash = h;
+        GuestInterface.pm.setPaymentMethod(pm);
     }
     public GuestAdmin(String e, String n, int h, String p, String i) {
         email = e;
@@ -38,11 +38,15 @@ public class GuestAdmin implements GuestInterface, AdminInterface{
     }
     public void setPhoneNumber(String x) { phoneNumber = x; }
     public void setPassword(String x) { hash = x.hashCode(); }
+    public void setPaymentId(String pId) { paymentId = pId; }
+    public void setId(UserType id) { this.id = id; }
+
     public String getName() { return name; }
     public String getEmail() { return email; }
     public String getPhoneNumber() { return phoneNumber; }
     public int getPassword() { return hash; }
     public String getPaymentId() { return paymentId; }
+    public UserType getId() { return id; }
 
 
     //public List<Reservation> findReservations(){ return res.findReservationsOfName(name); }

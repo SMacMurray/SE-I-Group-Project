@@ -95,7 +95,7 @@ public class HomePage extends JFrame {
         userHomeButton.setBounds(483, 100, 133, 22);
         userHomeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                UserHomePage newFrame = new UserHomePage(); //Opening the second JFrame
+//                UserHomePage newFrame = new UserHomePage(); //Opening the second JFrame
                 dispose(); //Disposing the First JFrame
             }
         });
