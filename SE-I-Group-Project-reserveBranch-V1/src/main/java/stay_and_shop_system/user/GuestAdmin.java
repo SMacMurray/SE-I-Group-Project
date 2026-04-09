@@ -1,0 +1,80 @@
+package stay_and_shop_system.user;
+
+import stay_and_shop_system.occupancy.Reservation;
+import stay_and_shop_system.occupancy.Room;
+
+import java.util.List;
+import java.util.Objects;
+
+public class GuestAdmin implements GuestInterface, AdminInterface{
+    private String name = "John Doe";
+    private String email = "dummyEmail@gmail.com";
+    private String phoneNumber;
+    private int hash; // Stores the hash of the password, not the password.
+    private String paymentId;
+    // private List<Reservation> reservations = new ArrayList<>();
+
+    // Fix when needed
+    GuestAdmin(String n, String e) {
+        name = n;
+        email = e;
+    }
+    GuestAdmin(String n, int h) {
+        name = n;
+        hash = h;
+    }
+    public GuestAdmin(String e, String n, int h, String p, String i) {
+        email = e;
+        name = n;
+        hash = h;
+        phoneNumber = p;
+        paymentId = i;
+    }
+    public void setName(String x) {
+        name = x;
+    }
+    public void setEmail(String x) {
+        email = x;
+    }
+    public void setPhoneNumber(String x) { phoneNumber = x; }
+    public void setPassword(String x) { hash = x.hashCode(); }
+    public String getName() { return name; }
+    public String getEmail() { return email; }
+    public String getPhoneNumber() { return phoneNumber; }
+    public int getPassword() { return hash; }
+    public String getPaymentId() { return paymentId; }
+
+
+    // reservations is in the GuestInterface
+    public void addReservation(Reservation r) {
+        reservations.add(r);
+    }
+    public void removeReservation(Reservation r) {
+        reservations.remove(r);
+    }
+    //public List<Reservation> findReservations(){ return res.findReservationsOfName(name); }
+
+    public void createClerkAccount(Clerk clerk) {
+
+    }
+
+    public void resetUserPassword(User user) {
+
+    }
+    public List<Reservation> findReservations(){ throw new RuntimeException("TODO: Finish findReservations()"); }
+
+
+    // Did not hash or use equals by 'name' because names can be the same,
+    // but emails can't.
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) return true;
+        if (!(o instanceof Guest)) return false;
+        Guest temp = (Guest)o;
+        return email.equals(temp.getEmail());
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(email);
+    }
+}
