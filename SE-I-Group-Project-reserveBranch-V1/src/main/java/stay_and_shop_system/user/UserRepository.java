@@ -208,7 +208,6 @@ public class UserRepository {
 		return false;
 	}
 
-	// TODO: MAKE SURE YOU HANDLE THE CASE WHERE THERE IS NOT PAYMENTMETHOD DATA.
 	// Sets SessionAccount. Change the switch cases if you want to change what type of account gets assigned.
 	static boolean setSessionAccount(ResultSet res) throws SQLException {
 		if (res == null){
