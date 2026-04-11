@@ -16,7 +16,7 @@ public class AccountController {
     }
 
     public static int login(String email, String password){
-        int hash = password.hashCode();
+        int hash = Objects.hash(password);
         return (UserRepository.authenticate(email, hash) ? 0 : 1);
     }
 

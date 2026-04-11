@@ -216,7 +216,7 @@ public class SetupUI {
         accountStatusTextArea.setEditable(false);
         accountStatusTextArea.setFont(new Font("Serif", Font.PLAIN, 18));
         accountStatusTextArea.setForeground(ColorPalette.OCEAN_LIGHTBLUE);
-        if (Main.SessionAccount != null) {
+        if (UserRepository.SessionAccount != null) {
             accountStatusTextArea.setText("LOGGED IN AS: " + UserRepository.getSessionAccount().getName());
         }
         c.gridx = 0;
