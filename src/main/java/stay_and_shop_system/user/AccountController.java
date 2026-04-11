@@ -30,4 +30,8 @@ public class AccountController {
         }
         return 1;
     }
+
+    public static void deleteAccount(String email){
+        AccountSystem.deleteAccount(email);
+    }
 }

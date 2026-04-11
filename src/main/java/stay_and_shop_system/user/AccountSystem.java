@@ -16,15 +16,17 @@ public class AccountSystem {
 
 
 	// Used to create the account table
-	static void initAccountTable(){
-		String sql = "CREATE TABLE IF NOT EXISTS Accounts ("
-				+ "	email text PRIMARY KEY,"
-				+ "	name text NOT NULL,"
-				+ "	password int NOT NULL,"
-				+ "	phoneNumber text NOT NULL,"
-				+ " paymentId text NOT NULL,"
-				+ " priveleges int NOT NULL" // 0: guest, 1: clerk, 2: admin
-				+ ");";
+	public static void initAccountTable(){
+		String sql = """
+			CREATE TABLE IF NOT EXISTS Accounts (
+			email text PRIMARY KEY,
+			name text NOT NULL,
+			password int NOT NULL,
+			phoneNumber text NOT NULL,
+			paymentId text NOT NULL,
+			priveleges int NOT NULL 
+			)
+			"""; // 0: guest, 1: clerk, 2: admin
 		try (var connection = DriverManager.getConnection(DatabaseURL)) {
 			System.out.println("Connection to SQLite has been established.");
 			connection.createStatement().execute(sql);
@@ -37,7 +39,9 @@ public class AccountSystem {
 
 	// Creates a DB connection and initializes an Accounts table if it doesn't exist.
 	static java.sql.Connection connectToDatabase() throws SQLException {
-		String sql = "SELECT name FROM sqlite_master WHERE type='table' AND name='Accounts'";
+		String sql = """
+			SELECT name FROM sqlite_master WHERE type='table' AND name='Accounts'
+			""";
 		java.sql.Connection connection = DriverManager.getConnection(DatabaseURL);
 		System.out.println("Connection to SQLite has been established.");
 		ResultSet res = connection.createStatement().executeQuery(sql);
@@ -51,7 +55,9 @@ public class AccountSystem {
 
 	// Confirms whether a given user exists in the system.
 	static boolean findAccount(String email) {
-		String sql = "SELECT EXISTS(SELECT 1 FROM Accounts WHERE email = ?)";
+		String sql = """
+			SELECT EXISTS(SELECT 1 FROM Accounts WHERE email = ?)
+			""";
 		try (var connection = connectToDatabase();
 			 var stmt = connection.prepareStatement(sql)) {
 			stmt.setString(1, email);
@@ -66,11 +72,28 @@ public class AccountSystem {
 		return false;
 	}
 
+	// Deletes an account by email
+	static void deleteAccount(String email) {
+		String sql = """
+			DELETE FROM Accounts where email = ?
+			""";
+		try (var connection = connectToDatabase();
+		     var stmt = connection.prepareStatement(sql)) {
+			stmt.setString(1, email);
+			stmt.execute();
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+	}
+
 	// Handles account creation for guests alone.
 	static boolean createAccount(String email, String username, int passwordHash, String phoneNumber){
-		String sql = "INSERT INTO Accounts (email, name, password, phoneNumber, paymentId, priveleges)"
-				+" VALUES (?,?,?,?,?,0)"
-				+" RETURNING *";
+		String sql = """
+				INSERT INTO Accounts (email, name, password, phoneNumber, paymentId, priveleges)
+				VALUES (?,?,?,?,?,0)
+				RETURNING *
+				""";
 		try (var connection = connectToDatabase();
 			 var stmt = connection.prepareStatement(sql)) {
 			stmt.setString(1, email);
@@ -89,7 +112,9 @@ public class AccountSystem {
 
 	// Validates a sign in, and sets SessionAccount if successful.
 	static boolean authenticate(String email, int passwordHash){
-		String sql = "SELECT * FROM Accounts WHERE email = ? and password = ?";
+		String sql = """
+			SELECT * FROM Accounts WHERE email = ? and password = ?
+			""";
 		try (var connection = connectToDatabase();
 			 var stmt = connection.prepareStatement(sql)){
 			stmt.setString(1, email);

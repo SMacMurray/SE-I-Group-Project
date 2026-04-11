@@ -11,8 +11,8 @@ import com.formdev.flatlaf.FlatLightLaf;
 
 public class Main extends JFrame {
 	//static Dimension ScreenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    public static int WINDOW_W = 640;
-    public static int WINDOW_H = 400;
+    public static int WINDOW_W = 1000;
+    public static int WINDOW_H = 800;
     public static String APP_TITLE = "The Ocean's Waters Hotel: the illustrious hotel/luxury shopping experience!";
     public static String HOME_TEXT = "Store Logo Here";
     static ReservationDataTable rdt = new ReservationDataTable();
