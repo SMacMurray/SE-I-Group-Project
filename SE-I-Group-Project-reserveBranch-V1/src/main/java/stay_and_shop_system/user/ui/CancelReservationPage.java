@@ -14,7 +14,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Calendar;
-import java.util.List;
 
 public class CancelReservationPage extends JFrame{
     private static final long serialVersionUID = 1L;
@@ -24,7 +23,7 @@ public class CancelReservationPage extends JFrame{
     private JPanel headerPane;
     private Reservation cancelR;
 
-    private ReservationService res = new ReservationService();
+    private ReservationController res = new ReservationController();
 
     public JTextArea createStyledJTextArea(String text) {
         JTextArea jta = new JTextArea(text);

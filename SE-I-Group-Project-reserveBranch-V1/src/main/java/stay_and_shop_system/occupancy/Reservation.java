@@ -1,6 +1,7 @@
 package stay_and_shop_system.occupancy;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class Reservation {
 	public Room room;
@@ -14,6 +15,7 @@ public class Reservation {
 	public double rate = 0;
 	public double cost = 0;
 	public int reservationId = Objects.hash(roomNumber + "John Doe");
+	public int guestId = Objects.hash(roomNumber + "John Doe");
 
 	// For testing purposes
 	public Reservation() {
@@ -50,7 +52,8 @@ public class Reservation {
 		rate = Math.round(100.0 * (r.baseDailyRate + r.qualityLevel.getPrice())) / 100.0;
 		cost = 0;
 		reservationId = Objects.hash(r.number + n);
-		
+		guestId = Math.abs(Objects.hash(em));
+
 		System.out.println(rate + " : Reservation");
 		System.out.println(reservationId + " : Reservation");
 	}
@@ -66,6 +69,7 @@ public class Reservation {
 	public Double getRate() { return rate; }
 	public Double getCost() { return cost; }
 	public int getReservationId() {return reservationId; }
+	public int getGuestId() {return guestId; }
 
 	public void setRoom(Room r) {
 		r = room;
@@ -92,4 +96,27 @@ public class Reservation {
 		reservationId = Objects.hash(room.number + guestName);
 	}
 
+	public void calculateTotal() {
+		long diffInMillis = Math.abs(end.getTime().getTime() - start.getTime().getTime());
+		long daysBetween = TimeUnit.DAYS.convert(diffInMillis, TimeUnit.MILLISECONDS);
+		System.out.println("Days Betweeb: " + daysBetween);
+		daysBetween += 1;
+
+		cost = Math.round((rate * daysBetween) * 100.0) / 100.0;
+	}
+
+	@Override
+	public String toString() {
+		String str = "Reservation at room number " +  roomNumber + " w/ reservationId " + reservationId;
+		str += "\n Guest Num: " + guestNum;
+		str += "\n Start Date: " + start.getTime();
+		str += "\n End Date: " + end.getTime();
+		str += "\n Guest Name: " + guestName;
+		str += "\n Credit Card Number: " + creditCardNumber;
+		str += "\n Rate: " + rate;
+		str += "\n Cost: " + cost;
+		str += "\n GuestId: " + guestId;
+
+		return str;
+	}
 }

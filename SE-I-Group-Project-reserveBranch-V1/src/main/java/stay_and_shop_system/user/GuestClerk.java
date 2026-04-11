@@ -12,10 +12,10 @@ public class GuestClerk implements GuestInterface, ClerkInterface{
     private String phoneNumber;
     private int hash; // Stores the hash of the password, not the password.
     private String paymentId;
-    private UserType id = UserType.GUEST_CLERK;
+    private UserType typeId = UserType.GUEST_CLERK;
 
     // Fix when needed
-    public GuestClerk(String n, String e, String pn, int h, PaymentMethod pm) {
+    public GuestClerk(String n, String e, int h, String pn,  PaymentMethod pm) {
         name = n;
         email = e;
         phoneNumber = pn;
@@ -30,6 +30,12 @@ public class GuestClerk implements GuestInterface, ClerkInterface{
         phoneNumber = p;
         paymentId = i;
     }
+    public GuestClerk(String e, String n, int h, String p) {
+        email = e;
+        name = n;
+        hash = h;
+        phoneNumber = p;
+    }
     public void setName(String x) {
         name = x;
     }
@@ -39,14 +45,19 @@ public class GuestClerk implements GuestInterface, ClerkInterface{
     public void setPhoneNumber(String x) { phoneNumber = x; }
     public void setPassword(String x) { hash = x.hashCode(); }
     public void setPaymentId(String pId) { paymentId = pId; }
-    public void setId(UserType id) { this.id = id; }
-
+    public void setTypeId(UserType id) { this.typeId = id; }
+    public void setPaymentMethod(PaymentMethod pm) {
+        GuestInterface.pm.setPaymentMethod(pm);
+    }
     public String getName() { return name; }
     public String getEmail() { return email; }
     public String getPhoneNumber() { return phoneNumber; }
     public int getPassword() { return hash; }
     public String getPaymentId() { return paymentId; }
-    public UserType getId() { return id; }
+    public UserType getTypeId() { return typeId; }
+    public PaymentMethod getPaymentMethod() {
+        return GuestInterface.pm;
+    }
 
     public boolean addRoom(Room r) {
         return false;

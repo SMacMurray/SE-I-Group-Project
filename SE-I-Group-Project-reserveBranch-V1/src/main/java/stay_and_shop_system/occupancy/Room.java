@@ -57,7 +57,7 @@ public class Room {
 		qualityLevel = q;
 		roomSize = rs;
 
-		dailyRate = q.getPrice() + baseDailyRate;
+		dailyRate = Math.round((q.getPrice() + baseDailyRate) * 100.0) / 100.0;
 	}
 	public int getNumber() { return number; }
 	public int getBeds() { return beds; }

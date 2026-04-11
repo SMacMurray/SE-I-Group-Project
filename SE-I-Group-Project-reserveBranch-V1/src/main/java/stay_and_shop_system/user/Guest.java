@@ -1,6 +1,5 @@
 package stay_and_shop_system.user;
 
-import stay_and_shop_system.occupancy.Reservation;
 import java.util.*;
 
 // USer needs Email and Name at minimum for reservation; email and password  at minimum for account
@@ -11,13 +10,20 @@ public class Guest implements GuestInterface {
     private String paymentId = "";
     private String phoneNumber;
     private int hash; // Stores the hash of the password, not the password.
-    private UserType id = UserType.GUEST;
+    private UserType typeId = UserType.GUEST;
 
 
     public Guest(String n, String e, String p, PaymentMethod pm) {
         name = n;
         email = e;
         phoneNumber = p;
+        GuestInterface.pm.setPaymentMethod(pm);
+    }
+    public Guest(String n, String e, int h, String p, PaymentMethod pm) {
+        name = n;
+        email = e;
+        phoneNumber = p;
+        hash = h;
         GuestInterface.pm.setPaymentMethod(pm);
     }
     public Guest(String n, String e) {
@@ -36,6 +42,12 @@ public class Guest implements GuestInterface {
         phoneNumber = p;
         paymentId = i;
     }
+    public Guest(String e, String n, int h, String p) {
+        email = e;
+        name = n;
+        hash = h;
+        phoneNumber = p;
+    }
 	public void setName(String x) {
 		name = x;
 	}
@@ -45,14 +57,20 @@ public class Guest implements GuestInterface {
     public void setPhoneNumber(String x) { phoneNumber = x; }
     public void setPassword(String x) { hash = x.hashCode(); }
     public void setPaymentId(String pId) { paymentId = pId; }
-    public void setId(UserType id) { this.id = id; }
+    public void setTypeId(UserType id) { this.typeId = id; }
+    public void setPaymentMethod(PaymentMethod pm) {
+        GuestInterface.pm.setPaymentMethod(pm);
+    }
+
     public String getName() { return name; }
     public String getEmail() { return email; }
     public String getPhoneNumber() { return phoneNumber; }
     public int getPassword() { return hash; }
     public String getPaymentId() { return paymentId; }
-    public UserType getId() { return id; }
-
+    public UserType getTypeId() { return typeId; }
+    public PaymentMethod getPaymentMethod() {
+        return GuestInterface.pm;
+    }
 
 
 

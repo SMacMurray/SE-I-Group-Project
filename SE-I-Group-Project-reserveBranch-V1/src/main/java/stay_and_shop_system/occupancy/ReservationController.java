@@ -1,23 +1,23 @@
 package stay_and_shop_system.occupancy;
 
-import stay_and_shop_system.occupancy.database.ReservationDataTable;
+import stay_and_shop_system.occupancy.database.ReservationRepository;
 import stay_and_shop_system.user.*;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 
-public class ReservationService {
+public class ReservationController {
 	// Won't stop saying can't make a type of ArrayList or smth, had to cut the entire code than paste it
 	private static List<Reservation> reservations  = new ArrayList<>();
 
-	ReservationDataTable rdt = new ReservationDataTable();
+	ReservationRepository rrp = new ReservationRepository();
 	private RoomService rs = new RoomService();
 	private GuestService gs = new GuestService();
 	private SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
 
 	public void loadReservations() {
-		reservations = rdt.loadReservations();
+		reservations = rrp.loadReservations();
 	}
 	public List<Reservation> getReservations() {
 		loadReservations();
@@ -27,27 +27,38 @@ public class ReservationService {
 		return formatter;
 	}
 	public Reservation getReservationOfId(int id) {
-		return rdt.loadReservationOfId(id);
+		return rrp.loadReservationOfId(id);
 	}
 	public void deleteReservation(Reservation r) {
 		reservations.remove(r);
-		rdt.deleteReservation(r.getRoomNumber(), r.getGuestName());
+		rrp.deleteReservation(r.getRoomNumber(), r.getGuestName());
 	}
-	public void reserveRoom(Room room, Calendar start, Calendar end, int guestNum, String guestName, String guestEmail, String creditCardNumber ) {
+	public Object[] reserveRoom(Room room, Calendar start, Calendar end, int guestNum, String guestName, String guestEmail, String phoneNumber, String creditCardNumber, String ccv, String billingAddr, Calendar expDate ) {
 		Reservation reservation = new Reservation(room, start, end, guestNum, guestName, guestEmail,  creditCardNumber);
-		reservations.add(reservation);
+		reservation.calculateTotal();
 
-		ReservationDataTable.addReservation(reservation);
-
-		// TODO: Handle GuestINterface
-		if (!gs.containsGuest(guestName, guestEmail)) {
-			gs.addGuest(guestName, guestEmail);
+		User user = UserRepository.getSessionAccount();
+		GuestInterface guest;
+		PaymentMethod pm = new PaymentMethod(creditCardNumber, ccv, billingAddr, expDate);
+		if (user == null) {
+			if (!UserRepository.findUser(guestEmail)) {
+				guest = new Guest(guestName, guestEmail, phoneNumber, pm);
+				UserRepository.addGuest(guest);
+			}
 		}
-		
+		else if (!(user instanceof GuestInterface)){
+			user = GuestConversionService.toGuest(user, pm);
+			UserRepository.changeTypeId((GuestInterface)user);
+		}
+
+		ReservationRepository.addReservation(reservation);
+
+		return new Object[] {reservation.getGuestId(), reservation.getCost()};
 	}
+
 	public List<Reservation> findReservationsOfGuest(GuestInterface guest) {
 		// TODO: Make guest have an ID attatched to their reservation unique to them because any guest can have the same name.
-		return rdt.loadReservationsOfEmail(guest.getEmail());
+		return rrp.loadReservationsOfEmail(guest.getEmail());
 //		throw new RuntimeException("TODO: Finish findReservationsOfGuest()");
 	}
 	public List<Room> deleteOverlapRooms(List<Room> rooms, Calendar[] dateRange) {
@@ -59,7 +70,7 @@ public class ReservationService {
 			}
 		}
 
-		System.out.println("Rooms to print on screen: " + rooms.size() + " : ReservationService");
+		System.out.println("Rooms to print on screen: " + rooms.size() + " : ReservationController");
 
 		return rooms;
 	}

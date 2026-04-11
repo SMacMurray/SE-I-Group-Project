@@ -5,7 +5,7 @@ import stay_and_shop_system.Main;
 import java.io.*;
 import java.util.Scanner;
 
-// A temporary implementation of AccountSystem geared towards reading from a CSV,
+// A temporary implementation of UserRepository geared towards reading from a CSV,
 // not a database.
 public class FauxAccountSystem {
     static final String DatabaseFile = "src/main/resources/accounts.csv";

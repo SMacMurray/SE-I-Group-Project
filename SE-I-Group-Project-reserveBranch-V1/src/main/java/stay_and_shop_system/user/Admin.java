@@ -5,7 +5,7 @@ public class Admin implements AdminInterface {
 	private String email = "dummyEmail@gmail.com";
 	private String phoneNumber;
 	private int hash; // Stores the hash of the password, not the password.
-	private UserType id = UserType.ADMIN;
+	private UserType typeId = UserType.ADMIN;
 
 	public Admin(String n, String e) {
 		name = n;
@@ -31,7 +31,7 @@ public class Admin implements AdminInterface {
 	}
 	public void setPhoneNumber(String x) { phoneNumber = x; }
 	public void setPassword(String x) { hash = x.hashCode(); }
-	public void setId(UserType id) { this.id = id; }
+	public void setTypeId(UserType id) { this.typeId = id; }
 
 	public String getName() {
 		return name;
@@ -41,7 +41,7 @@ public class Admin implements AdminInterface {
 	}
 	public String getPhoneNumber() { return phoneNumber; }
 	public int getPassword() { return hash; }
-	public UserType getId() { return id; }
+	public UserType getTypeId() { return typeId; }
 
 	public void createClerkAccount(Clerk clerk) {
 

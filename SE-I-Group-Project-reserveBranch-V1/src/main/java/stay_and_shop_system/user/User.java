@@ -5,12 +5,12 @@ public interface User {
     void setEmail(String x);
     void setPhoneNumber(String x);
     void setPassword(String x);
-    void setId(UserType ut);
+    void setTypeId(UserType ut);
     String getName();
     String getEmail();
     String getPhoneNumber();
     int getPassword();
-    UserType getId();
+    UserType getTypeId();
 
     public enum UserType {
         ADMIN,

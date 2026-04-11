@@ -1,7 +1,7 @@
 package stay_and_shop_system.occupancy.ui;
 
 import stay_and_shop_system.*;
-import stay_and_shop_system.occupancy.ReservationService;
+import stay_and_shop_system.occupancy.ReservationController;
 import stay_and_shop_system.occupancy.Room;
 import stay_and_shop_system.occupancy.RoomCriteria;
 import stay_and_shop_system.occupancy.SearchController;
@@ -42,7 +42,7 @@ public class SearchRoomPage2 extends JFrame{
     private JTextField dateERange;
     private Timer timer;
 
-    ReservationService res = new ReservationService();
+    ReservationController res = new ReservationController();
     SearchController sc = new SearchController();
 
     public JLabel createBackground() {

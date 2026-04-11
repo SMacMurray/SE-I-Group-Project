@@ -18,9 +18,9 @@ import javax.swing.JOptionPane;
 
 // Cautionary Note: What happens when we delete a room from the database, then we leave a reservation of that type in the database
 
-public class ReservationDataTable {
+public class ReservationRepository {
 	static Connection connection = DatabaseConnection.connect();
-	//ReservationService reS = new ReservationService();
+	//ReservationController reS = new ReservationController();
 	RoomService rs = new RoomService();
 	static SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy/MM/dd");
 
@@ -36,13 +36,14 @@ public class ReservationDataTable {
                     guestEmail TEXT NOT NULL,
                     creditCardNumber TEXT NOT NULL,
                     rate DOUBLE NOT NULL,
-                    cost DOUBLE NOT NULL
+                    cost DOUBLE NOT NULL,
+                    guestId INTEGER NOT NULL
                 );
                 """;
 		try (Statement stmt = connection.createStatement()) {
 			stmt.execute(sql);
 		} catch (SQLException e) {
-			throw new RuntimeException("Failed to create table : ReservationDataTable", e);
+			throw new RuntimeException("Failed to create table : ReservationRepository", e);
 		}
 	}
 	public void dropTable() {
@@ -50,7 +51,7 @@ public class ReservationDataTable {
 		try (Statement stmt = connection.createStatement()) {
 			stmt.execute(sql);
 		} catch (SQLException e) {
-			throw new RuntimeException("Failed to drop table : ReservationDataTable", e);
+			throw new RuntimeException("Failed to drop table : ReservationRepository", e);
 		}
 	}
 	// Assuming rooms are already loaded
@@ -66,7 +67,7 @@ public class ReservationDataTable {
 		}
 		catch (SQLException | ParseException e) {
 			e.printStackTrace();
-			// JOptionPane.showMessageDialog(null, e + " : ReservationDataTable");
+			// JOptionPane.showMessageDialog(null, e + " : ReservationRepository");
 		}
 		catch (NullPointerException e) {
 			System.out.println("You have not connected to the server.");
@@ -82,7 +83,7 @@ public class ReservationDataTable {
 		return reservations;
 	}
 	public List<Reservation> loadReservationsOfEmail(String email) {
-		String loadSQL = " SELECT * FROM Reservations WHERE guestEmail = \'" + email + "\'";
+		String loadSQL = " SELECT * FROM Reservations WHERE guestId = " + Objects.hash(email) + "";
 		List<Reservation> reservations = new ArrayList<>();
 
 		try (ResultSet rSet = connection.createStatement().executeQuery(loadSQL)) {
@@ -93,7 +94,7 @@ public class ReservationDataTable {
 		}
 		catch (SQLException | ParseException e) {
 			e.printStackTrace();
-			// JOptionPane.showMessageDialog(null, e + " : ReservationDataTable");
+			// JOptionPane.showMessageDialog(null, e + " : ReservationRepository");
 		}
 		catch (NullPointerException e) {
 			System.out.println("You have not connected to the server.");
@@ -118,7 +119,7 @@ public class ReservationDataTable {
 		}
 		catch (SQLException | ParseException e) {
 			e.printStackTrace();
-			// JOptionPane.showMessageDialog(null, e + " : ReservationDataTable");
+			// JOptionPane.showMessageDialog(null, e + " : ReservationRepository");
 		} catch (NullPointerException e) {
 			System.out.println("You have not connected to the server.");
 			e.printStackTrace();
@@ -129,9 +130,9 @@ public class ReservationDataTable {
 	}
 	public static void addReservation(Reservation re) {
 		// insert is SQL code.
-		String insert = "INSERT INTO Reservations (reservationId, roomNumber, guestNumber, startDate, endDate, guestName, guestEmail, creditCardNumber, rate, cost) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String insert = "INSERT INTO Reservations (reservationId, roomNumber, guestNumber, startDate, endDate, guestName, guestEmail, creditCardNumber, rate, cost, guestId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		try (PreparedStatement ps = connection.prepareStatement(insert)) {
-			//JOptionPane.showMessageDialog(null, "Successful Connection! : ReservationDataTable");
+			//JOptionPane.showMessageDialog(null, "Successful Connection! : ReservationRepository");
 			
 			ps.setInt(1, re.getReservationId());
 			ps.setInt(2, re.getRoomNumber());
@@ -143,12 +144,13 @@ public class ReservationDataTable {
 			ps.setString(8, re.getCreditCardNumber());
 			ps.setDouble(9, re.getRate());
 			ps.setDouble(10, re.getCost());
+			ps.setInt(11, re.getGuestId());
 			
 			int rowAdded = ps.executeUpdate();
 			if (rowAdded > 0) {
-                System.out.println("A new row has been inserted successfully! : ReservationDataTable");
+                System.out.println("A new row has been inserted successfully! : ReservationRepository");
             } else {
-                System.out.println("Insertion failed. : ReservationDataTable");
+                System.out.println("Insertion failed. : ReservationRepository");
                 // Notes:
                 // In MySqL, a primary key (which i made the reservationId for the Reservations table) has to be unique.
             }
@@ -156,23 +158,24 @@ public class ReservationDataTable {
 	
 		}
 		catch (SQLException e) {
-			JOptionPane.showMessageDialog(null, e + " : ReservationDataTable");
+			e.printStackTrace();
+//			JOptionPane.showMessageDialog(null, e + " : ReservationRepository");
 		}
 	}
 	public void deleteReservation(int roomNumber, String name) {
 		// delete is SQL code.
 		String delete = "DELETE FROM Reservations WHERE reservationId = ?";
 		try (PreparedStatement ps = connection.prepareStatement(delete)) {
-			//JOptionPane.showMessageDialog(null, "Successful Connection! : ReservationDataTable");
+			//JOptionPane.showMessageDialog(null, "Successful Connection! : ReservationRepository");
 
-			System.out.println(Objects.hash(roomNumber + name) + " : ReservationDataTable");
+			System.out.println(Objects.hash(roomNumber + name) + " : ReservationRepository");
 			ps.setInt(1, Objects.hash(roomNumber + name));						
 			
 			int rowAdded = ps.executeUpdate();
 			if (rowAdded > 0) {
-                System.out.println("A row has been deleted successfully! : ReservationDataTable");
+                System.out.println("A row has been deleted successfully! : ReservationRepository");
             } else {
-                System.out.println("Deletion failed. : ReservationDataTable");
+                System.out.println("Deletion failed. : ReservationRepository");
                 // Notes:
                 // In MySqL, a primary key (which i made the reservationId for the Reservations table) has to be unique.
             }
@@ -180,11 +183,13 @@ public class ReservationDataTable {
 	
 		}
 		catch (SQLException e) {
-			JOptionPane.showMessageDialog(null, e + " : ReservationDataTable");
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, e + " : ReservationRepository");
 		}
 	}
+	// TODO: MAY NEED TO MODIFY GUEST ID
 	public void modifyReservation(int roomNumber, String name, Reservation re) {
-		String modifySQL = "UPDATE Reservations SET roomNumber = ?, guestNumber = ?, startDate = ?, endDate = ?, guestName = ?, guestEmail = ?, creditCardNumber = ?, rate = ?, cost = ? WHERE reservationId = ?";
+		String modifySQL = "UPDATE Reservations SET roomNumber = ?, guestNumber = ?, startDate = ?, endDate = ?, guestName = ?, guestEmail = ?, creditCardNumber = ?, rate = ?, cost = ?, guestId = ? WHERE reservationId = ?";
 		try (PreparedStatement ps = connection.prepareStatement(modifySQL)) {
 
 			ps.setInt(1, re.getRoomNumber());
@@ -197,18 +202,21 @@ public class ReservationDataTable {
 			ps.setDouble(8, re.getRate() );
 			ps.setDouble(9, re.getCost() );
 			ps.setInt(10, Objects.hash(roomNumber + name));
+			ps.setInt(11, Objects.hash(re.getGuestId()));
 
 			int rowAdded = ps.executeUpdate();
 			if (rowAdded > 0) {
-				System.out.println("A row has been modified successfully! : ReservationDataTable");
+				System.out.println("A row has been modified successfully! : ReservationRepository");
 			} else {
-				System.out.println("Modification failed. : ReservationDataTable");
+				System.out.println("Modification failed. : ReservationRepository");
 				// Notes:
 				// In MySqL, a primary key (which i made the reservationId for the Reservations table) has to be unique.
 			}
 		}
 		catch(SQLException e) {
-			JOptionPane.showMessageDialog(null, e + " : ReservationDataTable");
+			e.printStackTrace();
+
+			JOptionPane.showMessageDialog(null, e + " : ReservationRepository");
 		}
 	}
 	public Reservation mapResultSetToReservation(ResultSet rSet) throws SQLException, ParseException{
@@ -232,8 +240,8 @@ public class ReservationDataTable {
 
 		Room r = rs.getRoom(roomNumber);
 		if (r == null) {
-			System.out.println("The reservation's room " + roomNumber + " does not exist. : ReservationDataTable");
-			System.out.println("Skipping reservation at room " + roomNumber + ". : ReservationDataTable");
+			System.out.println("The reservation's room " + roomNumber + " does not exist. : ReservationRepository");
+			System.out.println("Skipping reservation at room " + roomNumber + ". : ReservationRepository");
 //				deleteReservation(roomNumber, guestName);
 		} else {
 			re = new Reservation(r, start, end, guestNumber, guestName, guestEmail, cc);

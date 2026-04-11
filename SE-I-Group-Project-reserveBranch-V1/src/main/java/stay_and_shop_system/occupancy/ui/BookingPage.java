@@ -6,7 +6,6 @@ import com.google.i18n.phonenumbers.Phonenumber;
 import org.apache.commons.validator.routines.checkdigit.LuhnCheckDigit;
 import stay_and_shop_system.*;
 import stay_and_shop_system.occupancy.*;
-import stay_and_shop_system.user.PaymentMethod;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -18,9 +17,7 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Calendar;
@@ -49,7 +46,7 @@ public class BookingPage extends JFrame{
 
 	private Timer timer;
 
-	ReservationService res = new ReservationService();
+	ReservationController res = new ReservationController();
 
 	public JLabel createBackground() {
 		pagePane = new JPanel(new GridBagLayout());
@@ -413,7 +410,7 @@ public class BookingPage extends JFrame{
 
 			// 4 X 4
 			JLabel roomTitle = new JLabel("ROOM #" + r.getNumber() + " " + floorNumberToString(r.getNumber()) + " " + r.getRoomSize().toString());
-			roomTitle.setFont(new Font("Serif", Font.ITALIC, 25));
+			roomTitle.setFont(new Font("Serif", Font.ITALIC, 20));
 			roomTitle.setForeground(ColorPalette.DESATURATED_DARKBLUE);
 			c2.gridx = 0;
 			c2.gridy = 0;
@@ -426,7 +423,7 @@ public class BookingPage extends JFrame{
 			GridBagConstraints c3 = new GridBagConstraints();
 			c2.gridx = 1;
 			c2.gridy = 1;
-			c2.weightx = 0;
+			c2.weightx = 1;
 			roomPanel.add(roomInfoPanel, c2);
 
 			JLabel bedsLabel = new JLabel("Bed Types: " + makeBedTypesString(r.getBedTypes()));
@@ -463,13 +460,13 @@ public class BookingPage extends JFrame{
 			c2.gridy = 1;
 			c2.insets = new Insets(10, 0, 0, 0);
 			roomPanel.add(roomImg, c2);
-
-			loadImageForRoom(roomImg, r.getNumber());
 //			c.gridx = 0;
 //			c.gridy = i;
 //			++i;
 //			roomsPane.add(roomPanel, c);
 			roomsPane.add(roomPanel);
+			loadImageForRoom(roomImg, r.getNumber());
+
 		}
 	}
 	public String floorNumberToString(int number) {
@@ -600,6 +597,8 @@ public class BookingPage extends JFrame{
 				// get() - get's the image of the ImageWorker
 				ImageIcon icon = new ImageIcon(get());
 				imgContainer.setIcon(icon);
+				imgContainer.setText("");
+				imgContainer.setOpaque(false);
 				System.out.println("done()");
 
 				roomsPane.revalidate();

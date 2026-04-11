@@ -1,6 +1,5 @@
 package stay_and_shop_system;
 
-import stay_and_shop_system.occupancy.Room;
 import stay_and_shop_system.occupancy.ui.*;
 import stay_and_shop_system.user.*;
 import stay_and_shop_system.user.ui.CancelReservationPage;
@@ -13,7 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 
 public class SetupUI {
     public static void setUpJOptionPaneDesign() {
@@ -86,18 +84,18 @@ public class SetupUI {
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.CENTER;
         // TODO: Allow ButtonsPane to work with currently signed in User
-        User user = new GuestClerk("Johnny Test", "johnnyTest@gmail.com", "", 0, new PaymentMethod());
+        User user = new GuestClerk("Johnny Test", "johnnyTest@gmail.com", 0, "", new PaymentMethod());
 
         Font font = new Font("Serif", Font.PLAIN, 23);
         if (user instanceof ClerkInterface) {
-            JButton loginButton = setupSideBarButton((AccountSystem.getSessionAccount() == null ? "Sign In" : "Log Out"), 0, 0);
+            JButton loginButton = setupSideBarButton((UserRepository.getSessionAccount() == null ? "Sign In" : "Log Out"), 0, 0);
             c.gridx = 0;
             c.gridy = buttonCount;
             buttonCount++;
             buttonsPane.add(loginButton, c);
             loginButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    if (AccountSystem.getSessionAccount() == null){
+                    if (UserRepository.getSessionAccount() == null){
                         LoginPage newFrame = new LoginPage();
                         frame.dispose();
                     }
@@ -219,7 +217,7 @@ public class SetupUI {
         accountStatusTextArea.setFont(new Font("Serif", Font.PLAIN, 18));
         accountStatusTextArea.setForeground(ColorPalette.OCEAN_LIGHTBLUE);
         if (Main.SessionAccount != null) {
-            accountStatusTextArea.setText("LOGGED IN AS: " + AccountSystem.getSessionAccount().getName());
+            accountStatusTextArea.setText("LOGGED IN AS: " + UserRepository.getSessionAccount().getName());
         }
         c.gridx = 0;
         c.gridy = 1;
