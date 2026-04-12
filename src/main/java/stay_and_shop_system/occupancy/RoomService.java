@@ -105,5 +105,99 @@ public class RoomService {
 			return null;
 		}
 	}
-	
+	public boolean updateRoom(int originalRoomNumber,
+							  int newRoomNumber,
+							  int beds,
+							  int maxOccupancy,
+							  double baseDailyRate,
+							  boolean smokingStatus,
+							  List<Room.BedType> bedTypes,
+							  Room.QualityLevel qualityLevel,
+							  Room.RoomSize roomSize) {
+
+		if (originalRoomNumber < 100 || originalRoomNumber > 399) {
+			return false;
+		}
+
+		Room existingRoom = getRoom(originalRoomNumber);
+		if (existingRoom == null) {
+			return false;
+		}
+
+		if (newRoomNumber < 100 || newRoomNumber > 399) {
+			return false;
+		}
+
+		if (beds < 1 || beds > 4) {
+			return false;
+		}
+
+		if (maxOccupancy < 1 || baseDailyRate < 0) {
+			return false;
+		}
+
+		// If changing the room number, make sure the target number is not already taken
+		if (newRoomNumber != originalRoomNumber && getRoom(newRoomNumber) != null) {
+			return false;
+		}
+
+		bedTypes = bedTypes.stream().distinct().toList();
+
+		// If room number changed, clear old slot and create at new slot
+		if (newRoomNumber != originalRoomNumber) {
+			rooms[originalRoomNumber - 100] = null;
+		}
+
+		rooms[newRoomNumber - 100] = new Room(
+				newRoomNumber,
+				beds,
+				maxOccupancy,
+				baseDailyRate,
+				smokingStatus,
+				bedTypes,
+				qualityLevel,
+				roomSize
+		);
+
+		return true;
+	}
+
+	public void rewriteRoomsCSV() {
+		try (FileWriter fw = new FileWriter("src/main/resources/updatedReserves.csv", false)) {
+			fw.write("roomNumber,beds,maxOccupancy,baseDailyRate,smokingStatus,bedTypes,qualityLevel,roomSize\n");
+
+			for (Room room : rooms) {
+				if (room == null) continue;
+
+				StringBuilder bedTypes = new StringBuilder();
+				if (room.getBedTypes().size() > 1) {
+					bedTypes.append("\"");
+				}
+
+				for (int i = 0; i < room.getBedTypes().size(); i++) {
+					bedTypes.append(room.getBedTypes().get(i).name());
+					if (i < room.getBedTypes().size() - 1) {
+						bedTypes.append(", ");
+					}
+				}
+
+				if (room.getBedTypes().size() > 1) {
+					bedTypes.append("\"");
+				}
+
+				fw.write(
+						room.getNumber() + "," +
+								room.getBeds() + "," +
+								room.getMaxOccupancy() + "," +
+								room.getBaseDailyRate() + "," +
+								(room.getSmokingStatus() ? "Permitted" : "Prohibited") + "," +
+								bedTypes + "," +
+								room.getQualityLevel().name() + "," +
+								room.getRoomSize().name() + "\n"
+				);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

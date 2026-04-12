@@ -5,6 +5,7 @@ import stay_and_shop_system.user.*;
 import stay_and_shop_system.user.ui.CancelReservationPage;
 import stay_and_shop_system.user.ui.ClerkAddRoomPage;
 import stay_and_shop_system.user.ui.LoginPage;
+import stay_and_shop_system.user.ui.ModifyRoomPage;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicScrollBarUI;
@@ -118,11 +119,11 @@ public class SetupUI {
             c.gridy = buttonCount++;
             buttonsPane.add(modifyRoomButton, c);
 
-            // TODO: connect this when ModifyRoomPage exists
             modifyRoomButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    JOptionPane.showMessageDialog(frame, "Modify Room page is not implemented yet.");
+                    ModifyRoomPage newFrame = new ModifyRoomPage();
+                    frame.dispose();
                 }
             });
 

@@ -42,6 +42,14 @@ public class UserHomePage extends JFrame{
             buttonsPane.add(modifyRoomButton, c);
             buttonCount++;
 
+            modifyRoomButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    ModifyRoomPage newFrame = new ModifyRoomPage();
+                    dispose();
+                }
+            });
+
             JButton modifyMyInformationButton = new JButton("Modify My Information");
             c.gridx = 1;
             c.gridy = buttonCount;
