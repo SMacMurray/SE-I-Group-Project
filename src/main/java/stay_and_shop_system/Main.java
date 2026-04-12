@@ -14,7 +14,7 @@ public class Main extends JFrame {
     public static int WINDOW_W = 1000;
     public static int WINDOW_H = 800;
     public static String APP_TITLE = "The Ocean's Waters Hotel: the illustrious hotel/luxury shopping experience!";
-    public static String HOME_TEXT = "Store Logo Here";
+    public static String HOME_TEXT = "Home";
     static ReservationDataTable rdt = new ReservationDataTable();
 
     public static void initRooms() {

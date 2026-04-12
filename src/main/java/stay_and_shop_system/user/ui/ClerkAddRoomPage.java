@@ -2,6 +2,7 @@ package stay_and_shop_system.user.ui;
 
 import stay_and_shop_system.GlobalVariables;
 import stay_and_shop_system.HomePage;
+import stay_and_shop_system.HomePage2;
 import stay_and_shop_system.Main;
 import stay_and_shop_system.occupancy.Room;
 
@@ -23,7 +24,7 @@ public class ClerkAddRoomPage extends JFrame {
                     this,
                     "Only a Clerk or GuestClerk can add rooms."
             );
-            HomePage newFrame = new HomePage();
+            HomePage2 newFrame = new HomePage2();
             dispose();
             return;
         }
@@ -45,7 +46,7 @@ public class ClerkAddRoomPage extends JFrame {
         homeButton.setBounds(0, 0, 140, 22);
         homeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                HomePage newFrame = new HomePage();
+                HomePage2 newFrame = new HomePage2();
                 dispose();
             }
         });
