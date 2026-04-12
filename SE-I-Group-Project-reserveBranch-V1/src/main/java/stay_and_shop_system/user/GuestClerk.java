@@ -15,7 +15,7 @@ public class GuestClerk implements GuestInterface, ClerkInterface{
     private UserType typeId = UserType.GUEST_CLERK;
 
     // Fix when needed
-    public GuestClerk(String n, String e, int h, String pn,  PaymentMethod pm) {
+    public GuestClerk(String e, String n,  int h, String pn,  PaymentMethod pm) {
         name = n;
         email = e;
         phoneNumber = pn;
@@ -55,6 +55,7 @@ public class GuestClerk implements GuestInterface, ClerkInterface{
     public int getPassword() { return hash; }
     public String getPaymentId() { return paymentId; }
     public UserType getTypeId() { return typeId; }
+    public int getGuestId() { return Math.abs(Objects.hash(email)); }
     public PaymentMethod getPaymentMethod() {
         return GuestInterface.pm;
     }

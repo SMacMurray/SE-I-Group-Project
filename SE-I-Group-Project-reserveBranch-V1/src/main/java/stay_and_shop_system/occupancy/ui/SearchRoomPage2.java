@@ -649,7 +649,7 @@ public class SearchRoomPage2 extends JFrame{
 
                 RoomCriteria rc = new RoomCriteria(guestRange, bedRange, smokingStatuses, roomRanges, bedTypes, roomSizes, costRange, dateRange);
 
-                BookingPage newFrame = new BookingPage(sc.searchAvailableRooms(rc));
+                BookingPage newFrame = new BookingPage(sc.searchAvailableRooms(rc), rc);
                 dispose();
             }
         });

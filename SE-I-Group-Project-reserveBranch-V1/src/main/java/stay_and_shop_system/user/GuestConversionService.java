@@ -7,13 +7,13 @@ public class GuestConversionService {
             case ADMIN:
                 Admin admin = (Admin)user;
                 GuestAdmin gA;
-                gA = new GuestAdmin( admin.getName(), admin.getEmail(), admin.getPassword(), admin.getPhoneNumber(),  pm);
+                gA = new GuestAdmin( admin.getEmail(), admin.getName(),  admin.getPassword(), admin.getPhoneNumber(),  pm);
                 newGuest = gA;
                 break;
             case CLERK:
                 Clerk clerk = (Clerk)user;
                 GuestClerk gC;
-                gC = new GuestClerk( clerk.getName(), clerk.getEmail(), clerk.getPassword(), clerk.getPhoneNumber(),  pm);
+                gC = new GuestClerk(  clerk.getEmail(), clerk.getName(), clerk.getPassword(), clerk.getPhoneNumber(),  pm);
                 newGuest = gC;
                 break;
             default:

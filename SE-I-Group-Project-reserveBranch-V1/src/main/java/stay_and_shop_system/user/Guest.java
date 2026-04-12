@@ -13,13 +13,13 @@ public class Guest implements GuestInterface {
     private UserType typeId = UserType.GUEST;
 
 
-    public Guest(String n, String e, String p, PaymentMethod pm) {
+    public Guest(String e, String n,  String p, PaymentMethod pm) {
         name = n;
         email = e;
         phoneNumber = p;
         GuestInterface.pm.setPaymentMethod(pm);
     }
-    public Guest(String n, String e, int h, String p, PaymentMethod pm) {
+    public Guest(String e, String n, int h, String p, PaymentMethod pm) {
         name = n;
         email = e;
         phoneNumber = p;
@@ -68,6 +68,7 @@ public class Guest implements GuestInterface {
     public int getPassword() { return hash; }
     public String getPaymentId() { return paymentId; }
     public UserType getTypeId() { return typeId; }
+    public int getGuestId() { return Math.abs(Objects.hash(email)); }
     public PaymentMethod getPaymentMethod() {
         return GuestInterface.pm;
     }

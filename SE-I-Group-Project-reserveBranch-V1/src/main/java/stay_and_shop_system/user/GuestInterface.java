@@ -8,7 +8,6 @@ public interface GuestInterface extends User {
 
     public PaymentMethod getPaymentMethod();
     public void setPaymentMethod(PaymentMethod pm);
-    void setPaymentId(String pId);
-    String getPaymentId();
+    int getGuestId();
 
 }

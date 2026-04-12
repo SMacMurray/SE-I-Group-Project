@@ -1,5 +1,6 @@
 package stay_and_shop_system.occupancy;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -16,6 +17,8 @@ public class Reservation {
 	public double cost = 0;
 	public int reservationId = Objects.hash(roomNumber + "John Doe");
 	public int guestId = Objects.hash(roomNumber + "John Doe");
+
+	private SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
 
 	// For testing purposes
 	public Reservation() {
@@ -51,7 +54,7 @@ public class Reservation {
 		// Rounding it to 2 decimal places (you need to put 100.0 to make it work correctly instead of 100)
 		rate = Math.round(100.0 * (r.baseDailyRate + r.qualityLevel.getPrice())) / 100.0;
 		cost = 0;
-		reservationId = Objects.hash(r.number + n);
+		reservationId = Objects.hash(r.number + n + getFormattedEndDate());
 		guestId = Math.abs(Objects.hash(em));
 
 		System.out.println(rate + " : Reservation");
@@ -70,6 +73,8 @@ public class Reservation {
 	public Double getCost() { return cost; }
 	public int getReservationId() {return reservationId; }
 	public int getGuestId() {return guestId; }
+	public String getFormattedStartDate() { return formatter.format(start.getTime()); }
+	public String getFormattedEndDate() { return formatter.format(end.getTime()); }
 
 	public void setRoom(Room r) {
 		r = room;
@@ -93,7 +98,7 @@ public class Reservation {
 	}
 	public void setCost(double c) { c = cost; }
 	public void updateReservationId() {
-		reservationId = Objects.hash(room.number + guestName);
+		reservationId = Objects.hash(room.number + guestName + getFormattedEndDate());
 	}
 
 	public void calculateTotal() {
@@ -109,8 +114,8 @@ public class Reservation {
 	public String toString() {
 		String str = "Reservation at room number " +  roomNumber + " w/ reservationId " + reservationId;
 		str += "\n Guest Num: " + guestNum;
-		str += "\n Start Date: " + start.getTime();
-		str += "\n End Date: " + end.getTime();
+		str += "\n Start Date: " + getFormattedStartDate();
+		str += "\n End Date: " + getFormattedEndDate();
 		str += "\n Guest Name: " + guestName;
 		str += "\n Credit Card Number: " + creditCardNumber;
 		str += "\n Rate: " + rate;

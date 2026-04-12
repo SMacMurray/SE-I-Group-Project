@@ -3,23 +3,26 @@ package test;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import stay_and_shop_system.LoadCSV;
+//import stay_and_shop_system.LoadCSV;
 import stay_and_shop_system.occupancy.Reservation;
 import stay_and_shop_system.occupancy.ReservationController;
+import stay_and_shop_system.occupancy.Room;
 import stay_and_shop_system.occupancy.RoomService;
 import stay_and_shop_system.occupancy.database.ReservationRepository;
+import stay_and_shop_system.occupancy.database.RoomRepository;
 import stay_and_shop_system.user.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ReserveRoomTesting {
-    ReservationRepository rrp = new ReservationRepository();
     ReservationController rc = new ReservationController();
     RoomService rs = new RoomService();
 
@@ -29,15 +32,27 @@ public class ReserveRoomTesting {
     String phoneNumber = "909-909-9999";
     @BeforeAll
     static void beforeAll() {
-        LoadCSV.loadRooms();
+//        LoadCSV.loadRooms();
     }
     @BeforeEach
     void beforeEach() {
-        rrp.dropTable();
-        rrp.createTable();
+        ReservationRepository.dropTable();
+        ReservationRepository.createTable();
 
         UserRepository.dropTable();
         UserRepository.initAccountTable();
+
+        RoomRepository.dropTable();
+        RoomRepository.createTable();
+        List<Room.BedType> bts = new ArrayList<>();
+        bts.add(Room.BedType.Full);
+        bts.add(Room.BedType.King);
+        RoomRepository.addRoom(new Room(101, 100, 100, 101.01, true, bts, Room.QualityLevel.Executive, Room.RoomSize.Deluxe));
+        System.out.println(RoomRepository.loadRoomOfRoomNumber(101));
+        bts.add(Room.BedType.Queen);
+        bts.add(Room.BedType.King);
+        RoomRepository.addRoom(new Room(200, 13, 46, 203.99, false, bts, Room.QualityLevel.Comfort, Room.RoomSize.Double));
+        System.out.println(RoomRepository.loadRoomOfRoomNumber(200));
 
         UserRepository.setUser(null);
 
@@ -60,27 +75,27 @@ public class ReserveRoomTesting {
         catch (ParseException e) {
             e.printStackTrace();
         }
-        for (Reservation r : rrp.loadReservations()) {
+        for (Reservation r : ReservationRepository.loadReservations()) {
             System.out.println(r);
         }
-        Object[] reservationInfo = rc.reserveRoom(rs.getRoom(101), start, end, 2, "Jolly Jill", guestEmail, "909-909-9099", "4242 4242 4242 4242", "334", "1334 Firing My side at Drive", expDate);
-        for (Reservation r : rrp.loadReservations()) {
+        Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), start, end, 2, "Jolly Jill", guestEmail, "909-909-9099", "4242 4242 4242 4242", "334", "1334 Firing My side at Drive", expDate);
+        for (Reservation r : ReservationRepository.loadReservations()) {
             System.out.println(r);
         }
         int guestId = (int)reservationInfo[0];
         double total = (double)reservationInfo[1];
 
         assertEquals(guestId, Math.abs(Objects.hash(guestEmail)));
-        assertEquals(total, rs.getRoom(101).getDailyRate());
+        assertEquals(total, RoomRepository.loadRoomOfRoomNumber(101).getDailyRate());
 
         // This now considers that the User has a session account assigned.
-        reservationInfo = rc.reserveRoom(rs.getRoom(200), start, end2, 2, "Jolly Jill", guestEmail, "909-909-9099", "4242 4242 4242 4242", "334", "1334 Firing My side at Drive", expDate);
+        reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(200), start, end2, 2, "Jolly Jill", guestEmail, "909-909-9099", "4242 4242 4242 4242", "334", "1334 Firing My side at Drive", expDate);
 
         guestId = (int)reservationInfo[0];
         total = (double)reservationInfo[1];
 
         assertEquals(guestId, Math.abs(Objects.hash(guestEmail)));
-        assertEquals(rs.getRoom(200).getDailyRate() * 8, total);
+        assertEquals(RoomRepository.loadRoomOfRoomNumber(200).getDailyRate() * 8, total);
 
         assertTrue(UserRepository.findUser(guestEmail));
 
@@ -109,11 +124,11 @@ public class ReserveRoomTesting {
         catch (ParseException e) {
             e.printStackTrace();
         }
-        for (Reservation r : rrp.loadReservations()) {
+        for (Reservation r : ReservationRepository.loadReservations()) {
             System.out.println(r);
         }
-        Object[] reservationInfo = rc.reserveRoom(rs.getRoom(101), start, end, 2, name, email, phoneNumber, "4242 4242 4242 4242", "334", "1334 Firing My side at Drive", expDate);
-        for (Reservation r : rrp.loadReservations()) {
+        Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), start, end, 2, name, email, phoneNumber, "4242 4242 4242 4242", "334", "1334 Firing My side at Drive", expDate);
+        for (Reservation r : ReservationRepository.loadReservations()) {
             System.out.println(r);
         }
 
@@ -126,10 +141,10 @@ public class ReserveRoomTesting {
 
         assertTrue(UserRepository.getSessionAccount().getTypeId().equals(User.UserType.GUEST_ADMIN));
 
-        reservationInfo = rc.reserveRoom(rs.getRoom(200), start, end2, 2, name, email, phoneNumber, "4242 4242 4242 4242", "334", "1334 Firing My side at Drive", expDate);
+        reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(200), start, end2, 2, name, email, phoneNumber, "4242 4242 4242 4242", "334", "1334 Firing My side at Drive", expDate);
 
         System.out.println("");
-        for (Reservation r : rrp.loadReservations()) {
+        for (Reservation r : ReservationRepository.loadReservations()) {
             System.out.println(r);
         }
 
@@ -137,7 +152,7 @@ public class ReserveRoomTesting {
         total = (double)reservationInfo[1];
 
         assertEquals(guestId, Math.abs(Objects.hash(email)));
-        assertEquals(rs.getRoom(200).getDailyRate() * 8, total);
+        assertEquals(RoomRepository.loadRoomOfRoomNumber(200).getDailyRate() * 8, total);
 
         assertTrue(UserRepository.findUser(email));
 
@@ -177,11 +192,11 @@ public class ReserveRoomTesting {
         catch (ParseException e) {
             e.printStackTrace();
         }
-        for (Reservation r : rrp.loadReservations()) {
+        for (Reservation r : ReservationRepository.loadReservations()) {
             System.out.println(r);
         }
-        Object[] reservationInfo = rc.reserveRoom(rs.getRoom(101), start, end, 2, name, email, phoneNumber, "4242 4242 4242 4242", "334", "1334 Firing My side at Drive", expDate);
-        for (Reservation r : rrp.loadReservations()) {
+        Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), start, end, 2, name, email, phoneNumber, "4242 4242 4242 4242", "334", "1334 Firing My side at Drive", expDate);
+        for (Reservation r : ReservationRepository.loadReservations()) {
             System.out.println(r);
         }
 
@@ -194,10 +209,10 @@ public class ReserveRoomTesting {
 
         assertTrue(UserRepository.getSessionAccount().getTypeId().equals(User.UserType.GUEST_CLERK));
 
-        reservationInfo = rc.reserveRoom(rs.getRoom(200), start, end2, 2, name, email, phoneNumber, "4242 4242 4242 4242", "334", "1334 Firing My side at Drive", expDate);
+        reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(200), start, end2, 2, name, email, phoneNumber, "4242 4242 4242 4242", "334", "1334 Firing My side at Drive", expDate);
 
         System.out.println("");
-        for (Reservation r : rrp.loadReservations()) {
+        for (Reservation r : ReservationRepository.loadReservations()) {
             System.out.println(r);
         }
 
@@ -205,7 +220,7 @@ public class ReserveRoomTesting {
         total = (double)reservationInfo[1];
 
         assertEquals(guestId, Math.abs(Objects.hash(email)));
-        assertEquals(rs.getRoom(200).getDailyRate() * 8, total);
+        assertEquals(RoomRepository.loadRoomOfRoomNumber(200).getDailyRate() * 8, total);
 
         assertTrue(UserRepository.findUser(email));
 
@@ -221,14 +236,6 @@ public class ReserveRoomTesting {
         assertEquals(clerk.getPhoneNumber(), gC.getPhoneNumber());
 
 
-
-    }
-    @Test
-    void guestAdminMakesReservation() {
-
-    }
-    @Test
-    void guestClerkMakesReservation() {
 
     }
     @Test
@@ -250,11 +257,11 @@ public class ReserveRoomTesting {
         catch (ParseException e) {
             e.printStackTrace();
         }
-        for (Reservation r : rrp.loadReservations()) {
+        for (Reservation r : ReservationRepository.loadReservations()) {
             System.out.println(r);
         }
-        Object[] reservationInfo = rc.reserveRoom(rs.getRoom(101), start, end, 2, name, email, phoneNumber, "4242 4242 4242 4242", "334", "1334 Firing My side at Drive", expDate);
-        for (Reservation r : rrp.loadReservations()) {
+        Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), start, end, 2, name, email, phoneNumber, "4242 4242 4242 4242", "334", "1334 Firing My side at Drive", expDate);
+        for (Reservation r : ReservationRepository.loadReservations()) {
             System.out.println(r);
         }
 

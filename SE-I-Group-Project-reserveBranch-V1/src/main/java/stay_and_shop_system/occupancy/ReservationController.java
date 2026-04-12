@@ -16,22 +16,8 @@ public class ReservationController {
 	private GuestService gs = new GuestService();
 	private SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
 
-	public void loadReservations() {
-		reservations = rrp.loadReservations();
-	}
-	public List<Reservation> getReservations() {
-		loadReservations();
-		return reservations;
-	}
 	public SimpleDateFormat getDateFormatter() {
 		return formatter;
-	}
-	public Reservation getReservationOfId(int id) {
-		return rrp.loadReservationOfId(id);
-	}
-	public void deleteReservation(Reservation r) {
-		reservations.remove(r);
-		rrp.deleteReservation(r.getRoomNumber(), r.getGuestName());
 	}
 	public Object[] reserveRoom(Room room, Calendar start, Calendar end, int guestNum, String guestName, String guestEmail, String phoneNumber, String creditCardNumber, String ccv, String billingAddr, Calendar expDate ) {
 		Reservation reservation = new Reservation(room, start, end, guestNum, guestName, guestEmail,  creditCardNumber);
@@ -42,7 +28,7 @@ public class ReservationController {
 		PaymentMethod pm = new PaymentMethod(creditCardNumber, ccv, billingAddr, expDate);
 		if (user == null) {
 			if (!UserRepository.findUser(guestEmail)) {
-				guest = new Guest(guestName, guestEmail, phoneNumber, pm);
+				guest = new Guest(guestEmail, guestName,  phoneNumber, pm);
 				UserRepository.addGuest(guest);
 			}
 		}
@@ -56,16 +42,11 @@ public class ReservationController {
 		return new Object[] {reservation.getGuestId(), reservation.getCost()};
 	}
 
-	public List<Reservation> findReservationsOfGuest(GuestInterface guest) {
-		// TODO: Make guest have an ID attatched to their reservation unique to them because any guest can have the same name.
-		return rrp.loadReservationsOfEmail(guest.getEmail());
-//		throw new RuntimeException("TODO: Finish findReservationsOfGuest()");
-	}
 	public List<Room> deleteOverlapRooms(List<Room> rooms, Calendar[] dateRange) {
-		loadReservations();
+		reservations = ReservationRepository.loadReservations();
 
 		for (Reservation re : reservations) {
-			if (!dateRange[0].after(re.getEndDate()) && !dateRange[1].after(re.getEndDate())) {
+			if (!dateRange[0].after(re.getEndDate()) && !re.getEndDate().after(dateRange[1])) {
 				rooms.remove(re.room);
 			}
 		}

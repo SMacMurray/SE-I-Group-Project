@@ -6,6 +6,9 @@ import com.google.i18n.phonenumbers.Phonenumber;
 import org.apache.commons.validator.routines.checkdigit.LuhnCheckDigit;
 import stay_and_shop_system.*;
 import stay_and_shop_system.occupancy.*;
+import stay_and_shop_system.occupancy.database.RoomRepository;
+import stay_and_shop_system.user.PaymentMethod;
+import stay_and_shop_system.user.ui.CancelReservationPage;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -17,6 +20,7 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
@@ -36,6 +40,9 @@ public class BookingPage extends JFrame{
 	private JPanel pagePane;
 	private JButton reserveButton;
 
+	private JButton prevButton;
+	private JButton currButton;
+
 	private JTextField guestNameText;
 	private JTextField guestEmailText;
 	private JTextField guestPhoneText;
@@ -43,10 +50,13 @@ public class BookingPage extends JFrame{
 	private JTextField guestCCVText;
 	private JTextField guestBillAText;
 	private JTextField guestExpDateText;
+	private JTextField guestCountText;
 
 	private Timer timer;
 
-	ReservationController res = new ReservationController();
+	private ReservationController rc = new ReservationController();
+	private RoomCriteria rCr;
+	private SimpleDateFormat formatter = new SimpleDateFormat("MM/yy");
 
 	public JLabel createBackground() {
 		pagePane = new JPanel(new GridBagLayout());
@@ -209,6 +219,19 @@ public class BookingPage extends JFrame{
 		c.insets = new Insets(0, 0, 0, 0);
 		guestInfoPanel.add(guestExpDateWrapper, c);
 
+		JPanel guestCountWrapper = new JPanel();
+		guestCountWrapper.setOpaque(false);
+		JLabel guestCount = new JLabel("Amount of Guests: ");
+		guestCount.setFont(new Font("Serif", Font.ITALIC, 16));
+		guestCountText = new JTextField(16);
+		guestCountText.setBorder(BorderFactory.createMatteBorder(2,2,2,2, ColorPalette.SATURATED_LIGHTBLUE));
+		guestCountWrapper.add(guestCount);
+		guestCountWrapper.add(guestCountText);
+		c.gridx = 1;
+		c.gridy = 3;
+		c.insets = new Insets(0, 0, 0, 0);
+		guestInfoPanel.add(guestCountWrapper, c);
+
 		JPanel reserveBWrapper = new JPanel(new GridBagLayout());
 		reserveBWrapper.setOpaque(false);
 //		searchBWrapper.setPreferredSize(new Dimension(300, 300));
@@ -220,8 +243,31 @@ public class BookingPage extends JFrame{
 		reserveButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-//				BookingPage newFrame = new BookingPage();
-				dispose();
+				int choice = JOptionPane.showConfirmDialog(
+						null,
+						"Do you want to reserve room " + currButton.getName() + "?",
+						"Reserve Room " + currButton.getName() + "?",
+						JOptionPane.YES_NO_OPTION
+				);
+				if (choice == JOptionPane.YES_OPTION) {
+					try {
+						Calendar expDate = Calendar.getInstance();
+						expDate.setTime(formatter.parse(guestExpDateText.getText()));
+						Object[] reserveInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(Integer.parseInt(currButton.getName())), rCr.getDateRange()[0],
+								rCr.getDateRange()[1], Integer.parseInt(guestCountText.getText()), guestNameText.getText(),
+								guestEmailText.getText(), guestPhoneText.getText(), guestCCN.getText(), guestCCV.getText(),
+								guestBillAText.getText(), expDate);
+
+						ReservationSuccessPage newFrame = new ReservationSuccessPage((int)reserveInfo[0], (double)reserveInfo[1],
+								rCr.getDateRange()[0], rCr.getDateRange()[1]);
+					}
+					catch (ParseException exp) {
+						JOptionPane.showMessageDialog(null, "Failed to reserve the room.");
+						exp.printStackTrace();
+					}
+					dispose();
+				}
+
 			}
 		});
 		c.gridx = 4;
@@ -237,7 +283,7 @@ public class BookingPage extends JFrame{
 
 	}
 	public void addGuestInfoListeners() {
-		JTextField[] jts = new JTextField[] {guestNameText, guestEmailText, guestPhoneText, guestCCNText, guestCCVText, guestBillAText, guestExpDateText};
+		JTextField[] jts = new JTextField[] {guestNameText, guestEmailText, guestPhoneText, guestCCNText, guestCCVText, guestBillAText, guestExpDateText, guestCountText};
 		for (JTextField jt : jts) {
 			jt.getDocument().addDocumentListener(new DocumentListener() {
 				public void insertUpdate(DocumentEvent e) { update(); }
@@ -364,6 +410,20 @@ public class BookingPage extends JFrame{
 			guestExpDateText.setBorder(BorderFactory.createMatteBorder(2,2,2,2, ColorPalette.SATURATED_LIGHTBLUE));
 		}
 
+		try {
+			Integer.parseInt(guestCountText.getText());
+		}
+		catch (NumberFormatException e) {
+			guestCountText.setBorder(BorderFactory.createMatteBorder(2,2,2,2, ColorPalette.INVALID_RED));
+			changeEditabilityOfReserveButton(true);
+			return;
+		}
+		guestCountText.setBorder(BorderFactory.createMatteBorder(2,2,2,2, ColorPalette.SATURATED_LIGHTBLUE));
+
+		if (currButton == null) {
+			changeEditabilityOfReserveButton(true);
+			return;
+		}
 		changeEditabilityOfReserveButton(false);
 	}
 	public boolean isValidEmail(String email) {
@@ -398,7 +458,7 @@ public class BookingPage extends JFrame{
 			reserveButton.setText("Reserve Room");
 		}
 	}
-	public void loadReservationsOnScreen(List<Room> rooms) {
+	public void loadRoomsOnScreen(List<Room> rooms) {
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.NONE;
 
@@ -451,6 +511,19 @@ public class BookingPage extends JFrame{
 			c2.gridy = 2;
 			c2.insets = new Insets(20, 0, 0, 0);
 			roomPanel.add(bookButton, c2);
+			bookButton.setName(Integer.toString(r.getNumber()));
+			bookButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if (currButton != null) {
+						currButton.setEnabled(true);
+						prevButton = currButton;
+					}
+					currButton = (JButton) e.getSource();
+					currButton.setEnabled(false);
+
+					checkForExceptions();
+				}
+			});
 
 			JLabel roomImg = new JLabel("Loading...");
 			roomImg.setPreferredSize(new Dimension(325, 225));
@@ -509,7 +582,9 @@ public class BookingPage extends JFrame{
 
 
 	}
-	public BookingPage(List<Room> rooms) {
+	public BookingPage(List<Room> rooms, RoomCriteria roomCriteria) {
+		rCr = roomCriteria;
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(1000, 800);
 		setLocationRelativeTo(null); // Centers the screen
@@ -524,7 +599,7 @@ public class BookingPage extends JFrame{
 
 		roomsPane = new JPanel(new GridLayout(0, 1));
 		roomsPane.setOpaque(false);
-		loadReservationsOnScreen(rooms);
+		loadRoomsOnScreen(rooms);
 
 		JPanel roomsWrapper = new JPanel(new GridBagLayout()); // To force what im wrapping to be it's preferred size bc BorderLayout doesnt repsect it.
 		roomsWrapper.setOpaque(false);

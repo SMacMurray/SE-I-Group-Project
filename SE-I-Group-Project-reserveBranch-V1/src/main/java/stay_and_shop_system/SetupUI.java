@@ -1,5 +1,7 @@
 package stay_and_shop_system;
 
+import stay_and_shop_system.occupancy.Reservation;
+import stay_and_shop_system.occupancy.database.ReservationRepository;
 import stay_and_shop_system.occupancy.ui.*;
 import stay_and_shop_system.user.*;
 import stay_and_shop_system.user.ui.CancelReservationPage;
@@ -8,10 +10,13 @@ import stay_and_shop_system.user.ui.LoginPage;
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Calendar;
+import java.util.Objects;
 
 public class SetupUI {
     public static void setUpJOptionPaneDesign() {
@@ -84,28 +89,30 @@ public class SetupUI {
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.CENTER;
         // TODO: Allow ButtonsPane to work with currently signed in User
-        User user = new GuestClerk("Johnny Test", "johnnyTest@gmail.com", 0, "", new PaymentMethod());
+//        User user = new GuestClerk("Johnny Test", "johnnyTest@gmail.com", 0, "", new PaymentMethod());
+        User user = UserRepository.getSessionAccount();
 
         Font font = new Font("Serif", Font.PLAIN, 23);
-        if (user instanceof ClerkInterface) {
-            JButton loginButton = setupSideBarButton((UserRepository.getSessionAccount() == null ? "Sign In" : "Log Out"), 0, 0);
-            c.gridx = 0;
-            c.gridy = buttonCount;
-            buttonCount++;
-            buttonsPane.add(loginButton, c);
-            loginButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    if (UserRepository.getSessionAccount() == null){
-                        LoginPage newFrame = new LoginPage();
-                        frame.dispose();
-                    }
-                    else {
-                        AccountController.logout();
-                        HomePage2 newFrame = new HomePage2();
-                        frame.dispose();
-                    }
+
+        JButton loginButton = setupSideBarButton((UserRepository.getSessionAccount() == null ? "Sign In" : "Log Out"), 0, 0);
+        c.gridx = 0;
+        c.gridy = buttonCount;
+        buttonCount++;
+        buttonsPane.add(loginButton, c);
+        loginButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (UserRepository.getSessionAccount() == null){
+                    LoginPage newFrame = new LoginPage();
+                    frame.dispose();
                 }
-            });
+                else {
+                    AccountController.logout();
+                    HomePage2 newFrame = new HomePage2();
+                    frame.dispose();
+                }
+            }
+        });
+        if (user instanceof ClerkInterface) {
 
             JButton addRoomButton = setupSideBarButton("Add Room", 4, 0);
             c.gridx = 0;
@@ -145,8 +152,10 @@ public class SetupUI {
             buttonsPane.add(cancelReservationButton, c);
             cancelReservationButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    CancelReservationPage newFrame = new CancelReservationPage((GuestInterface)user);
-                    frame.dispose();
+                    String response = JOptionPane.showInputDialog(null, "Enter your guest:", "Input Needed", JOptionPane.QUESTION_MESSAGE);
+
+                    throw new RuntimeException("TODO: Finish allowing Clerk to get a guest's reservations");
+
                 }
             });
 
@@ -181,11 +190,44 @@ public class SetupUI {
             buttonsPane.add(cancelReservationButton, c);
             cancelReservationButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    CancelReservationPage newFrame = new CancelReservationPage((GuestInterface)user);
-                    frame.dispose();
+                    List<Reservation> reservationList = ReservationRepository.loadReservationsOfGuestId(((GuestInterface)user).getGuestId());
+                    if (reservationList.isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "There are no reservations attached to this guest Id");
+                    }
+                    else {
+                        CancelReservationPage newFrame = new CancelReservationPage(((GuestInterface)user).getGuestId());
+                        frame.dispose();
+                    }
                 }
             });
         }
+        else { // Not signed in
+            JButton cancelReservationButton = setupSideBarButton("Cancel Guest Reservation", 4, 0);
+            c.gridx = 0;
+            c.gridy = buttonCount;
+            buttonCount++;
+            buttonsPane.add(cancelReservationButton, c);
+            cancelReservationButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    String response = JOptionPane.showInputDialog(null, "Enter your guest Id:", "View Reservations", JOptionPane.QUESTION_MESSAGE);
+                    List<Reservation> reservationList = ReservationRepository.loadReservationsOfGuestId(Integer.parseInt(response));
+                    if (reservationList.isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "There are no reservations attached to this guest Id");
+                    }
+                    else {
+                        CancelReservationPage newFrame = new CancelReservationPage(Integer.parseInt(response));
+                        frame.dispose();
+                    }
+                }
+            });
+        }
+        // Aligning buttons to top if there aren't enough buttons to fill JScrollPane.
+        JButton fillButton = new JButton();
+        SetupUI.makeButtonInvisible(fillButton);
+        c.gridx = 0;
+        c.gridy = buttonCount;
+        c.weighty = 0.175; // rand number higher than 0 (default weight is 0)
+        buttonsPane.add(fillButton, c);
 
         return buttonsPane;
     }
@@ -234,12 +276,15 @@ public class SetupUI {
         sidebarPanel.add(horizontalLine, c);
 
         JPanel buttonsPane = setupButtonsPane(frame);
+        buttonsPane.setOpaque(false);
         JScrollPane buttonsScrollPane = new JScrollPane(buttonsPane);
         buttonsScrollPane.setPreferredSize(new Dimension(300, 400));
         buttonsScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         buttonsScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         buttonsScrollPane.setBorder(null);
         buttonsScrollPane.setViewportBorder(null);
+        buttonsScrollPane.getViewport().setOpaque(false);
+        buttonsScrollPane.setOpaque(false);
         buttonsScrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
             @Override
             protected void configureScrollBarColors() {
@@ -326,6 +371,7 @@ public class SetupUI {
             public void actionPerformed(ActionEvent e) {
                 SearchRoomPage2 newFrame = new SearchRoomPage2();
 //                BookingPage newFrame = new BookingPage(new ArrayList<Room>());
+//                ReservationSuccessPage newFrame = new ReservationSuccessPage(102043040, 510.99, Calendar.getInstance(), Calendar.getInstance());
 
                 frame.dispose();
             }

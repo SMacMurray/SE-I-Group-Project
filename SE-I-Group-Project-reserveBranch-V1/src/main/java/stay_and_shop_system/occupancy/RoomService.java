@@ -1,5 +1,7 @@
 package stay_and_shop_system.occupancy;
 
+import stay_and_shop_system.occupancy.database.RoomRepository;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
@@ -7,52 +9,59 @@ import java.util.stream.Collectors;
 
 public class RoomService {
 	public static Room[] rooms = new Room[300]; // Might need to fix the size
-	
-	public void createRoom(int number, int beds, int maxOccupancy, double baseDailyRate, 
+
+	// Dont use the RoomService to add rooms. Use RoomRepository now.
+
+	public void createRoom(int number, int beds, int maxOccupancy, double baseDailyRate,
 			boolean smokingStatus, List<Room.BedType> bedTypes, Room.QualityLevel qualityLevel,
 			Room.RoomSize roomSize) {
-		bedTypes = bedTypes.stream().distinct().collect(Collectors.toList());
-		rooms[number - 100] = (new Room (number, beds, maxOccupancy, baseDailyRate, smokingStatus,
-							bedTypes, qualityLevel, roomSize));
+		throw new RuntimeException("TODO: Replace the RoomService creation of rooms with the RoomRepository. You don't need RoomService to access the Repository");
+//		bedTypes = bedTypes.stream().distinct().collect(Collectors.toList());
+//		rooms[number - 100] = (new Room (number, beds, maxOccupancy, baseDailyRate, smokingStatus,
+//							bedTypes, qualityLevel, roomSize));
 	}
 
+	// Make sure to get rid of this since we are using a database instead of a CSV.
 	public void saveRoomToCSV(Room room) {
-		try (FileWriter fw = new FileWriter("src/main/resources/updatedReserves.csv", true)) {
-			StringBuilder bedTypes = new StringBuilder();
+		throw new RuntimeException("TODO: Replace the CSV saving with the RoomRepository. You don't need RoomService to access the Repository");
 
-			if (room.bedTypes.size() > 1) {
-				bedTypes.append("\"");
-			}
-			for (int i = 0; i < room.bedTypes.size(); i++) {
-				bedTypes.append(room.bedTypes.get(i).name());
-				if (i < room.bedTypes.size() - 1) {
-					bedTypes.append(", ");
-				}
-			}
-			if (room.bedTypes.size() > 1) {
-				bedTypes.append("\"");
-			}
-
-			fw.write(
-					room.number + "," +
-							room.beds + "," +
-							room.maxOccupancy + "," +
-							room.baseDailyRate + "," +
-							(room.smokingStatus ? "Permitted" : "Prohibited") + "," +
-							bedTypes.toString() + "," +
-							room.qualityLevel.name() + "," +
-							room.roomSize.name() + "\n"
-			);
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//
+//		try (FileWriter fw = new FileWriter("src/main/resources/updatedReserves.csv", true)) {
+//			StringBuilder bedTypes = new StringBuilder();
+//
+//			if (room.bedTypes.size() > 1) {
+//				bedTypes.append("\"");
+//			}
+//			for (int i = 0; i < room.bedTypes.size(); i++) {
+//				bedTypes.append(room.bedTypes.get(i).name());
+//				if (i < room.bedTypes.size() - 1) {
+//					bedTypes.append(", ");
+//				}
+//			}
+//			if (room.bedTypes.size() > 1) {
+//				bedTypes.append("\"");
+//			}
+//
+//			fw.write(
+//					room.number + "," +
+//							room.beds + "," +
+//							room.maxOccupancy + "," +
+//							room.baseDailyRate + "," +
+//							(room.smokingStatus ? "Permitted" : "Prohibited") + "," +
+//							bedTypes.toString() + "," +
+//							room.qualityLevel.name() + "," +
+//							room.roomSize.name() + "\n"
+//			);
+//
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 	}
 
 	public List<Room> findCandidateRooms(RoomCriteria rc) {
 		List<Room> candidateRooms = new ArrayList<>();
 
-		for (Room r : rooms) {
+		for (Room r : RoomRepository.loadReservations()) {
 			if (r != null) {
 				System.out.println("Not null room : Room Service");
 				boolean suitable = true;
@@ -113,15 +122,17 @@ public class RoomService {
 		return candidateRooms;
 	}
 	public Room getRoom(int number) {
-		try {
-			return rooms[number - 100];
-		}
-		catch(ArrayIndexOutOfBoundsException e) {
-			System.out.println("Array out of bounds : RoomService getRoom()");
-			System.out.println("Returning null : RoomService getRoom()");
-
-			return null;
-		}
+		throw new RuntimeException("TODO: Replace the RoomService getting of Rooms with the RoomRepository. You don't need RoomService to access the Repository");
+//
+//		try {
+//			return rooms[number - 100];
+//		}
+//		catch(ArrayIndexOutOfBoundsException e) {
+//			System.out.println("Array out of bounds : RoomService getRoom()");
+//			System.out.println("Returning null : RoomService getRoom()");
+//
+//			return null;
+//		}
 	}
 	
 }

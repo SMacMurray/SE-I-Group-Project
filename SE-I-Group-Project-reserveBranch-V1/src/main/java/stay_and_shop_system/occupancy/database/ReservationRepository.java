@@ -24,7 +24,7 @@ public class ReservationRepository {
 	RoomService rs = new RoomService();
 	static SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy/MM/dd");
 
-	public void createTable() {
+	public static void createTable() {
 		String sql = """
                 CREATE TABLE IF NOT EXISTS Reservations (
                     reservationId INTEGER PRIMARY KEY,
@@ -46,7 +46,7 @@ public class ReservationRepository {
 			throw new RuntimeException("Failed to create table : ReservationRepository", e);
 		}
 	}
-	public void dropTable() {
+	public static void dropTable() {
 		String sql = "DROP TABLE IF EXISTS Reservations";
 		try (Statement stmt = connection.createStatement()) {
 			stmt.execute(sql);
@@ -56,7 +56,7 @@ public class ReservationRepository {
 	}
 	// Assuming rooms are already loaded
 	// Joel: Im conflicted on if I want to combine loadReservations and loadReservationsOfName
-	public List<Reservation> loadReservations() {
+	public static  List<Reservation> loadReservations() {
 		String loadSQL = "SELECT * FROM Reservations";
 		List<Reservation> reservations = new ArrayList<>();
 
@@ -82,8 +82,8 @@ public class ReservationRepository {
 
 		return reservations;
 	}
-	public List<Reservation> loadReservationsOfEmail(String email) {
-		String loadSQL = " SELECT * FROM Reservations WHERE guestId = " + Objects.hash(email) + "";
+	public static List<Reservation> loadReservationsOfGuestId(int guestId) {
+		String loadSQL = " SELECT * FROM Reservations WHERE guestId = " + guestId + "";
 		List<Reservation> reservations = new ArrayList<>();
 
 		try (ResultSet rSet = connection.createStatement().executeQuery(loadSQL)) {
@@ -108,7 +108,7 @@ public class ReservationRepository {
 
 		return reservations;
 	}
-	public Reservation loadReservationOfId(int id) {
+	public static Reservation loadReservationOfId(int id) {
 		String loadSQL = " SELECT * FROM Reservations WHERE reservationId = " + id;
 		Reservation reservation = null;
 
@@ -162,14 +162,14 @@ public class ReservationRepository {
 //			JOptionPane.showMessageDialog(null, e + " : ReservationRepository");
 		}
 	}
-	public void deleteReservation(int roomNumber, String name) {
+	public static void deleteReservation(Reservation reservation) {
 		// delete is SQL code.
 		String delete = "DELETE FROM Reservations WHERE reservationId = ?";
 		try (PreparedStatement ps = connection.prepareStatement(delete)) {
 			//JOptionPane.showMessageDialog(null, "Successful Connection! : ReservationRepository");
 
-			System.out.println(Objects.hash(roomNumber + name) + " : ReservationRepository");
-			ps.setInt(1, Objects.hash(roomNumber + name));						
+			System.out.println(Objects.hash(reservation.getReservationId()) + " : ReservationRepository");
+			ps.setInt(1, reservation.getReservationId());
 			
 			int rowAdded = ps.executeUpdate();
 			if (rowAdded > 0) {
@@ -187,9 +187,8 @@ public class ReservationRepository {
 			JOptionPane.showMessageDialog(null, e + " : ReservationRepository");
 		}
 	}
-	// TODO: MAY NEED TO MODIFY GUEST ID
-	public void modifyReservation(int roomNumber, String name, Reservation re) {
-		String modifySQL = "UPDATE Reservations SET roomNumber = ?, guestNumber = ?, startDate = ?, endDate = ?, guestName = ?, guestEmail = ?, creditCardNumber = ?, rate = ?, cost = ?, guestId = ? WHERE reservationId = ?";
+	public static void modifyReservation(int prevReservationId, Reservation re) {
+		String modifySQL = "UPDATE Reservations SET roomNumber = ?, guestNumber = ?, startDate = ?, endDate = ?, guestName = ?, guestEmail = ?, creditCardNumber = ?, rate = ?, cost = ?, guestId = ?, reservationId = ? WHERE reservationId = ?";
 		try (PreparedStatement ps = connection.prepareStatement(modifySQL)) {
 
 			ps.setInt(1, re.getRoomNumber());
@@ -201,8 +200,9 @@ public class ReservationRepository {
 			ps.setString(7, re.getCreditCardNumber() );
 			ps.setDouble(8, re.getRate() );
 			ps.setDouble(9, re.getCost() );
-			ps.setInt(10, Objects.hash(roomNumber + name));
-			ps.setInt(11, Objects.hash(re.getGuestId()));
+			ps.setInt(10, Objects.hash(re.getGuestId()));
+			ps.setInt(11, Objects.hash(re.getRoomNumber() + re.getGuestName()));
+			ps.setInt(12, prevReservationId);
 
 			int rowAdded = ps.executeUpdate();
 			if (rowAdded > 0) {
@@ -219,7 +219,7 @@ public class ReservationRepository {
 			JOptionPane.showMessageDialog(null, e + " : ReservationRepository");
 		}
 	}
-	public Reservation mapResultSetToReservation(ResultSet rSet) throws SQLException, ParseException{
+	public static Reservation mapResultSetToReservation(ResultSet rSet) throws SQLException, ParseException{
 		Reservation re = null;
 
 		int reservationId = rSet.getInt("reservationId");
@@ -238,7 +238,7 @@ public class ReservationRepository {
 		double rate = rSet.getDouble("rate");
 		double cost = rSet.getDouble("cost");
 
-		Room r = rs.getRoom(roomNumber);
+		Room r = RoomRepository.loadRoomOfRoomNumber(roomNumber);
 		if (r == null) {
 			System.out.println("The reservation's room " + roomNumber + " does not exist. : ReservationRepository");
 			System.out.println("Skipping reservation at room " + roomNumber + ". : ReservationRepository");

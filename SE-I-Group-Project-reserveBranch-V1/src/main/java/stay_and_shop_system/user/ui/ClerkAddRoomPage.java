@@ -224,6 +224,7 @@ public class ClerkAddRoomPage extends JFrame {
                     Room.RoomSize size =
                             (Room.RoomSize) sizeBox.getSelectedItem();
 
+
                     GlobalVariables.rs.createRoom(
                             roomNumber,
                             beds,

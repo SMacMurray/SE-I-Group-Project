@@ -12,7 +12,7 @@ public class GuestAdmin implements GuestInterface, AdminInterface{
     // private List<Reservation> reservations = new ArrayList<>();
 
     // Fix when needed
-    public GuestAdmin(String n, String e, int h, String pn,  PaymentMethod pm) {
+    public GuestAdmin(String e, String n,  int h, String pn,  PaymentMethod pm) {
         name = n;
         email = e;
         phoneNumber = pn;
@@ -51,6 +51,7 @@ public class GuestAdmin implements GuestInterface, AdminInterface{
     public int getPassword() { return hash; }
     public String getPaymentId() { return paymentId; }
     public UserType getTypeId() { return typeId; }
+    public int getGuestId() { return Math.abs(Objects.hash(email)); }
     public PaymentMethod getPaymentMethod() {
         return GuestInterface.pm;
     }

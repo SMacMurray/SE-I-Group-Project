@@ -1,9 +1,11 @@
 package stay_and_shop_system.user;
 
 import stay_and_shop_system.DatabaseConnection;
+import stay_and_shop_system.occupancy.Reservation;
 
 import javax.swing.*;
 import java.sql.*; // Imports SQLException
+import java.util.Objects;
 
 
 public class UserRepository {
@@ -85,7 +87,7 @@ public class UserRepository {
 
 	// Confirms whether a given user exists in the system.
 	public static boolean findAccount(String email) {
-		String sql = "SELECT EXISTS(SELECT 1 FROM Users WHERE email = ? AND password IS NOT NULL)";
+		String sql = "SELECT EXISTS(SELECT 1 FROM Users WHERE email = ? AND password <> 0)";
 		try (var connection = DatabaseConnection.connect();
 			 var stmt = connection.prepareStatement(sql)) {
 			stmt.setString(1, email);
@@ -124,6 +126,10 @@ public class UserRepository {
 				+" RETURNING *";
 		try (var connection = DatabaseConnection.connect();
 			 var stmt = connection.prepareStatement(sql)) {
+			if (findUserWithoutPassword(email)) {
+				deleteUser(email);
+			}
+
 			stmt.setString(1, email);
 			stmt.setString(2, username);
 			stmt.setInt(3, passwordHash);
@@ -140,7 +146,22 @@ public class UserRepository {
 		}
 		return false;
 	}
-
+	// Finds user regardless of passwor
+	public static boolean findUserWithoutPassword(String email) {
+		String sql = "SELECT EXISTS(SELECT 1 FROM Users WHERE email = ? AND password = 0)";
+		try (var connection = DatabaseConnection.connect();
+			 var stmt = connection.prepareStatement(sql)) {
+			stmt.setString(1, email);
+			ResultSet res = stmt.executeQuery();
+			if (res.next()) {
+				return res.getBoolean(1);
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+		return false;
+	}
 
 
 	public static boolean addGuest(GuestInterface guest) {
@@ -149,6 +170,7 @@ public class UserRepository {
 				+" RETURNING *";
 		try (var connection = DatabaseConnection.connect();
 			 var stmt = connection.prepareStatement(sql)) {
+
 			stmt.setString(1, guest.getEmail());
 			stmt.setString(2, guest.getName());
 			stmt.setInt(3, guest.getPassword());
@@ -165,6 +187,29 @@ public class UserRepository {
 			e.printStackTrace();
 		}
 		return false;
+	}
+	public static void deleteUser(String email) {
+		// delete is SQL code.
+		String delete = "DELETE FROM Users WHERE email = ?";
+		try (var connection = DatabaseConnection.connect();
+			 var ps = connection.prepareStatement(delete)) {
+			//JOptionPane.showMessageDialog(null, "Successful Connection! : ReservationRepository");
+
+			ps.setString(1, email);
+
+			int rowAdded = ps.executeUpdate();
+			if (rowAdded > 0) {
+				System.out.println("A row has been deleted successfully! : ReservationRepository");
+			} else {
+				System.out.println("Deletion failed. : ReservationRepository");
+			}
+
+
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, e + " : ReservationRepository");
+		}
 	}
 	// The parameter guest has the altered version of the typeId
 	public static boolean changeTypeId(GuestInterface guest) {

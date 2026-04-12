@@ -44,7 +44,7 @@ public class Room {
 	RoomSize roomSize = RoomSize.Single;
 	
 	// For Testing purposes
-	Room() {
+    public Room() {
 		
 	}
 	public Room(int n, int b, int p, double r, boolean s, List<BedType> t, QualityLevel q, RoomSize rs) {
@@ -96,5 +96,23 @@ public class Room {
 	@Override
 	public int hashCode() {
 		return Objects.hash(number);
+	}
+
+	@Override
+	public String toString() {
+		String str = "Room of number " + number;
+		str += "\n Bed Number: " + beds;
+		str += "\n Max Occupancy: " + maxOccupancy;
+		str += "\n Base Daily Rate: " + baseDailyRate;
+		str += "\n Daily Rate: " + dailyRate;
+		str += "\n Smoking Status: " + smokingStatus;
+		str += "\n Bed Types: ";
+		for (BedType bt : bedTypes) {
+			str += bt.toString() + " ";
+		}
+		str += "\n Quality Level: " + qualityLevel.toString();
+		str += "\n RoomSize: " + roomSize.toString();
+
+		return str;
 	}
 }

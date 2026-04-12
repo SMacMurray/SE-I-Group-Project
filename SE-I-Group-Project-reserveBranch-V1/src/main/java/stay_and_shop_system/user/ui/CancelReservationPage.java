@@ -4,11 +4,13 @@ import stay_and_shop_system.ColorPalette;
 import stay_and_shop_system.Main;
 import stay_and_shop_system.SetupUI;
 import stay_and_shop_system.occupancy.*;
+import stay_and_shop_system.occupancy.database.ReservationRepository;
 import stay_and_shop_system.user.*;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -34,7 +36,7 @@ public class CancelReservationPage extends JFrame{
 
         return jta;
     }
-    public CancelReservationPage(GuestInterface guest) {
+    public CancelReservationPage(int guestId) {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1000, 800);
         setLocationRelativeTo(null);
@@ -117,8 +119,8 @@ public class CancelReservationPage extends JFrame{
                         JOptionPane.YES_NO_OPTION
                 );
                 if (choice == JOptionPane.YES_OPTION) {
-                    res.deleteReservation(cancelR);
-                    CancelReservationPage newFrame = new CancelReservationPage(guest);
+                    ReservationRepository.deleteReservation(cancelR);
+                    CancelReservationPage newFrame = new CancelReservationPage(guestId);
                     dispose();
                 }
             }
@@ -157,8 +159,7 @@ public class CancelReservationPage extends JFrame{
         reservationsPane.setBackground(ColorPalette.DESATURATED_LIGHTBLUE);
         int buttonsCount = 0;
         // TODO: LOAD RESERVATIONS BY GUESTID.
-        for (Reservation r : res.findReservationsOfGuest(guest)) {
-            // TODO: Finish findReservationsOfGuest()
+        for (Reservation r : ReservationRepository.loadReservationsOfGuestId(guestId)) {
             System.out.println("FOUND RESERVATION");
             JButton reservationButton = new JButton("Reservation at room " + r.getRoomNumber());
             reservationButton.setHorizontalAlignment(SwingConstants.LEFT);
@@ -176,7 +177,7 @@ public class CancelReservationPage extends JFrame{
             reservationButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    cancelR = res.getReservationOfId(Integer.parseInt(e.getActionCommand()));
+                    cancelR = ReservationRepository.loadReservationOfId(Integer.parseInt(e.getActionCommand()));
                     reservationTitleJL.setText("RESERVATION AT ROOM " + cancelR.getRoomNumber());
                     String roomFloor;
                     if (cancelR.getRoomNumber() >= 100 && cancelR.getRoomNumber() < 200) roomFloor = "Nature Retreat";
