@@ -18,6 +18,7 @@ public class Main extends JFrame {
     static ReservationDataTable rdt = new ReservationDataTable();
 
     public static void initRooms() {
+
     	LoadCSV.loadRooms(); // Cant do this outside a function.
     	
     }

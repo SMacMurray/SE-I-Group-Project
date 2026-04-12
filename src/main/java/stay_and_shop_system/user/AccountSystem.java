@@ -135,7 +135,7 @@ public class AccountSystem {
 			return true;
 		}
 		if (res.next()) {
-			switch (res.getInt(5)){
+			switch (res.getInt("priveleges")){
 				case 1:
 					AccountSystem.SessionAccount = new GuestClerk(
 							res.getString(1),

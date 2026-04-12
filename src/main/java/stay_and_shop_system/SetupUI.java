@@ -3,6 +3,7 @@ package stay_and_shop_system;
 import stay_and_shop_system.occupancy.ui.SearchRoomPage;
 import stay_and_shop_system.user.*;
 import stay_and_shop_system.user.ui.CancelReservationPage;
+import stay_and_shop_system.user.ui.ClerkAddRoomPage;
 import stay_and_shop_system.user.ui.LoginPage;
 
 import javax.swing.*;
@@ -75,104 +76,112 @@ public class SetupUI {
         JPanel buttonsPane = new JPanel(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.CENTER;
-        User user = new GuestClerk("Johnny Test", "johnnyTest@gmail.com");
 
-        Font font = new Font("Serif", Font.PLAIN, 23);
+        User user = AccountSystem.getSessionAccount();
+
+        JButton loginButton = setupSideBarButton(
+                (user == null ? "Sign In" : "Log Out"), 4, 0
+        );
+        c.gridx = 0;
+        c.gridy = buttonCount++;
+        buttonsPane.add(loginButton, c);
+
+        loginButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (AccountSystem.getSessionAccount() == null){
+                    LoginPage newFrame = new LoginPage();
+                    frame.dispose();
+                }
+                else {
+                    AccountController.logout();
+                    HomePage2 newFrame = new HomePage2();
+                    frame.dispose();
+                }
+            }
+        });
+
         if (user instanceof ClerkInterface) {
-            JButton loginButton = setupSideBarButton((AccountSystem.getSessionAccount() == null ? "Sign In" : "Log Out"), 4, 0);
+            JButton addRoomButton = setupSideBarButton("Add Room", 4, 0);
             c.gridx = 0;
-            c.gridy = buttonCount;
-            buttonCount++;
-            buttonsPane.add(loginButton, c);
-            loginButton.addActionListener(new ActionListener() {
+            c.gridy = buttonCount++;
+            buttonsPane.add(addRoomButton, c);
+            addRoomButton.addActionListener(new ActionListener() {
+                @Override
                 public void actionPerformed(ActionEvent e) {
-                    if (AccountSystem.getSessionAccount() == null){
-                        LoginPage newFrame = new LoginPage();
-                        frame.dispose();
-                    }
-                    else {
-                        AccountController.logout();
-                        HomePage2 newFrame = new HomePage2();
-                        frame.dispose();
-                    }
+                    ClerkAddRoomPage newFrame = new ClerkAddRoomPage();
+                    frame.dispose();
                 }
             });
 
-            JButton addRoomButton = setupSideBarButton("Add Room", 4, 0);
+            JButton modifyRoomButton = setupSideBarButton("Modify Room", 4, 0);
             c.gridx = 0;
-            c.gridy = buttonCount;
-            buttonCount++;
-            buttonsPane.add(addRoomButton, c);
+            c.gridy = buttonCount++;
+            buttonsPane.add(modifyRoomButton, c);
+
+            // TODO: connect this when ModifyRoomPage exists
+            modifyRoomButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    JOptionPane.showMessageDialog(frame, "Modify Room page is not implemented yet.");
+                }
+            });
 
             JButton viewRoomsButton = setupSideBarButton("View All Rooms", 4, 0);
             c.gridx = 0;
-            c.gridy = buttonCount;
-            buttonCount++;
+            c.gridy = buttonCount++;
             buttonsPane.add(viewRoomsButton, c);
-
-            JButton modifyRoomButton = setupSideBarButton("Modify Room", 4, 0);
-            c.gridx = 0;
-            c.gridy = buttonCount;
-            buttonCount++;
-            buttonsPane.add(modifyRoomButton, c);
 
             JButton modifyMyInformationButton = setupSideBarButton("Modify My Information", 4, 0);
             c.gridx = 0;
-            c.gridy = buttonCount;
-            buttonCount++;
+            c.gridy = buttonCount++;
             buttonsPane.add(modifyMyInformationButton, c);
 
             JButton modifyReservationButton = setupSideBarButton("Modify Guest Information", 4, 0);
             c.gridx = 0;
-            c.gridy = buttonCount;
-            buttonCount++;
+            c.gridy = buttonCount++;
             buttonsPane.add(modifyReservationButton, c);
 
-            // Make a JPanel that prompts for a user's name to search for.
             JButton cancelReservationButton = setupSideBarButton("Cancel Guest Reservation", 4, 0);
             c.gridx = 0;
-            c.gridy = buttonCount;
-            buttonCount++;
+            c.gridy = buttonCount++;
             buttonsPane.add(cancelReservationButton, c);
             cancelReservationButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    CancelReservationPage newFrame = new CancelReservationPage((GuestInterface)user);
-                    frame.dispose();
+                    if (user instanceof GuestInterface guestUser) {
+                        CancelReservationPage newFrame = new CancelReservationPage(guestUser);
+                        frame.dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(frame, "This clerk account is not also a guest.");
+                    }
                 }
             });
 
             JButton checkGuestBill = setupSideBarButton("Check Guest Bill", 4, 0);
             c.gridx = 0;
-            c.gridy = buttonCount;
-            buttonCount++;
+            c.gridy = buttonCount++;
             buttonsPane.add(checkGuestBill, c);
-
         }
-        if (user instanceof AdminInterface) {
 
-        }
         if (user instanceof GuestInterface) {
-            int topBorder = (user instanceof AdminInterface || user instanceof ClerkInterface) ? 4 : 0;
+            int topBorder = (user instanceof ClerkInterface) ? 4 : 0;
+
             JButton checkGuestBill = setupSideBarButton("Check My Bill", topBorder, 0);
             c.gridx = 0;
-            c.gridy = buttonCount;
-            buttonCount++;
+            c.gridy = buttonCount++;
             buttonsPane.add(checkGuestBill, c);
 
             JButton modifyReservationButton = setupSideBarButton("Modify My Reservation", 4, 0);
             c.gridx = 0;
-            c.gridy = buttonCount;
-            buttonCount++;
+            c.gridy = buttonCount++;
             buttonsPane.add(modifyReservationButton, c);
 
             JButton cancelReservationButton = setupSideBarButton("Cancel My Reservation", 4, 0);
             c.gridx = 0;
-            c.gridy = buttonCount;
-            buttonCount++;
+            c.gridy = buttonCount++;
             buttonsPane.add(cancelReservationButton, c);
             cancelReservationButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    CancelReservationPage newFrame = new CancelReservationPage((GuestInterface)user);
+                    CancelReservationPage newFrame = new CancelReservationPage((GuestInterface) user);
                     frame.dispose();
                 }
             });
@@ -327,5 +336,23 @@ public class SetupUI {
         headerPane.add(bookRoomButton, c);
 
         return new Object[] {popupPane, mainPane, headerPane};
+    }
+
+    public static User getCurrentUser() {
+        return AccountSystem.getSessionAccount();
+    }
+
+    public static boolean canManageRooms() {
+        User user = getCurrentUser();
+        return user instanceof ClerkInterface;
+    }
+
+    public static void blockUnauthorizedRoomAccess(JFrame frame) {
+        JOptionPane.showMessageDialog(
+                frame,
+                "Only a Clerk or GuestClerk can manage rooms."
+        );
+        HomePage2 newFrame = new HomePage2();
+        frame.dispose();
     }
 }

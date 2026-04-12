@@ -18,6 +18,16 @@ public class ClerkAddRoomPage extends JFrame {
     private JPanel contentPane;
 
     public ClerkAddRoomPage() {
+        if (!(stay_and_shop_system.user.AccountSystem.getSessionAccount() instanceof stay_and_shop_system.user.ClerkInterface)) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Only a Clerk or GuestClerk can add rooms."
+            );
+            HomePage newFrame = new HomePage();
+            dispose();
+            return;
+        }
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(700, 550);
         setLocationRelativeTo(null); // Centers the JFrame on the screen
