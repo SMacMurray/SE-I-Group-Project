@@ -18,6 +18,7 @@ import java.awt.event.MouseEvent;
 import java.util.Calendar;
 import java.util.Objects;
 
+
 public class SetupUI {
     public static void setUpJOptionPaneDesign() {
         UIManager.put("OptionPane.background", ColorPalette.OCEAN_DARKBLUE);
@@ -112,6 +113,7 @@ public class SetupUI {
                 }
             }
         });
+
         if (user instanceof ClerkInterface) {
 
             JButton addRoomButton = setupSideBarButton("Add Room", 4, 0);
@@ -138,14 +140,8 @@ public class SetupUI {
             buttonCount++;
             buttonsPane.add(modifyMyInformationButton, c);
 
-            JButton modifyReservationButton = setupSideBarButton("Modify Guest Information", 4, 0);
-            c.gridx = 0;
-            c.gridy = buttonCount;
-            buttonCount++;
-            buttonsPane.add(modifyReservationButton, c);
-
-            // Make a JPanel that prompts for a user's name to search for.
-            JButton cancelReservationButton = setupSideBarButton("Cancel Guest Reservation", 4, 0);
+            // Cancel/Modification of Guest's reservation
+            JButton cancelReservationButton = setupSideBarButton("View Guest's Reservations", 4, 0);
             c.gridx = 0;
             c.gridy = buttonCount;
             buttonCount++;
@@ -159,31 +155,56 @@ public class SetupUI {
                 }
             });
 
+
+            JButton makeReservationButton = setupSideBarButton("Make Guest's Reservation", 4, 0);
+            c.gridx = 0;
+            c.gridy = buttonCount;
+            buttonCount++;
+            buttonsPane.add(makeReservationButton, c);
+            cancelReservationButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                   // This doesn't sound that complicated(to me, Joel), since it may just require the clerk to book a room with the guest's info.
+
+                }
+            });
+
             JButton checkGuestBill = setupSideBarButton("Check Guest Bill", 4, 0);
             c.gridx = 0;
             c.gridy = buttonCount;
             buttonCount++;
             buttonsPane.add(checkGuestBill, c);
 
-        }
-        if (user instanceof AdminInterface) {
+            JButton checkGuest = setupSideBarButton("Chteck-in/Check-out Guest", 4, 0);
+            c.gridx = 0;
+            c.gridy = buttonCount;
+            buttonCount++;
+            buttonsPane.add(checkGuest, c);
 
         }
+        if (user instanceof AdminInterface) {
+            // Based on the Project 12 deliverable, the Admin does not change the default password(since the clerk would), but can leave a predefined email.
+            JButton addRoomButton = setupSideBarButton("Create Hotel Clerk", 4, 0);
+            c.gridx = 0;
+            c.gridy = buttonCount;
+            buttonCount++;
+            buttonsPane.add(addRoomButton, c);
+
+            // Joel: Make sure to check User has a password in the first place.
+            JButton resetUserPassButton = setupSideBarButton("Reset User Password", 4, 0);
+            c.gridx = 0;
+            c.gridy = buttonCount;
+            buttonCount++;
+            buttonsPane.add(resetUserPassButton, c);
+        }
         if (user instanceof GuestInterface) {
-            int topBorder = (user instanceof AdminInterface || user instanceof ClerkInterface) ? 4 : 0;
-            JButton checkGuestBill = setupSideBarButton("Check My Bill", topBorder, 0);
+            // Need to find checked in reservation either by date or kept on the Guest.
+            JButton checkGuestBill = setupSideBarButton("Check My Bill", 4, 0);
             c.gridx = 0;
             c.gridy = buttonCount;
             buttonCount++;
             buttonsPane.add(checkGuestBill, c);
 
-            JButton modifyReservationButton = setupSideBarButton("Modify My Reservation", 4, 0);
-            c.gridx = 0;
-            c.gridy = buttonCount;
-            buttonCount++;
-            buttonsPane.add(modifyReservationButton, c);
-
-            JButton cancelReservationButton = setupSideBarButton("Cancel My Reservation", 4, 0);
+            JButton cancelReservationButton = setupSideBarButton("View My Reservations", 4, 0);
             c.gridx = 0;
             c.gridy = buttonCount;
             buttonCount++;
@@ -200,9 +221,41 @@ public class SetupUI {
                     }
                 }
             });
+
+            JButton shopButton = setupSideBarButton("Shop", 4, 0);
+            c.gridx = 0;
+            c.gridy = buttonCount;
+            buttonCount++;
+            buttonsPane.add(shopButton, c);
+            shopButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    // Whatever is shopped will be attatched to the reservation that fits within the current time (or the reservation thats the one thats checked in
+                    List<Reservation> reservationList = ReservationRepository.loadReservationsOfGuestId(((GuestInterface)user).getGuestId());
+                    if (reservationList.isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "There are no reservations attached to this guest Id");
+                    }
+                    else {
+                        ShoppingPage newFrame = new ShoppingPage();
+                        frame.dispose();
+                        throw new RuntimeException("TODO: Gavin needs to finish the Shopping");
+                    }
+                }
+            });
         }
         else { // Not signed in
-            JButton cancelReservationButton = setupSideBarButton("Cancel Guest Reservation", 4, 0);
+            // Need to find checked in reservation either by date or kept on the Guest.
+            JButton checkGuestBill = setupSideBarButton("Check My Bill", 4, 0);
+            c.gridx = 0;
+            c.gridy = buttonCount;
+            buttonCount++;
+            buttonsPane.add(checkGuestBill, c);
+            checkGuestBill.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+
+                }
+            });
+
+            JButton cancelReservationButton = setupSideBarButton("View My Reservations", 4, 0);
             c.gridx = 0;
             c.gridy = buttonCount;
             buttonCount++;
@@ -219,6 +272,26 @@ public class SetupUI {
                             CancelReservationPage newFrame = new CancelReservationPage(Integer.parseInt(response));
                             frame.dispose();
                         }
+                    }
+                }
+            });
+
+            JButton shopButton = setupSideBarButton("Shop", 4, 0);
+            c.gridx = 0;
+            c.gridy = buttonCount;
+            buttonCount++;
+            buttonsPane.add(shopButton, c);
+            shopButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    // Whatever is shopped will be attatched to the reservation that fits within the current time (or the reservation  thats checked in based on how we implement it).
+                    List<Reservation> reservationList = ReservationRepository.loadReservationsOfGuestId(((GuestInterface)user).getGuestId());
+                    if (reservationList.isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "There are no reservations attached to this guest Id");
+                    }
+                    else {
+                        ShoppingPage newFrame = new ShoppingPage();
+                        frame.dispose();
+                        throw new RuntimeException("TODO: Gavin needs to finish the Shopping");
                     }
                 }
             });
