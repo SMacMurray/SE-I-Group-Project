@@ -96,7 +96,7 @@ public class RoomService {
 				for (int i = 0; i < rc.getBedTypes().size(); ++i) {
 					containsTypes.add(false);
 				}
-				for (Room.BedType bT : r.bedTypes) {
+				for (Room.BedType bT : r.getBedTypes()) {
 					for (int i = 0; i < containsTypes.size(); ++i) {
 						containsTypes.set(i, (bT == rc.getBedTypes().get(i)) ? true : containsTypes.get(i));
 					}

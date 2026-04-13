@@ -33,15 +33,15 @@ public class Room {
 		Standard
 	}
 	
-	int number = 0;
-	int beds = 0;
-	int maxOccupancy = 0;
-	double baseDailyRate = 0;
-	double dailyRate = 0;
-	boolean smokingStatus = false;
-	List<BedType> bedTypes = new ArrayList<>();
-	QualityLevel qualityLevel = QualityLevel.Executive;
-	RoomSize roomSize = RoomSize.Single;
+	private int number = 0;
+	private int beds = 0;
+	private int maxOccupancy = 0;
+	private double baseDailyRate = 0;
+	private double dailyRate = 0;
+	private boolean smokingStatus = false;
+	private List<BedType> bedTypes = new ArrayList<>();
+	private QualityLevel qualityLevel = QualityLevel.Executive;
+	private RoomSize roomSize = RoomSize.Single;
 	
 	// For Testing purposes
     public Room() {

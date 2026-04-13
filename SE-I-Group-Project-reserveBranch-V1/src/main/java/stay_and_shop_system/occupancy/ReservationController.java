@@ -47,7 +47,7 @@ public class ReservationController {
 
 		for (Reservation re : reservations) {
 			if (!dateRange[0].after(re.getEndDate()) && !re.getEndDate().after(dateRange[1])) {
-				rooms.remove(re.room);
+				rooms.remove(re.getRoom());
 			}
 		}
 
