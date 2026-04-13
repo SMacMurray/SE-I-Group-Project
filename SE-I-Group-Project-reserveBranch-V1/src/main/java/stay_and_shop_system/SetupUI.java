@@ -210,13 +210,15 @@ public class SetupUI {
             cancelReservationButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     String response = JOptionPane.showInputDialog(null, "Enter your guest Id:", "View Reservations", JOptionPane.QUESTION_MESSAGE);
-                    List<Reservation> reservationList = ReservationRepository.loadReservationsOfGuestId(Integer.parseInt(response));
-                    if (reservationList.isEmpty()) {
-                        JOptionPane.showMessageDialog(null, "There are no reservations attached to this guest Id");
-                    }
-                    else {
-                        CancelReservationPage newFrame = new CancelReservationPage(Integer.parseInt(response));
-                        frame.dispose();
+                    if (response != null) { // if was not canceled or not empty
+                        response = (response.isEmpty()) ? "-1" : response;
+                        List<Reservation> reservationList = ReservationRepository.loadReservationsOfGuestId(Integer.parseInt(response));
+                        if (reservationList.isEmpty()) {
+                            JOptionPane.showMessageDialog(null, "There are no reservations attached to this guest Id");
+                        } else {
+                            CancelReservationPage newFrame = new CancelReservationPage(Integer.parseInt(response));
+                            frame.dispose();
+                        }
                     }
                 }
             });
