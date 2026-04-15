@@ -6,6 +6,7 @@ import stay_and_shop_system.occupancy.ui.*;
 import stay_and_shop_system.user.*;
 import stay_and_shop_system.user.ui.CancelReservationPage;
 import stay_and_shop_system.user.ui.LoginPage;
+import stay_and_shop_system.user.ui.ResetPasswordPage;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicScrollBarUI;
@@ -174,7 +175,7 @@ public class SetupUI {
             buttonCount++;
             buttonsPane.add(checkGuestBill, c);
 
-            JButton checkGuest = setupSideBarButton("Chteck-in/Check-out Guest", 4, 0);
+            JButton checkGuest = setupSideBarButton("Check-in/Check-out Guest", 4, 0);
             c.gridx = 0;
             c.gridy = buttonCount;
             buttonCount++;
@@ -194,6 +195,12 @@ public class SetupUI {
             c.gridx = 0;
             c.gridy = buttonCount;
             buttonCount++;
+            resetUserPassButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    ResetPasswordPage newFrame = new ResetPasswordPage();
+                    frame.dispose();
+                }
+            });
             buttonsPane.add(resetUserPassButton, c);
         }
         if (user instanceof GuestInterface) {
@@ -333,7 +340,7 @@ public class SetupUI {
         accountStatusTextArea.setEditable(false);
         accountStatusTextArea.setFont(new Font("Serif", Font.PLAIN, 18));
         accountStatusTextArea.setForeground(ColorPalette.OCEAN_LIGHTBLUE);
-        if (UserRepository.SessionAccount != null) {
+        if (UserRepository.getSessionAccount() != null) {
             accountStatusTextArea.setText("LOGGED IN AS: " + UserRepository.getSessionAccount().getName());
         }
         c.gridx = 0;

@@ -1,5 +1,7 @@
 package stay_and_shop_system.user.ui;
 
+import org.jdesktop.swingx.JXLoginPane;
+import org.jdesktop.swingx.JXTextField;
 import stay_and_shop_system.*;
 import stay_and_shop_system.ui.RoundJButton;
 import stay_and_shop_system.ui.RoundJPasswordField;
@@ -82,62 +84,30 @@ public class LoginPage extends JFrame {
         welcomeLabel.setPreferredSize(new Dimension(500, 40));
         contentPane.add(welcomeLabel, c);
 
-        JTextField emailField = new RoundJTextField(25);
-        emailField.setText(EMAIL_FIELD);
+        JXTextField emailField = new RoundJTextField(25);
+        emailField.setPrompt(EMAIL_FIELD);
         emailField.setPreferredSize(new Dimension(200, 30));
         emailField.setBackground(contentPane.getBackground());
-        emailField.setForeground(Color.GRAY);
-        // This listener creates the "hint" text
-        emailField.addFocusListener(new FocusAdapter() {
-            public void focusGained(FocusEvent e) {
-                if (emailField.getText().equals(EMAIL_FIELD)) {
-                    emailField.setText("");
-                    emailField.setForeground(Color.BLACK);
-                }
-                else emailField.setForeground(Color.BLACK);
-            }
-            public void focusLost(FocusEvent e) {
-                if (emailField.getText().isEmpty()) {
-                    emailField.setText(EMAIL_FIELD);
-                    emailField.setForeground(Color.GRAY);
-                }
-            }
-        });
         contentPane.add(emailField, c);
 
-        JPanel passwordPanel = new JPanel(new FlowLayout());
-
-        JPasswordField passwordField = new RoundJPasswordField(25);
-        passwordField.setText(PASSWORD_FIELD);
+        JXTextField passwordField = new RoundJPasswordField(25);
+        passwordField.setPrompt(PASSWORD_FIELD);
         passwordField.setPreferredSize(new Dimension(200, 30));
         passwordField.setBackground(contentPane.getBackground());
-        passwordField.setForeground(Color.GRAY);
-        passwordField.setEchoChar((char)0);
-        passwordField.addFocusListener(new FocusAdapter() {
-            public void focusGained(FocusEvent e) {
-                if (passwordField.getText().equals(PASSWORD_FIELD)) {
-                    passwordField.setText("");
-                    passwordField.setForeground(Color.BLACK);
-                    passwordField.setEchoChar('•');
-                }
-            }
-            public void focusLost(FocusEvent e) {
-                if (passwordField.getText().isEmpty()) {
-                    passwordField.setText(PASSWORD_FIELD);
-                    passwordField.setForeground(Color.GRAY);
-                    passwordField.setEchoChar((char)0);
-                }
-            }
-        });
-        passwordPanel.add(passwordField);
+        //passwordField.setEchoChar((char)0);
+        contentPane.add(passwordField);
 
         ImageIcon showPasswordIcon = new ImageIcon("src/main/resources/showPassword.png");
         showPasswordIcon = new ImageIcon(showPasswordIcon.getImage().getScaledInstance((int)(showPasswordIcon.getIconWidth() * 0.2), (int)(showPasswordIcon.getIconHeight() * 0.2), Image.SCALE_SMOOTH));
         ImageIcon hidePasswordIcon = new ImageIcon("src/main/resources/hidePassword.png");
         hidePasswordIcon = new ImageIcon(hidePasswordIcon.getImage().getScaledInstance((int)(hidePasswordIcon.getIconWidth() * 0.0390625), (int)(hidePasswordIcon.getIconHeight() * 0.0390625), Image.SCALE_SMOOTH));
 
+        // This button is currently deprecated as SwingX does not have an equivalent JXPasswordField
+        // that would allow you to set echoChar... why.
+        // This is positioned absolutely, because I can not for the life of me figure out how to make
+        // this appear in line with the password field in GridBagLayout.
         JToggleButton showPasswordButton = new JToggleButton();
-        showPasswordButton.setPreferredSize(new Dimension(30, 30));
+        showPasswordButton.setBounds(30, 300, 30, 30);
         ImageIcon finalShowPasswordIcon = showPasswordIcon;
         ImageIcon finalHidePasswordIcon = hidePasswordIcon;
         showPasswordButton.setIcon(finalHidePasswordIcon);
@@ -145,65 +115,29 @@ public class LoginPage extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 showPasswordButton.setBackground(contentPane.getBackground());
                 if (showPasswordButton.isSelected()){
-                    passwordField.setEchoChar((char)0);
+                    //passwordField.setEchoChar((char)0);
                     showPasswordButton.setIcon(finalShowPasswordIcon);
                 }
                 else{
-                    passwordField.setEchoChar('•');
+                    //passwordField.setEchoChar('•');
                     showPasswordButton.setIcon(finalHidePasswordIcon);
                 }
             }
         });
-        passwordPanel.add(passwordField);
+        contentPane.add(passwordField, c);
 
-        contentPane.add(showPasswordButton);
+        //mainPane.add(showPasswordButton);
 
-        contentPane.add(passwordPanel, c);
-
-        JTextField usernameField = new RoundJTextField(25);
-        usernameField.setText(USERNAME_FIELD);
+        JXTextField usernameField = new RoundJTextField(25);
+        usernameField.setPrompt(USERNAME_FIELD);
         usernameField.setPreferredSize(new Dimension(200, 30));
         usernameField.setBackground(contentPane.getBackground());
-        usernameField.setForeground(Color.GRAY);
-        // This listener creates the "hint" text
-        usernameField.addFocusListener(new FocusAdapter() {
-            public void focusGained(FocusEvent e) {
-                if (usernameField.getText().equals(USERNAME_FIELD)) {
-                    usernameField.setText("");
-                    usernameField.setForeground(Color.BLACK);
-                }
-                else usernameField.setForeground(Color.BLACK);
-            }
-            public void focusLost(FocusEvent e) {
-                if (usernameField.getText().isEmpty()) {
-                    usernameField.setText(USERNAME_FIELD);
-                    usernameField.setForeground(Color.GRAY);
-                }
-            }
-        });
         contentPane.add(usernameField, c);
 
-        JTextField phoneNumberField = new RoundJTextField(25);
-        phoneNumberField.setText(PHONENUMBER_FIELD);
+        JXTextField phoneNumberField = new RoundJTextField(25);
+        phoneNumberField.setPrompt(PHONENUMBER_FIELD);
         phoneNumberField.setPreferredSize(new Dimension(200, 30));
         phoneNumberField.setBackground(contentPane.getBackground());
-        phoneNumberField.setForeground(Color.GRAY);
-        // This listener creates the "hint" text
-        phoneNumberField.addFocusListener(new FocusAdapter() {
-            public void focusGained(FocusEvent e) {
-                if (phoneNumberField.getText().equals(PHONENUMBER_FIELD)) {
-                    phoneNumberField.setText("");
-                    phoneNumberField.setForeground(Color.BLACK);
-                }
-                else phoneNumberField.setForeground(Color.BLACK);
-            }
-            public void focusLost(FocusEvent e) {
-                if (phoneNumberField.getText().isEmpty()) {
-                    phoneNumberField.setText(PHONENUMBER_FIELD);
-                    phoneNumberField.setForeground(Color.GRAY);
-                }
-            }
-        });
         contentPane.add(phoneNumberField, c);
 
         JSeparator horizontalLine = new JSeparator(SwingConstants.HORIZONTAL);
@@ -219,10 +153,10 @@ public class LoginPage extends JFrame {
         signInButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String email = emailField.getText().trim();
-                String password = String.valueOf(passwordField.getPassword());
+                String password = String.valueOf(passwordField.getText());
                 String dialogMessage;
-                passwordField.setText(PASSWORD_FIELD);
-                passwordField.setEchoChar((char)0);
+                //passwordField.setPassword("");
+                //passwordField.setEchoChar((char)0);
 
                 if (email.isEmpty()) dialogMessage = EMAIL_EMPTY;
                 else if (password.isEmpty()) dialogMessage = PASSWORD_EMPTY;
@@ -259,13 +193,12 @@ public class LoginPage extends JFrame {
         createAccountButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String username = usernameField.getText().trim();
-                String password = String.valueOf(passwordField.getPassword());
+                String password = String.valueOf(passwordField.getText());
                 String email = emailField.getText().trim();
                 String phoneNumber = phoneNumberField.getText().trim();
 
                 String dialogMessage;
-                passwordField.setText(PASSWORD_FIELD);
-                passwordField.setEchoChar((char)0);
+                //passwordField.setEchoChar((char)0);
 
                 if (username.isEmpty()) dialogMessage = USERNAME_EMPTY;
                 else if (password.isEmpty()) dialogMessage = PASSWORD_EMPTY;

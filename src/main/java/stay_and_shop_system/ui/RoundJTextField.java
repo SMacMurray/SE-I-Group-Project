@@ -1,9 +1,11 @@
 package stay_and_shop_system.ui;
 
+import org.jdesktop.swingx.JXTextField;
+
 import javax.swing.*;
 import java.awt.*;
 
-public class RoundJTextField extends JTextField {
+public class RoundJTextField extends JXTextField {
     private Shape shape;
     private int arcAmount = 0;
     public RoundJTextField(int arcAmount) {

@@ -34,6 +34,14 @@
             <version>1.0</version>
         </dependency>
 
+        <!-- For text field prompts (hints) -->
+        <dependency>
+            <groupId>org.swinglabs</groupId>
+            <artifactId>swingx</artifactId>
+            <version>1.6.1</version>
+            <scope>compile</scope>
+        </dependency>
+
         <!-- Source: https://mvnrepository.com/artifact/com.formdev/flatlaf -->
         <!--        For design (initialized in main) -->
 

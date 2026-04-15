@@ -1,9 +1,12 @@
 package stay_and_shop_system.ui;
 
+import org.jdesktop.swingx.JXLoginPane;
+import org.jdesktop.swingx.JXTextField;
+
 import javax.swing.*;
 import java.awt.*;
 
-public class RoundJPasswordField extends JPasswordField {
+public class RoundJPasswordField extends JXTextField {
     private Shape shape;
     private int arcAmount = 0;
     public RoundJPasswordField(int arcAmount) {
