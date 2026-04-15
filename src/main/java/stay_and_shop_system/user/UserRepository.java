@@ -10,7 +10,7 @@ import java.util.Objects;
 
 public class UserRepository {
 	// Use this to indicate what user is currently logged in, or null for logged out.
-	public static User SessionAccount = null; // Change this to private when we've fixed the legacy code.
+	private static User SessionAccount = null; // Change this to private when we've fixed the legacy code.
 	static final String DatabaseURL = "jdbc:sqlite:./hotelSystem.db";
 	static final String DB_NOT_FOUND = "Critical error: a connection could not be establish with the database.";
 
