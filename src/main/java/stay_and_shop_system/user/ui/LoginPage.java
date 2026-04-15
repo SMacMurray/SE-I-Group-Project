@@ -135,7 +135,7 @@ public class LoginPage extends JFrame {
         ImageIcon showPasswordIcon = new ImageIcon("src/main/resources/showPassword.png");
         showPasswordIcon = new ImageIcon(showPasswordIcon.getImage().getScaledInstance((int)(showPasswordIcon.getIconWidth() * 0.2), (int)(showPasswordIcon.getIconHeight() * 0.2), Image.SCALE_SMOOTH));
         ImageIcon hidePasswordIcon = new ImageIcon("src/main/resources/hidePassword.png");
-        hidePasswordIcon = new ImageIcon(hidePasswordIcon.getImage().getScaledInstance((int)(hidePasswordIcon.getIconWidth() * 0.2), (int)(hidePasswordIcon.getIconHeight() * 0.2), Image.SCALE_SMOOTH));
+        hidePasswordIcon = new ImageIcon(hidePasswordIcon.getImage().getScaledInstance((int)(hidePasswordIcon.getIconWidth() * 0.0390625), (int)(hidePasswordIcon.getIconHeight() * 0.0390625), Image.SCALE_SMOOTH));
 
         JToggleButton showPasswordButton = new JToggleButton();
         showPasswordButton.setPreferredSize(new Dimension(30, 30));

@@ -5,25 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="428cf44f-7588-43e7-9bd3-c1681c4f300e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/stay_and_shop_system/RoundJButton.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/stay_and_shop_system/RoundJPasswordField.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/stay_and_shop_system/RoundJTextField.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/data_sources_history.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/data_sources_history.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data.db" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/stay_and_shop_system/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/stay_and_shop_system/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/stay_and_shop_system/user/AccountController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/stay_and_shop_system/user/AccountController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/stay_and_shop_system/user/AccountSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/stay_and_shop_system/user/AccountSystem.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/stay_and_shop_system/user/ui/LoginPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/stay_and_shop_system/user/ui/LoginPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/Main$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/Main$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/user/AccountController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/user/AccountController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/user/AccountSystem.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/user/AccountSystem.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/user/ui/LoginPage$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/user/ui/LoginPage$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/user/ui/LoginPage$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/user/ui/LoginPage$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/user/ui/LoginPage$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/user/ui/LoginPage$3.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/user/ui/LoginPage$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/user/ui/LoginPage$4.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/user/ui/LoginPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/user/ui/LoginPage.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/hidePassword.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/hidePassword.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/hidePassword.png" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/hidePassword.png" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -103,7 +88,9 @@
       <workItem from="1775518818417" duration="5900000" />
       <workItem from="1775610133260" duration="1626000" />
       <workItem from="1775774929849" duration="7169000" />
-      <workItem from="1775860694482" duration="8917000" />
+      <workItem from="1775860694482" duration="9145000" />
+      <workItem from="1775871008409" duration="195000" />
+      <workItem from="1776281495931" duration="325000" />
     </task>
     <task id="LOCAL-00001">
       <option name="closed" value="true" />
