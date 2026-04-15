@@ -87,7 +87,7 @@ public class Reservation {
 	private void updateRate() {
 		rate = Math.round(100.0 * (room.baseDailyRate + room.qualityLevel.getPrice())) / 100.0;
 	}
-	public void setCost(double c) { c = cost; }
+	public void setCost(double c) { cost = c; }
 	public void updateReservationId() {
 		reservationId = Objects.hash(room.number + guestName);
 	}

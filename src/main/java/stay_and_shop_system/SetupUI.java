@@ -6,6 +6,7 @@ import stay_and_shop_system.user.ui.CancelReservationPage;
 import stay_and_shop_system.user.ui.ClerkAddRoomPage;
 import stay_and_shop_system.user.ui.LoginPage;
 import stay_and_shop_system.user.ui.ModifyRoomPage;
+import stay_and_shop_system.user.ui.CombinedBillPage;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicScrollBarUI;
@@ -159,8 +160,17 @@ public class SetupUI {
 
             JButton checkGuestBill = setupSideBarButton("Check Guest Bill", 4, 0);
             c.gridx = 0;
-            c.gridy = buttonCount++;
+            c.gridy = buttonCount;
+            buttonCount++;
             buttonsPane.add(checkGuestBill, c);
+
+            checkGuestBill.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    CombinedBillPage newFrame = new CombinedBillPage(true);
+                    frame.dispose();
+                }
+            });
         }
 
         if (user instanceof GuestInterface) {
@@ -168,8 +178,17 @@ public class SetupUI {
 
             JButton checkGuestBill = setupSideBarButton("Check My Bill", topBorder, 0);
             c.gridx = 0;
-            c.gridy = buttonCount++;
+            c.gridy = buttonCount;
+            buttonCount++;
             buttonsPane.add(checkGuestBill, c);
+
+            checkGuestBill.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    CombinedBillPage newFrame = new CombinedBillPage(false);
+                    frame.dispose();
+                }
+            });
 
             JButton modifyReservationButton = setupSideBarButton("Modify My Reservation", 4, 0);
             c.gridx = 0;
