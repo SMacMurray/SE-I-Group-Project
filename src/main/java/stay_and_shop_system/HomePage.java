@@ -2,7 +2,6 @@ package stay_and_shop_system;
 
 import stay_and_shop_system.occupancy.ui.*;
 import stay_and_shop_system.store.ui.*;
-import stay_and_shop_system.user.AccountSystem;
 import stay_and_shop_system.user.ui.*;
 
 import java.awt.event.ActionEvent;
@@ -35,7 +34,7 @@ public class HomePage extends JFrame {
         contentPane.setLayout(null);
 
         JLabel signedInLabel = new JLabel();
-        signedInLabel.setText((AccountSystem.SessionAccount == null) ? "Logged Out" : "Signed in as " + AccountSystem.SessionAccount.getName());
+        signedInLabel.setText((Main.SessionAccount == null) ? "Logged Out" : "Signed in as " + Main.SessionAccount.getName());
         signedInLabel.setHorizontalAlignment(SwingConstants.CENTER);
         signedInLabel.setBounds(300, 0, 416, 22);
         contentPane.add(signedInLabel);
@@ -66,7 +65,7 @@ public class HomePage extends JFrame {
         bookingButton.setBounds(10, 63, 122, 22);
         bookingButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	SearchRoomPage newFrame = new SearchRoomPage(); //Opening the second JFrame
+            	SearchRoomPage2 newFrame = new SearchRoomPage2(); //Opening the second JFrame
                 dispose(); //Disposing the First JFrame
             }
         });
@@ -96,7 +95,7 @@ public class HomePage extends JFrame {
         userHomeButton.setBounds(483, 100, 133, 22);
         userHomeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                UserHomePage newFrame = new UserHomePage(); //Opening the second JFrame
+//                UserHomePage newFrame = new UserHomePage(); //Opening the second JFrame
                 dispose(); //Disposing the First JFrame
             }
         });

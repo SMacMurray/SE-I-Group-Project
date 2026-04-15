@@ -4,7 +4,7 @@ import java.util.*;
 
 
 public class ModifyReservationController {
-	ReservationService reS;
+	ReservationController reS;
 	SearchController sc;
 	
 	public List<Room> modifyReservation(boolean room, Calendar start, Calendar end, int guestNum) {

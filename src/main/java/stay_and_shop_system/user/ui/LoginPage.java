@@ -3,32 +3,19 @@ package stay_and_shop_system.user.ui;
 import stay_and_shop_system.*;
 import stay_and_shop_system.user.*;
 
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.geom.RoundRectangle2D;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.plaf.basic.BasicScrollBarUI;
-
-import static stay_and_shop_system.SetupUI.getScaledImage;
-
+import java.awt.Color;
+import java.awt.Dimension;
 
 public class LoginPage extends JFrame {
     private static final long serialVersionUID = 1L;
-    private JPanel popupPane;
-    private JPanel mainPane;
     private JPanel contentPane;
     private JLabel invalidLabel;
-    private JPanel pagePane;
 
-    static final String EMAIL_FIELD = "Email";
-    static final String PASSWORD_FIELD = "Password";
-    static final String USERNAME_FIELD = "Username";
-    static final String PHONENUMBER_FIELD = "Phone";
     static final String EMAIL_EMPTY = "Warning: email field is empty.";
     static final String USERNAME_EMPTY = "Warning: username field is empty.";
     static final String PASSWORD_EMPTY = "Warning: password field is empty.";
@@ -46,184 +33,126 @@ public class LoginPage extends JFrame {
     public LoginPage() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(Main.WINDOW_W, Main.WINDOW_H);
-        setLocationRelativeTo(null); // Centers the screen
+        setLocationRelativeTo(null);
         setTitle(Main.APP_TITLE);
+        contentPane = new JPanel();
+        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        setContentPane(contentPane);
+        contentPane.setLayout(null);
 
-        // Header Stuff ------------------------------------------------------------------------------
-        Object[] uiObjects = SetupUI.initializeScreen(popupPane, mainPane, this);
-        popupPane = (JPanel) uiObjects[0];
-        mainPane = (JPanel) uiObjects[1];
-
-        pagePane = new JPanel(new GridBagLayout());
-        JScrollPane pageScrollPane = new JScrollPane(pagePane);
-        pageScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        pageScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        pageScrollPane.setBorder(null);
-        pageScrollPane.setViewportBorder(null);
-        pageScrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
-            @Override
-            protected void configureScrollBarColors() {
-                this.thumbColor = ColorPalette.SATURATED_LIGHTBLUE; // Color of the draggable bar
-                this.trackColor = ColorPalette.OCEAN_DARKBLUE; // Color of the background track
-            }
-        });
-        mainPane.add(pageScrollPane, BorderLayout.CENTER);
-        // -------------------------------------------------------------------------------------------
-
-        contentPane = new JPanel( new GridBagLayout() );
-        GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 0;
-        c.gridy = GridBagConstraints.RELATIVE;
-        c.insets = new Insets(10, 20, 10, 20);
-
-        JLabel welcomeLabel = new JLabel("Welcome to the Ocean's Water Hotel");
-        welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        welcomeLabel.setForeground(ColorPalette.OCEAN_DARKBLUE);
-        welcomeLabel.setFont(new Font("Serif", Font.BOLD, 30));
-        welcomeLabel.setPreferredSize(new Dimension(500, 40));
-        contentPane.add(welcomeLabel, c);
-
-        JTextField emailField = new RoundJTextField(25);
-        emailField.setText(EMAIL_FIELD);
-        emailField.setPreferredSize(new Dimension(200, 30));
-        emailField.setBackground(contentPane.getBackground());
-        emailField.setForeground(Color.GRAY);
-        // This listener creates the "hint" text
-        emailField.addFocusListener(new FocusAdapter() {
-            public void focusGained(FocusEvent e) {
-                if (emailField.getText().equals(EMAIL_FIELD)) {
-                    emailField.setText("");
-                    emailField.setForeground(Color.BLACK);
-                }
-                else emailField.setForeground(Color.BLACK);
-            }
-            public void focusLost(FocusEvent e) {
-                if (emailField.getText().isEmpty()) {
-                    emailField.setText(EMAIL_FIELD);
-                    emailField.setForeground(Color.GRAY);
-                }
-            }
-        });
-        contentPane.add(emailField, c);
-
-        JPanel passwordPanel = new JPanel(new FlowLayout());
-
-        JPasswordField passwordField = new RoundJPasswordField(25);
-        passwordField.setText(PASSWORD_FIELD);
-        passwordField.setPreferredSize(new Dimension(200, 30));
-        passwordField.setBackground(contentPane.getBackground());
-        passwordField.setForeground(Color.GRAY);
-        passwordField.setEchoChar((char)0);
-        passwordField.addFocusListener(new FocusAdapter() {
-            public void focusGained(FocusEvent e) {
-                if (passwordField.getText().equals(PASSWORD_FIELD)) {
-                    passwordField.setText("");
-                    passwordField.setForeground(Color.BLACK);
-                    passwordField.setEchoChar('•');
-                }
-            }
-            public void focusLost(FocusEvent e) {
-                if (passwordField.getText().isEmpty()) {
-                    passwordField.setText(PASSWORD_FIELD);
-                    passwordField.setForeground(Color.GRAY);
-                    passwordField.setEchoChar((char)0);
-                }
-            }
-        });
-        passwordPanel.add(passwordField);
-
-        ImageIcon showPasswordIcon = new ImageIcon("src/main/resources/showPassword.png");
-        showPasswordIcon = new ImageIcon(showPasswordIcon.getImage().getScaledInstance((int)(showPasswordIcon.getIconWidth() * 0.2), (int)(showPasswordIcon.getIconHeight() * 0.2), Image.SCALE_SMOOTH));
-        ImageIcon hidePasswordIcon = new ImageIcon("src/main/resources/hidePassword.png");
-        hidePasswordIcon = new ImageIcon(hidePasswordIcon.getImage().getScaledInstance((int)(hidePasswordIcon.getIconWidth() * 0.0390625), (int)(hidePasswordIcon.getIconHeight() * 0.0390625), Image.SCALE_SMOOTH));
-
-        JToggleButton showPasswordButton = new JToggleButton();
-        showPasswordButton.setPreferredSize(new Dimension(30, 30));
-        ImageIcon finalShowPasswordIcon = showPasswordIcon;
-        ImageIcon finalHidePasswordIcon = hidePasswordIcon;
-        showPasswordButton.setIcon(finalHidePasswordIcon);
-        showPasswordButton.addActionListener(new ActionListener() {
+        JButton homeButton = new JButton(Main.HOME_TEXT);
+        homeButton.setBounds(0, 0, 140, 22);
+        homeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                showPasswordButton.setBackground(contentPane.getBackground());
-                if (showPasswordButton.isSelected()){
-                    passwordField.setEchoChar((char)0);
-                    showPasswordButton.setIcon(finalShowPasswordIcon);
-                }
-                else{
-                    passwordField.setEchoChar('•');
-                    showPasswordButton.setIcon(finalHidePasswordIcon);
-                }
+                HomePage2 newFrame = new HomePage2(); //Opening the second JFrame
+                dispose(); //Disposing the First JFrame
             }
         });
-        passwordPanel.add(passwordField);
+        contentPane.add(homeButton);
 
-        contentPane.add(showPasswordButton);
+        JLabel usernameLabel = new JLabel("Username");
+        usernameLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        usernameLabel.setBounds((Main.WINDOW_W-170)/2, 20, 170, 20);
+        contentPane.add(usernameLabel);
 
-        contentPane.add(passwordPanel, c);
+        JTextField usernameField = new JTextField();
+        usernameField.setBounds((Main.WINDOW_W-170)/2, 40, 170, 20);
+        contentPane.add(usernameField);
 
-        JTextField usernameField = new RoundJTextField(25);
-        usernameField.setText(USERNAME_FIELD);
-        usernameField.setPreferredSize(new Dimension(200, 30));
-        usernameField.setBackground(contentPane.getBackground());
-        usernameField.setForeground(Color.GRAY);
-        // This listener creates the "hint" text
-        usernameField.addFocusListener(new FocusAdapter() {
-            public void focusGained(FocusEvent e) {
-                if (usernameField.getText().equals(USERNAME_FIELD)) {
-                    usernameField.setText("");
-                    usernameField.setForeground(Color.BLACK);
-                }
-                else usernameField.setForeground(Color.BLACK);
-            }
-            public void focusLost(FocusEvent e) {
-                if (usernameField.getText().isEmpty()) {
-                    usernameField.setText(USERNAME_FIELD);
-                    usernameField.setForeground(Color.GRAY);
-                }
-            }
-        });
-        contentPane.add(usernameField, c);
+        JLabel passwordLabel = new JLabel("Password");
+        passwordLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        passwordLabel.setBounds((Main.WINDOW_W-110)/2, 60, 110, 14);
+        contentPane.add(passwordLabel);
 
-        JTextField phoneNumberField = new RoundJTextField(25);
-        phoneNumberField.setText(PHONENUMBER_FIELD);
-        phoneNumberField.setPreferredSize(new Dimension(200, 30));
-        phoneNumberField.setBackground(contentPane.getBackground());
-        phoneNumberField.setForeground(Color.GRAY);
-        // This listener creates the "hint" text
-        phoneNumberField.addFocusListener(new FocusAdapter() {
-            public void focusGained(FocusEvent e) {
-                if (phoneNumberField.getText().equals(PHONENUMBER_FIELD)) {
-                    phoneNumberField.setText("");
-                    phoneNumberField.setForeground(Color.BLACK);
-                }
-                else phoneNumberField.setForeground(Color.BLACK);
-            }
-            public void focusLost(FocusEvent e) {
-                if (phoneNumberField.getText().isEmpty()) {
-                    phoneNumberField.setText(PHONENUMBER_FIELD);
-                    phoneNumberField.setForeground(Color.GRAY);
-                }
+        JPasswordField passwordField = new JPasswordField();
+        passwordField.setBounds((Main.WINDOW_W-170)/2, 80, 170, 20);
+        contentPane.add(passwordField);
+
+        JToggleButton btnShowPassword = new JToggleButton();
+        btnShowPassword.setBounds((Main.WINDOW_W-170)/2+passwordField.getWidth(), 80, 20, 20);
+        btnShowPassword.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (btnShowPassword.isSelected()) passwordField.setEchoChar((char)0);
+                else passwordField.setEchoChar('•');
             }
         });
-        contentPane.add(phoneNumberField, c);
+        contentPane.add(btnShowPassword);
 
-        JSeparator horizontalLine = new JSeparator(SwingConstants.HORIZONTAL);
-        horizontalLine.setPreferredSize(new Dimension(400, 10));
-        horizontalLine.setForeground(ColorPalette.OCEAN_LIGHTBLUE);
-        contentPane.add(horizontalLine, c);
+        JLabel emailLabel = new JLabel("Email");
+        emailLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        emailLabel.setBounds((Main.WINDOW_W-110)/2, 100, 110, 14);
+        contentPane.add(emailLabel);
 
-        JButton signInButton = new RoundJButton(25);
-        signInButton.setText("Sign In");
-        //signInButton.setBackground(Color.BLACK);
-        //signInButton.setForeground(Color.WHITE);
-        signInButton.setPreferredSize(new Dimension(100, 30));
-        signInButton.addActionListener(new ActionListener() {
+        JTextField emailField = new JTextField();
+        emailField.setBounds((Main.WINDOW_W-170)/2, 120, 170, 20);
+        contentPane.add(emailField);
+
+        JLabel phoneNumberLabel = new JLabel("Phone Number");
+        phoneNumberLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        phoneNumberLabel.setBounds((Main.WINDOW_W-110)/2, 140, 110, 14);
+        contentPane.add(phoneNumberLabel);
+
+        JTextField phoneNumberField = new JTextField();
+        phoneNumberField.setBounds((Main.WINDOW_W-170)/2, 160, 170, 20);
+        contentPane.add(phoneNumberField);
+
+        JPanel panel = new JPanel();
+        panel.setBackground(new Color(160, 160, 160));
+        panel.setBounds(143, 251, 360, 101);
+        contentPane.add(panel);
+        panel.setLayout(null);
+
+        JLabel lblNewLabel_3 = new JLabel("Not a member?");
+        lblNewLabel_3.setHorizontalAlignment(SwingConstants.CENTER);
+        lblNewLabel_3.setBounds((panel.getWidth()-240)/2, 11, 240, 14);
+        panel.add(lblNewLabel_3);
+
+        JButton btnCreateAccount = new JButton("Join Now");
+        btnCreateAccount.setBounds((panel.getWidth()-90)/2, 67, 90, 23);
+        btnCreateAccount.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String username = usernameField.getText().trim();
+                String password = String.valueOf(passwordField.getPassword());
+                String email = emailField.getText().trim();
+                String phoneNumber = phoneNumberField.getText().trim();
+
+                String dialogMessage;
+                passwordField.setText("");
+
+                if (username.isEmpty()) dialogMessage = USERNAME_EMPTY;
+                else if (password.isEmpty()) dialogMessage = PASSWORD_EMPTY;
+                else if (email.isEmpty()) dialogMessage = EMAIL_EMPTY;
+                else if (phoneNumber.isEmpty()) dialogMessage = PHONENUMBER_EMPTY;
+                else {
+//                	JOptionPane.showMessageDialog(usernameLabel, dialogMessage);
+                    int res = AccountController.createAccount(email, username, password, phoneNumber);
+                    dialogMessage = switch (res) {
+                        case 0 -> ACCOUNT_CREATE_SUCCESS;
+                        case 1 -> ACCOUNT_ALREADY_EXISTS;
+                        case -1 -> FUBAR;
+                        default -> RESPONSE_MISSING;
+                    };
+
+                    // Create Account Success
+                    if (res == 0){
+                        HomePage2 newFrame = new HomePage2();
+                        dispose();
+                    }
+                }
+
+                JOptionPane.showMessageDialog(usernameLabel, dialogMessage);
+            }
+        });
+        panel.add(btnCreateAccount);
+
+        JButton btnSignIn = new JButton("Sign In");
+        btnSignIn.setBounds((Main.WINDOW_W-90)/2, 190, 90, 22);
+        btnSignIn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String email = emailField.getText().trim();
                 String password = String.valueOf(passwordField.getPassword());
                 String dialogMessage;
-                passwordField.setText(PASSWORD_FIELD);
-                passwordField.setEchoChar((char)0);
+                passwordField.setText("");
 
                 if (email.isEmpty()) dialogMessage = EMAIL_EMPTY;
                 else if (password.isEmpty()) dialogMessage = PASSWORD_EMPTY;
@@ -241,84 +170,36 @@ public class LoginPage extends JFrame {
                         dispose();
                     }
                 }
-                JOptionPane.showMessageDialog(contentPane, dialogMessage);
+                JOptionPane.showMessageDialog(usernameLabel, dialogMessage);
             }
         });
-        contentPane.add(signInButton, c);
+        contentPane.add(btnSignIn);
 
-        JPanel newMemberPanel = new JPanel(new GridBagLayout());
-        newMemberPanel.setBackground(ColorPalette.OCEAN_LIGHTBLUE);
-        newMemberPanel.setPreferredSize(new Dimension(200, 100));
+        JButton btnResetPassword = new JButton("Forgot password?");
+        btnResetPassword.setBounds((Main.WINDOW_W-170)/2, 224, 170, 22);
+        contentPane.add(btnResetPassword);
 
-        JLabel newMemberLabel = new JLabel("Not a member?");
-        newMemberLabel.setFont(new Font("Serif", Font.BOLD, 20));
-        newMemberPanel.add(newMemberLabel, c);
 
-        JButton createAccountButton = new RoundJButton(25);
-        createAccountButton.setText("Join Now");
-        createAccountButton.setPreferredSize(new Dimension(100, 30));
-        createAccountButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                String username = usernameField.getText().trim();
-                String password = String.valueOf(passwordField.getPassword());
-                String email = emailField.getText().trim();
-                String phoneNumber = phoneNumberField.getText().trim();
-
-                String dialogMessage;
-                passwordField.setText(PASSWORD_FIELD);
-                passwordField.setEchoChar((char)0);
-
-                if (username.isEmpty()) dialogMessage = USERNAME_EMPTY;
-                else if (password.isEmpty()) dialogMessage = PASSWORD_EMPTY;
-                else if (email.isEmpty()) dialogMessage = EMAIL_EMPTY;
-                else if (phoneNumber.isEmpty()) dialogMessage = PHONENUMBER_EMPTY;
-                else {
-                    int res = AccountController.createAccount(email, username, password, phoneNumber);
-                    dialogMessage = switch (res) {
-                        case 0 -> ACCOUNT_CREATE_SUCCESS;
-                        case 1 -> ACCOUNT_ALREADY_EXISTS;
-                        case -1 -> FUBAR;
-                        default -> RESPONSE_MISSING;
-                    };
-                    // Create Account Success
-                    if (res == 0){
-                        HomePage2 newFrame = new HomePage2();
-                        dispose();
-                    }
-                }
-                JOptionPane.showMessageDialog(contentPane, dialogMessage);
-            }
-        });
-        newMemberPanel.add(createAccountButton, c);
-
-        contentPane.add(newMemberPanel, c);
-
-        JPanel footer = new JPanel();
-        footer.setBackground(ColorPalette.DESATURATED_LIGHTBLUE);
-        footer.setPreferredSize(new Dimension(500, 100));
-        mainPane.add(footer, BorderLayout.SOUTH);
-
-        mainPane.add(contentPane, BorderLayout.CENTER);
         setVisible(true);
     }
     public void invalidInfo(String label) {
-    	if (!contentPane.isAncestorOf(invalidLabel) || invalidLabel.getText() != label) { // If contentPane does not contain invalidLabel
-    		if (contentPane.isAncestorOf(invalidLabel)) { // For testing purposes
-    			contentPane.remove(invalidLabel);
-    		}
-    		
-    		invalidLabel = new JLabel(label);
-    		invalidLabel.setHorizontalAlignment(SwingConstants.CENTER);
-    		Dimension prefSize = invalidLabel.getPreferredSize(); // So the text fits exactly in the box more properly
-    		invalidLabel.setBounds(280, 40, prefSize.width, prefSize.height);
-    		invalidLabel.setForeground(Color.RED);
-    		
-    		contentPane.add(invalidLabel);
-    		contentPane.revalidate();
-    		contentPane.repaint();
-    		
-    		// Note to self: I need to find a user based on the Username, then check if the password is right
-    		// This means that there can only be one Username for each person.
-    	}
+        if (!contentPane.isAncestorOf(invalidLabel) || invalidLabel.getText() != label) { // If contentPane does not contain invalidLabel
+            if (contentPane.isAncestorOf(invalidLabel)) { // For testing purposes
+                contentPane.remove(invalidLabel);
+            }
+
+            invalidLabel = new JLabel(label);
+            invalidLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            Dimension prefSize = invalidLabel.getPreferredSize(); // So the text fits exactly in the box more properly
+            invalidLabel.setBounds(280, 40, prefSize.width, prefSize.height);
+            invalidLabel.setForeground(Color.RED);
+
+            contentPane.add(invalidLabel);
+            contentPane.revalidate();
+            contentPane.repaint();
+
+            // Note to self: I need to find a user based on the Username, then check if the password is right
+            // This means that there can only be one Username for each person.
+        }
     }
 }

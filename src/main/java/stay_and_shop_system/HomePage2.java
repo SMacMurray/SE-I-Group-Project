@@ -14,7 +14,6 @@ public class HomePage2 extends JFrame{
     private JPanel popupPane;
     private JPanel mainPane;
     private JPanel headerPane;
-    // Overriding JPanel class
     private JPanel pagePane;
 
     public HomePage2() {

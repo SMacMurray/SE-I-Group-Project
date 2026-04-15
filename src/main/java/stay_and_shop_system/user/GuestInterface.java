@@ -4,11 +4,10 @@ import java.util.*;
 import stay_and_shop_system.occupancy.*;
 
 public interface GuestInterface extends User {
-    List<Reservation> reservations = new ArrayList<>();
-    ReservationService res = new ReservationService();
+    PaymentMethod pm = new PaymentMethod();
 
-    void addReservation(Reservation r);
-    void removeReservation(Reservation r);
-    List<Reservation> findReservations();
+    public PaymentMethod getPaymentMethod();
+    public void setPaymentMethod(PaymentMethod pm);
+    int getGuestId();
 
 }

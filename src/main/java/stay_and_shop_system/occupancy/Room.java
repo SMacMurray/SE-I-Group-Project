@@ -33,17 +33,18 @@ public class Room {
 		Standard
 	}
 	
-	int number = 0;
-	int beds = 0;
-	int maxOccupancy = 0;
-	double baseDailyRate = 0;
-	boolean smokingStatus = false;
-	List<BedType> bedTypes = new ArrayList<>();
-	QualityLevel qualityLevel = QualityLevel.Executive;
-	RoomSize roomSize = RoomSize.Single;
+	private int number = 0;
+	private int beds = 0;
+	private int maxOccupancy = 0;
+	private double baseDailyRate = 0;
+	private double dailyRate = 0;
+	private boolean smokingStatus = false;
+	private List<BedType> bedTypes = new ArrayList<>();
+	private QualityLevel qualityLevel = QualityLevel.Executive;
+	private RoomSize roomSize = RoomSize.Single;
 	
 	// For Testing purposes
-	Room() {
+    public Room() {
 		
 	}
 	public Room(int n, int b, int p, double r, boolean s, List<BedType> t, QualityLevel q, RoomSize rs) {
@@ -55,25 +56,36 @@ public class Room {
 		bedTypes = t;
 		qualityLevel = q;
 		roomSize = rs;
+
+		dailyRate = Math.round((q.getPrice() + baseDailyRate) * 100.0) / 100.0;
 	}
 	public int getNumber() { return number; }
-	public int getBeds() { return beds;}
+	public int getBeds() { return beds; }
 	public int getMaxOccupancy() { return maxOccupancy; }
 	public double getBaseDailyRate() { return baseDailyRate; }
 	public boolean getSmokingStatus() { return smokingStatus; }
 	public List<BedType> getBedTypes() { return bedTypes; }
 	public QualityLevel getQualityLevel() { return qualityLevel; }
 	public RoomSize getRoomSize() { return roomSize; }
-	
+	public double getDailyRate() {return dailyRate;}
+
 	public void setNumber(int n) { number = n; }
 	public void setBeds(int b) { beds = b;}
 	public void setMaxOccupancy(int p) { maxOccupancy = p; }
-	public void setBaseDailyRate(double r) { baseDailyRate = r; }
+	public void setBaseDailyRate(double r) {
+		baseDailyRate = r;
+		updateDailyRate();
+	}
 	public void setSmokingStatus(boolean s) { smokingStatus = s; }
 	public void addBedType(BedType t) { bedTypes.add(t); }
-	public void setQualityLevel(QualityLevel q) {qualityLevel = q; }
+	public void setQualityLevel(QualityLevel q) {
+		qualityLevel = q;
+		updateDailyRate();
+	}
 	public void setRoomSize(RoomSize rs) { roomSize = rs; }
-	
+	private void updateDailyRate() {
+		dailyRate = qualityLevel.getPrice() + baseDailyRate;
+	}
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true; 
@@ -84,5 +96,23 @@ public class Room {
 	@Override
 	public int hashCode() {
 		return Objects.hash(number);
+	}
+
+	@Override
+	public String toString() {
+		String str = "Room of number " + number;
+		str += "\n Bed Number: " + beds;
+		str += "\n Max Occupancy: " + maxOccupancy;
+		str += "\n Base Daily Rate: " + baseDailyRate;
+		str += "\n Daily Rate: " + dailyRate;
+		str += "\n Smoking Status: " + smokingStatus;
+		str += "\n Bed Types: ";
+		for (BedType bt : bedTypes) {
+			str += bt.toString() + " ";
+		}
+		str += "\n Quality Level: " + qualityLevel.toString();
+		str += "\n RoomSize: " + roomSize.toString();
+
+		return str;
 	}
 }

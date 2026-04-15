@@ -1,19 +1,24 @@
 package stay_and_shop_system.occupancy;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class Reservation {
-	public Room room;
-	public int roomNumber = 0;
-	public int guestNum = 0;
-	public Calendar start;
-	public Calendar end;
-	public String guestName = "John Doe";
-	public String guestEmail = "johnDoe@gmail.com";
-	public String creditCardNumber = "9999-9999-9997";
-	public double rate = 0;
-	public double cost = 0;
-	public int reservationId = Objects.hash(roomNumber + "John Doe");
+	private Room room;
+	private int roomNumber = 0;
+	private int guestNum = 0;
+	private Calendar start;
+	private Calendar end;
+	private String guestName = "John Doe";
+	private String guestEmail = "johnDoe@gmail.com";
+	private String creditCardNumber = "9999-9999-9997";
+	private double rate = 0;
+	private double cost = 0;
+	private int reservationId = Objects.hash(roomNumber + "John Doe");
+	private int guestId = Objects.hash(roomNumber + "John Doe");
+
+	private SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
 
 	// For testing purposes
 	public Reservation() {
@@ -39,7 +44,7 @@ public class Reservation {
 
 	public Reservation(Room r, Calendar s, Calendar e, int g, String n, String em, String cc) {
 		room = r;
-		roomNumber = r.number;
+		roomNumber = r.getNumber();
 		start = s;
 		end = e;
 		guestNum = g;
@@ -47,10 +52,11 @@ public class Reservation {
 		guestEmail = em;
 		creditCardNumber = cc;
 		// Rounding it to 2 decimal places (you need to put 100.0 to make it work correctly instead of 100)
-		rate = Math.round(100.0 * (r.baseDailyRate + r.qualityLevel.getPrice())) / 100.0;
+		rate = room.getDailyRate();
 		cost = 0;
-		reservationId = Objects.hash(r.number + n);
-		
+		reservationId = Objects.hash(r.getNumber() + n + getFormattedEndDate());
+		guestId = Math.abs(Objects.hash(em));
+
 		System.out.println(rate + " : Reservation");
 		System.out.println(reservationId + " : Reservation");
 	}
@@ -66,6 +72,9 @@ public class Reservation {
 	public Double getRate() { return rate; }
 	public Double getCost() { return cost; }
 	public int getReservationId() {return reservationId; }
+	public int getGuestId() {return guestId; }
+	public String getFormattedStartDate() { return formatter.format(start.getTime()); }
+	public String getFormattedEndDate() { return formatter.format(end.getTime()); }
 
 	public void setRoom(Room r) {
 		r = room;
@@ -85,11 +94,34 @@ public class Reservation {
 	// TODO: MAKE INPUT VALIDATION FOR CREDIT CARD NUMBER
 	public void setCreditCardNumber(String cc) { cc = creditCardNumber; }
 	private void updateRate() {
-		rate = Math.round(100.0 * (room.baseDailyRate + room.qualityLevel.getPrice())) / 100.0;
+		rate = room.getDailyRate();
 	}
 	public void setCost(double c) { c = cost; }
 	public void updateReservationId() {
-		reservationId = Objects.hash(room.number + guestName);
+		reservationId = Objects.hash(room.getNumber() + guestName + getFormattedEndDate());
 	}
 
+	public void calculateTotal() {
+		long diffInMillis = Math.abs(end.getTime().getTime() - start.getTime().getTime());
+		long daysBetween = TimeUnit.DAYS.convert(diffInMillis, TimeUnit.MILLISECONDS);
+		System.out.println("Days Betweeb: " + daysBetween);
+		daysBetween += 1;
+
+		cost = Math.round((rate * daysBetween) * 100.0) / 100.0;
+	}
+
+	@Override
+	public String toString() {
+		String str = "Reservation at room number " +  roomNumber + " w/ reservationId " + reservationId;
+		str += "\n Guest Num: " + guestNum;
+		str += "\n Start Date: " + getFormattedStartDate();
+		str += "\n End Date: " + getFormattedEndDate();
+		str += "\n Guest Name: " + guestName;
+		str += "\n Credit Card Number: " + creditCardNumber;
+		str += "\n Rate: " + rate;
+		str += "\n Cost: " + cost;
+		str += "\n GuestId: " + guestId;
+
+		return str;
+	}
 }

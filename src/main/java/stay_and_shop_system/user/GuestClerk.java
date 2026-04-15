@@ -9,26 +9,32 @@ import java.util.Objects;
 public class GuestClerk implements GuestInterface, ClerkInterface{
     private String name = "John Doe";
     private String email = "dummyEmail@gmail.com";
-    private String paymentId;
     private String phoneNumber;
     private int hash; // Stores the hash of the password, not the password.
-    // private List<Reservation> reservations = new ArrayList<>();
+    private String paymentId;
+    private UserType typeId = UserType.GUEST_CLERK;
 
     // Fix when needed
-    public GuestClerk(String n, String e) {
+    public GuestClerk(String e, String n,  int h, String pn,  PaymentMethod pm) {
         name = n;
         email = e;
-    }
-    public GuestClerk(String n, int h) {
-        name = n;
+        phoneNumber = pn;
         hash = h;
+        GuestInterface.pm.setPaymentMethod(pm);
     }
+    // When a new Guest Account as a clerk is created/logged in.
     public GuestClerk(String e, String n, int h, String p, String i) {
         email = e;
         name = n;
         hash = h;
         phoneNumber = p;
         paymentId = i;
+    }
+    public GuestClerk(String e, String n, int h, String p) {
+        email = e;
+        name = n;
+        hash = h;
+        phoneNumber = p;
     }
     public void setName(String x) {
         name = x;
@@ -38,19 +44,21 @@ public class GuestClerk implements GuestInterface, ClerkInterface{
     }
     public void setPhoneNumber(String x) { phoneNumber = x; }
     public void setPassword(String x) { hash = x.hashCode(); }
+    public void setPaymentId(String pId) { paymentId = pId; }
+    public void setTypeId(UserType id) { this.typeId = id; }
+    public void setPaymentMethod(PaymentMethod pm) {
+        GuestInterface.pm.setPaymentMethod(pm);
+    }
     public String getName() { return name; }
     public String getEmail() { return email; }
     public String getPhoneNumber() { return phoneNumber; }
     public int getPassword() { return hash; }
-
-    // reservations is in the GuestInterface
-    public void addReservation(Reservation r) {
-        reservations.add(r);
+    public String getPaymentId() { return paymentId; }
+    public UserType getTypeId() { return typeId; }
+    public int getGuestId() { return Math.abs(Objects.hash(email)); }
+    public PaymentMethod getPaymentMethod() {
+        return GuestInterface.pm;
     }
-    public void removeReservation(Reservation r) {
-        reservations.remove(r);
-    }
-    public List<Reservation> findReservations(){ throw new RuntimeException("TODO: Finish findReservations()"); }
 
     public boolean addRoom(Room r) {
         return false;

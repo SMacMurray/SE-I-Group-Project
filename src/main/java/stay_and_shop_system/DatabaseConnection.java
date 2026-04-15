@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class DatabaseConnection {
     // private static final String DB_URL = "jdbc:mysql://localhost:3306/yourdb";
 //    private static final String DB_URL = "jdbc:mysql://localhost:3306/yummers";
-    private static final String DB_URL = "jdbc:sqlite:hotelSystem";
+    private static final String DB_URL = "jdbc:sqlite:hotelSystem.db";
 //    private static final String USER = "root";
 //    private static final String PASS = "ch@rl1eK1rk#GoD";
     // New user: newUser
