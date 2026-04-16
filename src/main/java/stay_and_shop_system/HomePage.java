@@ -7,13 +7,8 @@ import stay_and_shop_system.user.ui.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 
 public class HomePage extends JFrame {
 
@@ -103,8 +98,13 @@ public class HomePage extends JFrame {
 
         JButton clerkAddRoomButton = new JButton("Clerk Add Room");
         clerkAddRoomButton.setBounds(10, 100, 160, 22);
+        clerkAddRoomButton.setVisible(AccountSystem.getSessionAccount() instanceof stay_and_shop_system.user.ClerkInterface);
         clerkAddRoomButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                if (!(AccountSystem.getSessionAccount() instanceof stay_and_shop_system.user.ClerkInterface)) {
+                    JOptionPane.showMessageDialog(contentPane, "Only a Clerk or GuestClerk can add rooms.");
+                    return;
+                }
                 ClerkAddRoomPage newFrame = new ClerkAddRoomPage();
                 dispose();
             }

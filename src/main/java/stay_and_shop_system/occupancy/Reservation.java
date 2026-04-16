@@ -96,7 +96,7 @@ public class Reservation {
 	private void updateRate() {
 		rate = room.getDailyRate();
 	}
-	public void setCost(double c) { c = cost; }
+	public void setCost(double c) { cost = c; }
 	public void updateReservationId() {
 		reservationId = Objects.hash(room.getNumber() + guestName + getFormattedEndDate());
 	}

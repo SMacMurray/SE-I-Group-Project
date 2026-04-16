@@ -12,7 +12,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClerkAddRoomPage extends JFrame {
+public class ModifyRoomPage extends JFrame {
     private static final long serialVersionUID = 1L;
 
     private JPanel popupPane;
@@ -20,7 +20,7 @@ public class ClerkAddRoomPage extends JFrame {
     private JPanel pagePane;
     private JPanel contentPane;
 
-    public ClerkAddRoomPage() {
+    public ModifyRoomPage() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(Main.WINDOW_W, Main.WINDOW_H);
         setLocationRelativeTo(null);
@@ -59,19 +59,20 @@ public class ClerkAddRoomPage extends JFrame {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.anchor = GridBagConstraints.CENTER;
 
-        JLabel titleLabel = new JLabel("Add New Room");
+        JLabel titleLabel = new JLabel("Modify Room");
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
         titleLabel.setForeground(ColorPalette.OCEAN_LIGHTBLUE);
         titleLabel.setFont(new Font("Serif", Font.BOLD, 30));
         titleLabel.setPreferredSize(new Dimension(500, 40));
         contentPane.add(titleLabel, c);
 
-        JLabel subtitleLabel = new JLabel("Create a room with details that match the hotel catalog");
+        JLabel subtitleLabel = new JLabel("Load an existing room, update the fields, then save changes");
         subtitleLabel.setHorizontalAlignment(SwingConstants.CENTER);
         subtitleLabel.setForeground(ColorPalette.DESATURATED_LIGHTBLUE);
         subtitleLabel.setFont(new Font("Serif", Font.PLAIN, 18));
         contentPane.add(subtitleLabel, c);
 
+        JTextField lookupRoomField = makeField();
         JTextField roomNumberField = makeField();
         JTextField bedsField = makeField();
         JTextField occupancyField = makeField();
@@ -94,7 +95,22 @@ public class ClerkAddRoomPage extends JFrame {
         styleComboBox(qualityBox);
         styleComboBox(sizeBox);
 
-        contentPane.add(makeLabeledRow("Room Number", roomNumberField), c);
+        JPanel lookupPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 12, 0));
+        lookupPanel.setOpaque(false);
+
+        JLabel lookupLabel = new JLabel("Room Number to Load");
+        lookupLabel.setForeground(ColorPalette.OCEAN_LIGHTBLUE);
+        lookupLabel.setFont(new Font("Serif", Font.PLAIN, 20));
+
+        JButton loadButton = new JButton("Load Room");
+        stylePrimaryButton(loadButton);
+
+        lookupPanel.add(lookupLabel);
+        lookupPanel.add(lookupRoomField);
+        lookupPanel.add(loadButton);
+        contentPane.add(lookupPanel, c);
+
+        contentPane.add(makeLabeledRow("New Room Number", roomNumberField), c);
         contentPane.add(makeLabeledRow("Number of Beds", bedsField), c);
         contentPane.add(makeLabeledRow("Max Occupancy", occupancyField), c);
         contentPane.add(makeLabeledRow("Base Daily Rate", rateField), c);
@@ -120,13 +136,13 @@ public class ClerkAddRoomPage extends JFrame {
         JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 16, 0));
         buttonsPanel.setOpaque(false);
 
-        JButton addRoomButton = new JButton("Add Room");
-        stylePrimaryButton(addRoomButton);
+        JButton updateButton = new JButton("Update Room");
+        stylePrimaryButton(updateButton);
 
         JButton clearButton = new JButton("Clear");
         styleSecondaryButton(clearButton);
 
-        buttonsPanel.add(addRoomButton);
+        buttonsPanel.add(updateButton);
         buttonsPanel.add(clearButton);
         contentPane.add(buttonsPanel, c);
 
@@ -157,6 +173,7 @@ public class ClerkAddRoomPage extends JFrame {
         });
 
         clearButton.addActionListener(e -> {
+            lookupRoomField.setText("");
             roomNumberField.setText("");
             bedsField.setText("");
             occupancyField.setText("");
@@ -174,15 +191,59 @@ public class ClerkAddRoomPage extends JFrame {
             bedTypeBox4.setEnabled(false);
         });
 
-        addRoomButton.addActionListener(e -> {
+        loadButton.addActionListener(e -> {
             try {
-                int roomNumber = Integer.parseInt(roomNumberField.getText().trim());
+                int roomNumber = Integer.parseInt(lookupRoomField.getText().trim());
+                Room room = GlobalVariables.rs.getRoom(roomNumber);
+
+                if (room == null) {
+                    JOptionPane.showMessageDialog(null, "No room exists with that room number.");
+                    return;
+                }
+
+                roomNumberField.setText(String.valueOf(room.getNumber()));
+                bedsField.setText(String.valueOf(room.getBeds()));
+                occupancyField.setText(String.valueOf(room.getMaxOccupancy()));
+                rateField.setText(String.valueOf(room.getBaseDailyRate()));
+                smokingBox.setSelectedItem(room.getSmokingStatus() ? "Permitted" : "Not Permitted");
+                qualityBox.setSelectedItem(room.getQualityLevel());
+                sizeBox.setSelectedItem(room.getRoomSize());
+
+                bedTypeBox1.setSelectedIndex(0);
+                bedTypeBox2.setSelectedIndex(0);
+                bedTypeBox3.setSelectedIndex(0);
+                bedTypeBox4.setSelectedIndex(0);
+
+                List<Room.BedType> bedTypes = room.getBedTypes();
+                if (bedTypes.size() > 0) bedTypeBox1.setSelectedItem(bedTypes.get(0));
+                if (bedTypes.size() > 1) bedTypeBox2.setSelectedItem(bedTypes.get(1));
+                if (bedTypes.size() > 2) bedTypeBox3.setSelectedItem(bedTypes.get(2));
+                if (bedTypes.size() > 3) bedTypeBox4.setSelectedItem(bedTypes.get(3));
+
+                bedTypeBox1.setEnabled(true);
+                bedTypeBox2.setEnabled(room.getBeds() >= 2);
+                bedTypeBox3.setEnabled(room.getBeds() >= 3);
+                bedTypeBox4.setEnabled(room.getBeds() >= 4);
+
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null, "Enter a valid room number to load.");
+            }
+        });
+
+        updateButton.addActionListener(e -> {
+            try {
+                int originalRoomNumber = Integer.parseInt(lookupRoomField.getText().trim());
+                int newRoomNumber = Integer.parseInt(roomNumberField.getText().trim());
                 int beds = Integer.parseInt(bedsField.getText().trim());
                 int maxOccupancy = Integer.parseInt(occupancyField.getText().trim());
-                double baseDailyRate = Double.parseDouble(rateField.getText().trim());
+                double rate = Double.parseDouble(rateField.getText().trim());
 
-                if (roomNumber < 100 || roomNumber > 399) {
-                    JOptionPane.showMessageDialog(null, "Room number must be between 100 and 399.");
+                if (originalRoomNumber < 100 || originalRoomNumber > 399) {
+                    JOptionPane.showMessageDialog(null, "Original room number must be between 100 and 399.");
+                    return;
+                }
+                if (newRoomNumber < 100 || newRoomNumber > 399) {
+                    JOptionPane.showMessageDialog(null, "New room number must be between 100 and 399.");
                     return;
                 }
                 if (beds < 1 || beds > 4) {
@@ -193,16 +254,12 @@ public class ClerkAddRoomPage extends JFrame {
                     JOptionPane.showMessageDialog(null, "Max occupancy must be at least 1.");
                     return;
                 }
-                if (baseDailyRate < 0) {
+                if (rate < 0) {
                     JOptionPane.showMessageDialog(null, "Base daily rate cannot be negative.");
                     return;
                 }
-                if (GlobalVariables.rs.getRoom(roomNumber) != null) {
-                    JOptionPane.showMessageDialog(null, "A room with that room number already exists.");
-                    return;
-                }
 
-                boolean smokingStatus = ((String) smokingBox.getSelectedItem()).equals("Permitted");
+                boolean smokingStatus = ((String) smokingBox.getSelectedItem()).equalsIgnoreCase("Permitted");
 
                 List<Room.BedType> bedTypes = new ArrayList<>();
                 if (beds >= 1) bedTypes.add((Room.BedType) bedTypeBox1.getSelectedItem());
@@ -210,30 +267,35 @@ public class ClerkAddRoomPage extends JFrame {
                 if (beds >= 3) bedTypes.add((Room.BedType) bedTypeBox3.getSelectedItem());
                 if (beds >= 4) bedTypes.add((Room.BedType) bedTypeBox4.getSelectedItem());
 
-                Room.QualityLevel qualityLevel = (Room.QualityLevel) qualityBox.getSelectedItem();
-                Room.RoomSize roomSize = (Room.RoomSize) sizeBox.getSelectedItem();
+                Room.QualityLevel quality = (Room.QualityLevel) qualityBox.getSelectedItem();
+                Room.RoomSize size = (Room.RoomSize) sizeBox.getSelectedItem();
 
-                GlobalVariables.rs.createRoom(
-                        roomNumber,
+                boolean updated = GlobalVariables.rs.updateRoom(
+                        originalRoomNumber,
+                        newRoomNumber,
                         beds,
                         maxOccupancy,
-                        baseDailyRate,
+                        rate,
                         smokingStatus,
                         bedTypes,
-                        qualityLevel,
-                        roomSize
+                        quality,
+                        size
                 );
 
-                Room createdRoom = GlobalVariables.rs.getRoom(roomNumber);
-                if (createdRoom != null) {
-                    GlobalVariables.rs.saveRoomToCSV(createdRoom);
+                if (!updated) {
+                    JOptionPane.showMessageDialog(null,
+                            "Room update failed. Check whether the room exists or the new number is already taken.");
+                    return;
                 }
 
-                JOptionPane.showMessageDialog(null, "Room added successfully.");
-                clearButton.doClick();
+                GlobalVariables.rs.rewriteRoomsCSV();
+
+                JOptionPane.showMessageDialog(null,
+                        "Room " + originalRoomNumber + " updated successfully.");
 
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(null, "Please enter valid numeric values.");
+                JOptionPane.showMessageDialog(null,
+                        "Please enter valid numbers for room number, beds, occupancy, and rate.");
             }
         });
 
