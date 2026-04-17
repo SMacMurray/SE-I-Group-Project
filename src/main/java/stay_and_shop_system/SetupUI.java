@@ -257,11 +257,8 @@ public class SetupUI {
             c.gridy = buttonCount;
             buttonCount++;
             buttonsPane.add(checkGuestBill, c);
-            checkGuestBill.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-
-                }
-            });
+            checkGuestBill.addActionListener(e ->
+                    JOptionPane.showMessageDialog(null, "You need to be signed in to view your bill."));
 
             JButton cancelReservationButton = setupSideBarButton("View My Reservations", 4, 0);
             c.gridx = 0;
@@ -289,20 +286,8 @@ public class SetupUI {
             c.gridy = buttonCount;
             buttonCount++;
             buttonsPane.add(shopButton, c);
-            shopButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    // Whatever is shopped will be attatched to the reservation that fits within the current time (or the reservation  thats checked in based on how we implement it).
-                    List<Reservation> reservationList = ReservationRepository.loadReservationsOfGuestId(((GuestInterface)user).getGuestId());
-                    if (reservationList.isEmpty()) {
-                        JOptionPane.showMessageDialog(null, "There are no reservations attached to this guest Id");
-                    }
-                    else {
-                        ShoppingPage newFrame = new ShoppingPage();
-                        frame.dispose();
-                        throw new RuntimeException("TODO: Gavin needs to finish the Shopping");
-                    }
-                }
-            });
+            shopButton.addActionListener(e ->
+                    JOptionPane.showMessageDialog(null, "You need to be signed in to use the shop."));
         }
         // Aligning buttons to top if there aren't enough buttons to fill JScrollPane.
         JButton fillButton = new JButton();
