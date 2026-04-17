@@ -4,9 +4,7 @@ import stay_and_shop_system.occupancy.Reservation;
 import stay_and_shop_system.occupancy.database.ReservationRepository;
 import stay_and_shop_system.occupancy.ui.*;
 import stay_and_shop_system.user.*;
-import stay_and_shop_system.user.ui.CancelReservationPage;
-import stay_and_shop_system.user.ui.LoginPage;
-import stay_and_shop_system.user.ui.ResetPasswordPage;
+import stay_and_shop_system.user.ui.*;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicScrollBarUI;
@@ -116,56 +114,58 @@ public class SetupUI {
         });
 
         if (user instanceof ClerkInterface) {
-
             JButton addRoomButton = setupSideBarButton("Add Room", 4, 0);
             c.gridx = 0;
-            c.gridy = buttonCount;
-            buttonCount++;
+            c.gridy = buttonCount++;
             buttonsPane.add(addRoomButton, c);
-
-            JButton viewRoomsButton = setupSideBarButton("View All Rooms", 4, 0);
-            c.gridx = 0;
-            c.gridy = buttonCount;
-            buttonCount++;
-            buttonsPane.add(viewRoomsButton, c);
-
-            JButton modifyRoomButton = setupSideBarButton("Modify Room", 4, 0);
-            c.gridx = 0;
-            c.gridy = buttonCount;
-            buttonCount++;
-            buttonsPane.add(modifyRoomButton, c);
-
-            JButton modifyMyInformationButton = setupSideBarButton("Modify My Information", 4, 0);
-            c.gridx = 0;
-            c.gridy = buttonCount;
-            buttonCount++;
-            buttonsPane.add(modifyMyInformationButton, c);
-
-            // Cancel/Modification of Guest's reservation
-            JButton cancelReservationButton = setupSideBarButton("View Guest's Reservations", 4, 0);
-            c.gridx = 0;
-            c.gridy = buttonCount;
-            buttonCount++;
-            buttonsPane.add(cancelReservationButton, c);
-            cancelReservationButton.addActionListener(new ActionListener() {
+            addRoomButton.addActionListener(new ActionListener() {
+                @Override
                 public void actionPerformed(ActionEvent e) {
-                    String response = JOptionPane.showInputDialog(null, "Enter your guest:", "Input Needed", JOptionPane.QUESTION_MESSAGE);
-
-                    throw new RuntimeException("TODO: Finish allowing Clerk to get a guest's reservations");
-
+                    ClerkAddRoomPage newFrame = new ClerkAddRoomPage();
+                    frame.dispose();
                 }
             });
 
-
-            JButton makeReservationButton = setupSideBarButton("Make Guest's Reservation", 4, 0);
+            JButton modifyRoomButton = setupSideBarButton("Modify Room", 4, 0);
             c.gridx = 0;
-            c.gridy = buttonCount;
-            buttonCount++;
-            buttonsPane.add(makeReservationButton, c);
+            c.gridy = buttonCount++;
+            buttonsPane.add(modifyRoomButton, c);
+
+            modifyRoomButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    ModifyRoomPage newFrame = new ModifyRoomPage();
+                    frame.dispose();
+                }
+            });
+
+            JButton viewRoomsButton = setupSideBarButton("View All Rooms", 4, 0);
+            c.gridx = 0;
+            c.gridy = buttonCount++;
+            buttonsPane.add(viewRoomsButton, c);
+
+            JButton modifyMyInformationButton = setupSideBarButton("Modify My Information", 4, 0);
+            c.gridx = 0;
+            c.gridy = buttonCount++;
+            buttonsPane.add(modifyMyInformationButton, c);
+
+            JButton modifyReservationButton = setupSideBarButton("Modify Guest Information", 4, 0);
+            c.gridx = 0;
+            c.gridy = buttonCount++;
+            buttonsPane.add(modifyReservationButton, c);
+
+            JButton cancelReservationButton = setupSideBarButton("Cancel Guest Reservation", 4, 0);
+            c.gridx = 0;
+            c.gridy = buttonCount++;
+            buttonsPane.add(cancelReservationButton, c);
             cancelReservationButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                   // This doesn't sound that complicated(to me, Joel), since it may just require the clerk to book a room with the guest's info.
-
+                    if (user instanceof GuestInterface guestUser) {
+                        CancelReservationPage newFrame = new CancelReservationPage(guestUser.getGuestId());
+                        frame.dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(frame, "This clerk account is not also a guest.");
+                    }
                 }
             });
 
@@ -175,12 +175,13 @@ public class SetupUI {
             buttonCount++;
             buttonsPane.add(checkGuestBill, c);
 
-            JButton checkGuest = setupSideBarButton("Check-in/Check-out Guest", 4, 0);
-            c.gridx = 0;
-            c.gridy = buttonCount;
-            buttonCount++;
-            buttonsPane.add(checkGuest, c);
-
+            checkGuestBill.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    CombinedBillPage newFrame = new CombinedBillPage(true);
+                    frame.dispose();
+                }
+            });
         }
         if (user instanceof AdminInterface) {
             // Based on the Project 12 deliverable, the Admin does not change the default password(since the clerk would), but can leave a predefined email.

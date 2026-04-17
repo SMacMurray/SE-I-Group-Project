@@ -3,7 +3,7 @@ package stay_and_shop_system.user.ui;
 import stay_and_shop_system.ColorPalette;
 import stay_and_shop_system.Main;
 import stay_and_shop_system.SetupUI;
-import stay_and_shop_system.user.AccountSystem;
+import stay_and_shop_system.user.UserRepository;
 import stay_and_shop_system.user.CombinedBillService;
 import stay_and_shop_system.occupancy.Reservation;
 import stay_and_shop_system.store.Product;
@@ -97,8 +97,8 @@ public class CombinedBillPage extends JFrame {
 
         if (!clerkMode) {
             String sessionEmail = "";
-            if (AccountSystem.getSessionAccount() != null) {
-                sessionEmail = AccountSystem.getSessionAccount().getEmail();
+            if (UserRepository.getSessionAccount() != null) {
+                sessionEmail = UserRepository.getSessionAccount().getEmail();
             }
             emailField.setText(sessionEmail);
             emailField.setEditable(false);

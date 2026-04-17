@@ -2,6 +2,7 @@ package stay_and_shop_system.user.ui;
 
 import stay_and_shop_system.*;
 import stay_and_shop_system.occupancy.Room;
+import stay_and_shop_system.ui.RoundJTextField;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

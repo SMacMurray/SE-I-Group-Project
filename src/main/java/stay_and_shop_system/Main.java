@@ -17,15 +17,9 @@ public class Main extends JFrame {
     public static String HOME_TEXT = "Home";
     static ReservationDataTable rdt = new ReservationDataTable();
 
-    public static void initRooms() {
-
-    	LoadCSV.loadRooms(); // Cant do this outside a function.
-    	
-    }
 
     public static void main(String[] args) {
         FlatLightLaf.setup();
-    	initRooms();
         SetupUI.setUpJOptionPaneDesign();
 //        rdt.dropTable();
     	rdt.createTable();
