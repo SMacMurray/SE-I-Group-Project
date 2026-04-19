@@ -65,7 +65,7 @@ public class HomePage extends JFrame {
         bookingButton.setBounds(10, 63, 122, 22);
         bookingButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	SearchRoomPage2 newFrame = new SearchRoomPage2(); //Opening the second JFrame
+            	SearchRoomPage2 newFrame = new SearchRoomPage2(null); //Opening the second JFrame
                 dispose(); //Disposing the First JFrame
             }
         });

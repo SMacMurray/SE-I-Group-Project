@@ -1,10 +1,7 @@
 package stay_and_shop_system.occupancy.ui;
 
 import stay_and_shop_system.*;
-import stay_and_shop_system.occupancy.ReservationController;
-import stay_and_shop_system.occupancy.Room;
-import stay_and_shop_system.occupancy.RoomCriteria;
-import stay_and_shop_system.occupancy.SearchController;
+import stay_and_shop_system.occupancy.*;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -44,6 +41,8 @@ public class SearchRoomPage2 extends JFrame{
 
     ReservationController res = new ReservationController();
     SearchController sc = new SearchController();
+
+    Object[] reservationData;
 
     public JLabel createBackground() {
         pagePane = new JPanel(new GridBagLayout());
@@ -470,7 +469,7 @@ public class SearchRoomPage2 extends JFrame{
             changeEditabilityOfSearchButton(true);
             return;
         }
-        if (startDate.before(todayDate)) { // If startDate is before today's date.
+        if (startDate.before(todayDate) && (reservationData == null || reservationData.length == 1)) { // If startDate is before today's date AND not trying to modify a reservation.
             dateSRange.setBorder(BorderFactory.createMatteBorder(2,2,2,2, ColorPalette.INVALID_RED));
             changeEditabilityOfSearchButton(true);
             return;
@@ -520,7 +519,9 @@ public class SearchRoomPage2 extends JFrame{
             searchButton.setText("Search Room");
         }
     }
-    public SearchRoomPage2() {
+    public SearchRoomPage2(Object[] reD) {
+        reservationData = reD;
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1000, 800);
         setLocationRelativeTo(null); // Centers the screen
@@ -578,11 +579,13 @@ public class SearchRoomPage2 extends JFrame{
         searchPane.add(fillButton1, c);
 
 
-        JPanel progressWrapper = new JPanel(new FlowLayout());
-        progressWrapper.setOpaque(false);
-        JButton progressBar = makeProgressBar();
-        progressWrapper.add(progressBar);
-        background.add(progressWrapper, BorderLayout.PAGE_START);
+        if (reservationData == null || reservationData.length == 1) {
+            JPanel progressWrapper = new JPanel(new FlowLayout());
+            progressWrapper.setOpaque(false);
+            JButton progressBar = makeProgressBar();
+            progressWrapper.add(progressBar);
+            background.add(progressWrapper, BorderLayout.PAGE_START);
+        }
 
         addSearchCriteria();
         addCriteriaListeners();
@@ -649,7 +652,7 @@ public class SearchRoomPage2 extends JFrame{
 
                 RoomCriteria rc = new RoomCriteria(guestRange, bedRange, smokingStatuses, roomRanges, bedTypes, roomSizes, costRange, dateRange);
 
-                BookingPage newFrame = new BookingPage(sc.searchAvailableRooms(rc), rc);
+                BookingPage newFrame = new BookingPage(sc.searchAvailableRooms(rc), rc, reservationData);
                 dispose();
             }
         });
@@ -668,12 +671,28 @@ public class SearchRoomPage2 extends JFrame{
 
         setVisible(true);
 
-        timer.start();
+
+        if (reservationData != null && reservationData.length > 1) {
+            Reservation r = (Reservation) reservationData[0];
+            guestSRange.setText(Integer.toString((int)reservationData[1]));
+            guestSRange.setEnabled(false);
+            dateSRange.setText(r.getFormattedStartDate());
+            dateSRange.setEnabled(false);
+            dateERange.setText(r.getFormattedEndDate());
+            dateERange.setEnabled(false);
+
+        }
+        else {
+            timer.start();
+
+        }
 
     }
     @Override
     public void dispose() {
-        timer.stop(); // To prevent the timer from continuing when immediately leaving the page before the timer is done.
+        if (timer != null) {
+            timer.stop(); // To prevent the timer from continuing when immediately leaving the page before the timer is done.
+        }
         super.dispose();
     }
 }

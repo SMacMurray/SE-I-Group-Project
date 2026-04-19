@@ -148,10 +148,17 @@ public class SetupUI {
             buttonsPane.add(cancelReservationButton, c);
             cancelReservationButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    String response = JOptionPane.showInputDialog(null, "Enter your guest:", "Input Needed", JOptionPane.QUESTION_MESSAGE);
-
-                    throw new RuntimeException("TODO: Finish allowing Clerk to get a guest's reservations");
-
+                    String response = JOptionPane.showInputDialog(null, "Enter the guest's Id:", "View Reservations", JOptionPane.QUESTION_MESSAGE);
+                    if (response != null) { // if was not canceled or not empty
+                        response = (response.isEmpty()) ? "-1" : response;
+                        List<Reservation> reservationList = ReservationRepository.loadReservationsOfGuestId(Integer.parseInt(response));
+                        if (reservationList.isEmpty()) {
+                            JOptionPane.showMessageDialog(null, "There are no reservations attached to this guest Id");
+                        } else {
+                            CancelReservationPage newFrame = new CancelReservationPage(Integer.parseInt(response), null);
+                            frame.dispose();
+                        }
+                    }
                 }
             });
 
@@ -161,9 +168,16 @@ public class SetupUI {
             c.gridy = buttonCount;
             buttonCount++;
             buttonsPane.add(makeReservationButton, c);
-            cancelReservationButton.addActionListener(new ActionListener() {
+            makeReservationButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                   // This doesn't sound that complicated(to me, Joel), since it may just require the clerk to book a room with the guest's info.
+                    String response = JOptionPane.showInputDialog(null, "Enter the guest's email:", "Make Reservation", JOptionPane.QUESTION_MESSAGE);
+                    if (response.isEmpty() || !Reservation.validateEmail(response)) {
+                        JOptionPane.showMessageDialog(null, "The email is invalid.");
+                    }
+                    else {
+                        SearchRoomPage2 newFrame = new SearchRoomPage2(new Object[] { response });
+                        frame.dispose();
+                    }
 
                 }
             });
@@ -216,7 +230,7 @@ public class SetupUI {
                         JOptionPane.showMessageDialog(null, "There are no reservations attached to this guest Id");
                     }
                     else {
-                        CancelReservationPage newFrame = new CancelReservationPage(((GuestInterface)user).getGuestId());
+                        CancelReservationPage newFrame = new CancelReservationPage(((GuestInterface)user).getGuestId(), null);
                         frame.dispose();
                     }
                 }
@@ -269,7 +283,7 @@ public class SetupUI {
                         if (reservationList.isEmpty()) {
                             JOptionPane.showMessageDialog(null, "There are no reservations attached to this guest Id");
                         } else {
-                            CancelReservationPage newFrame = new CancelReservationPage(Integer.parseInt(response));
+                            CancelReservationPage newFrame = new CancelReservationPage(Integer.parseInt(response), null);
                             frame.dispose();
                         }
                     }
@@ -444,7 +458,7 @@ public class SetupUI {
         bookRoomButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                SearchRoomPage2 newFrame = new SearchRoomPage2();
+                SearchRoomPage2 newFrame = new SearchRoomPage2(null);
 //                BookingPage newFrame = new BookingPage(new ArrayList<Room>());
 //                ReservationSuccessPage newFrame = new ReservationSuccessPage(102043040, 510.99, Calendar.getInstance(), Calendar.getInstance());
 
