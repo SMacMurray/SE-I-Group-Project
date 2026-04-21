@@ -2,6 +2,7 @@ package stay_and_shop_system.user.ui;
 
 import stay_and_shop_system.*;
 import stay_and_shop_system.occupancy.Room;
+import stay_and_shop_system.occupancy.database.RoomRepository;
 import stay_and_shop_system.ui.RoundJTextField;
 
 import javax.swing.*;
@@ -198,7 +199,8 @@ public class ClerkAddRoomPage extends JFrame {
                     JOptionPane.showMessageDialog(null, "Base daily rate cannot be negative.");
                     return;
                 }
-                if (GlobalVariables.rs.getRoom(roomNumber) != null) {
+
+                if (RoomRepository.loadRoomOfRoomNumber(roomNumber) != null) {
                     JOptionPane.showMessageDialog(null, "A room with that room number already exists.");
                     return;
                 }
@@ -214,7 +216,7 @@ public class ClerkAddRoomPage extends JFrame {
                 Room.QualityLevel qualityLevel = (Room.QualityLevel) qualityBox.getSelectedItem();
                 Room.RoomSize roomSize = (Room.RoomSize) sizeBox.getSelectedItem();
 
-                GlobalVariables.rs.createRoom(
+                Room newRoom = new Room(
                         roomNumber,
                         beds,
                         maxOccupancy,
@@ -225,10 +227,7 @@ public class ClerkAddRoomPage extends JFrame {
                         roomSize
                 );
 
-                Room createdRoom = GlobalVariables.rs.getRoom(roomNumber);
-                if (createdRoom != null) {
-                    GlobalVariables.rs.saveRoomToCSV(createdRoom);
-                }
+                RoomRepository.addRoom(newRoom);
 
                 JOptionPane.showMessageDialog(null, "Room added successfully.");
                 clearButton.doClick();

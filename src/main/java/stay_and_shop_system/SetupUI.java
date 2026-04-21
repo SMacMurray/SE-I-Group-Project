@@ -211,6 +211,13 @@ public class SetupUI {
             c.gridy = buttonCount;
             buttonCount++;
             buttonsPane.add(checkGuestBill, c);
+            checkGuestBill.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    CombinedBillPage newFrame = new CombinedBillPage(false);
+                    frame.dispose();
+                }
+            });
 
             JButton cancelReservationButton = setupSideBarButton("View My Reservations", 4, 0);
             c.gridx = 0;
@@ -258,8 +265,10 @@ public class SetupUI {
             buttonCount++;
             buttonsPane.add(checkGuestBill, c);
             checkGuestBill.addActionListener(new ActionListener() {
+                @Override
                 public void actionPerformed(ActionEvent e) {
-
+                    CombinedBillPage newFrame = new CombinedBillPage(false);
+                    frame.dispose();
                 }
             });
 

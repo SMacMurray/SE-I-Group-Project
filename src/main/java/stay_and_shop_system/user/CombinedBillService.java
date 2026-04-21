@@ -1,15 +1,15 @@
 package stay_and_shop_system.user;
 
 import stay_and_shop_system.occupancy.Reservation;
-import stay_and_shop_system.occupancy.ReservationService;
+import stay_and_shop_system.occupancy.database.ReservationRepository;
 import stay_and_shop_system.store.Product;
 import stay_and_shop_system.store.StoreService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class CombinedBillService {
-    private final ReservationService reservationService = new ReservationService();
     private final StoreService storeService = new StoreService();
 
     public List<Reservation> getReservationsForEmail(String email) {
@@ -17,8 +17,8 @@ public class CombinedBillService {
             return new ArrayList<>();
         }
 
-        Guest guest = new Guest("Billing Lookup", email);
-        return reservationService.findReservationsOfGuest(guest);
+        int guestId = Math.abs(Objects.hash(email));
+        return ReservationRepository.loadReservationsOfGuestId(guestId);
     }
 
     public List<Product> getProductsForEmail(String email) {

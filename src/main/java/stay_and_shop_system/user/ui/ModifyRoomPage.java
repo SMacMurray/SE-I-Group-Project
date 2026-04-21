@@ -2,6 +2,7 @@ package stay_and_shop_system.user.ui;
 
 import stay_and_shop_system.*;
 import stay_and_shop_system.occupancy.Room;
+import stay_and_shop_system.occupancy.database.RoomRepository;
 import stay_and_shop_system.ui.RoundJTextField;
 
 import javax.swing.*;
@@ -195,7 +196,7 @@ public class ModifyRoomPage extends JFrame {
         loadButton.addActionListener(e -> {
             try {
                 int roomNumber = Integer.parseInt(lookupRoomField.getText().trim());
-                Room room = GlobalVariables.rs.getRoom(roomNumber);
+                Room room = RoomRepository.loadRoomOfRoomNumber(roomNumber);
 
                 if (room == null) {
                     JOptionPane.showMessageDialog(null, "No room exists with that room number.");
@@ -260,6 +261,18 @@ public class ModifyRoomPage extends JFrame {
                     return;
                 }
 
+                Room existingRoom = RoomRepository.loadRoomOfRoomNumber(originalRoomNumber);
+                if (existingRoom == null) {
+                    JOptionPane.showMessageDialog(null, "That original room does not exist.");
+                    return;
+                }
+
+                Room roomWithNewNumber = RoomRepository.loadRoomOfRoomNumber(newRoomNumber);
+                if (newRoomNumber != originalRoomNumber && roomWithNewNumber != null) {
+                    JOptionPane.showMessageDialog(null, "The new room number is already taken.");
+                    return;
+                }
+
                 boolean smokingStatus = ((String) smokingBox.getSelectedItem()).equalsIgnoreCase("Permitted");
 
                 List<Room.BedType> bedTypes = new ArrayList<>();
@@ -271,8 +284,7 @@ public class ModifyRoomPage extends JFrame {
                 Room.QualityLevel quality = (Room.QualityLevel) qualityBox.getSelectedItem();
                 Room.RoomSize size = (Room.RoomSize) sizeBox.getSelectedItem();
 
-                boolean updated = GlobalVariables.rs.updateRoom(
-                        originalRoomNumber,
+                Room updatedRoom = new Room(
                         newRoomNumber,
                         beds,
                         maxOccupancy,
@@ -283,13 +295,7 @@ public class ModifyRoomPage extends JFrame {
                         size
                 );
 
-                if (!updated) {
-                    JOptionPane.showMessageDialog(null,
-                            "Room update failed. Check whether the room exists or the new number is already taken.");
-                    return;
-                }
-
-                GlobalVariables.rs.rewriteRoomsCSV();
+                RoomRepository.updateRoom(originalRoomNumber, updatedRoom);
 
                 JOptionPane.showMessageDialog(null,
                         "Room " + originalRoomNumber + " updated successfully.");

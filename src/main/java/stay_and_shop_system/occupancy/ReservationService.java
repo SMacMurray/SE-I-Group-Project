@@ -54,7 +54,7 @@ public class ReservationService {
         loadReservations();
 
         for (Reservation re : reservations) {
-            rooms.remove(re.room);
+            rooms.remove(re.getRoom());
         }
 
         return rooms;
