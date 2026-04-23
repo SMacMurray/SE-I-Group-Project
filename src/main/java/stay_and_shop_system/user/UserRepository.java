@@ -159,6 +159,36 @@ public class UserRepository {
 		return false;
 	}
 
+	// Creates a clerk account without automatically logging in.
+	static boolean createClerk(String email, String username, int passwordHash, String phoneNumber){
+		String sql = """
+				INSERT INTO Users (email, name, password, phoneNumber, creditCardNumber, ccv, billingAddress, expirationDate, priveleges)
+				VALUES (?,?,?,?,?,?,?,?,1)
+				RETURNING *
+				""";
+		try (var connection = DatabaseConnection.connect();
+		     var stmt = connection.prepareStatement(sql)) {
+			if (findUserWithoutPassword(email)) {
+				deleteUser(email);
+			}
+
+			stmt.setString(1, email);
+			stmt.setString(2, username);
+			stmt.setInt(3, passwordHash);
+			stmt.setString(4, phoneNumber);
+			stmt.setString(5, null);
+			stmt.setString(6, null);
+			stmt.setString(7, null);
+			stmt.setString(8, null);
+			stmt.executeQuery();
+			return true;
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+		return false;
+	}
+
 	// Updates the password
 	public static boolean updatePassword(String email, int passwordHash) {
 		String sql = """

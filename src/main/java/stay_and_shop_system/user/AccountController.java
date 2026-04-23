@@ -8,12 +8,20 @@ public class AccountController {
     // In case we ever decide to change how passwords are hashed.
     private static int hashPassword(String password) { return Objects.hash(password); }
 
-    // Ignore email and phone numbers fields for now for simplicity.
     public static int createAccount(String email, String username, String password, String phoneNumber){
         int hash = hashPassword(password);
         boolean accountFound = UserRepository.findAccount(email);
         if (!accountFound){
             return (UserRepository.createAccount(email, username, hash, phoneNumber) ? 0 : -1);
+        }
+        return 1;
+    }
+
+    public static int createClerk(String email, String username, String password, String phoneNumber){
+        int hash = hashPassword(password);
+        boolean accountFound = UserRepository.findAccount(email);
+        if (!accountFound){
+            return (UserRepository.createClerk(email, username, hash, phoneNumber) ? 0 : -1);
         }
         return 1;
     }

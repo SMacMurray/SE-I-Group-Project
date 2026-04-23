@@ -185,11 +185,17 @@ public class SetupUI {
         }
         if (user instanceof AdminInterface) {
             // Based on the Project 12 deliverable, the Admin does not change the default password(since the clerk would), but can leave a predefined email.
-            JButton addRoomButton = setupSideBarButton("Create Hotel Clerk", 4, 0);
+            JButton createClerkButton = setupSideBarButton("Create Hotel Clerk", 4, 0);
             c.gridx = 0;
             c.gridy = buttonCount;
             buttonCount++;
-            buttonsPane.add(addRoomButton, c);
+            createClerkButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    CreateHotelClerkPage newFrame = new CreateHotelClerkPage();
+                    frame.dispose();
+                }
+            });
+            buttonsPane.add(createClerkButton, c);
 
             // Joel: Make sure to check User has a password in the first place.
             JButton resetUserPassButton = setupSideBarButton("Reset User Password", 4, 0);
