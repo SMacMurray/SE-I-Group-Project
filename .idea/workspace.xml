@@ -4,62 +4,54 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="428cf44f-7588-43e7-9bd3-c1681c4f300e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/stay_and_shop_system/user/ui/CreateHotelClerkPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/data_sources_history.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/data_sources_history.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hotelSystem.db" beforeDir="false" afterPath="$PROJECT_DIR$/hotelSystem.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/stay_and_shop_system/SetupUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/stay_and_shop_system/SetupUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/stay_and_shop_system/user/AccountController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/stay_and_shop_system/user/AccountController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/stay_and_shop_system/user/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/stay_and_shop_system/user/UserRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/SetupUI$10.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/SetupUI$10.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/SetupUI$11.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/SetupUI$11.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/SetupUI$12.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/SetupUI$12.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/SetupUI$13.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/SetupUI$13.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/SetupUI$14.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/SetupUI$14.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/SetupUI$15.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/SetupUI$15.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/SetupUI$16.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/SetupUI$16.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/SetupUI$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/SetupUI$6.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/SetupUI$7.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/SetupUI$7.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/SetupUI$8.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/SetupUI$8.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/SetupUI$9.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/SetupUI$9.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/SetupUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/SetupUI.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/user/AccountController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/user/AccountController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/stay_and_shop_system/user/UserRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stay_and_shop_system/user/UserRepository.class" afterDir="false" />
-    </list>
+    <list default="true" id="9ce3b8bd-c022-4a38-82f7-0c3c38d890dd" name="Changes" comment="Preparing for commit with Main." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Class" />
-      </list>
-    </option>
-  </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="reserveMergeBranch" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory">{
-  &quot;lastFilter&quot;: {
-    &quot;state&quot;: &quot;OPEN&quot;,
-    &quot;assignee&quot;: &quot;SMacMurray&quot;
-  }
-}</component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {}
+}]]></component>
+  <component name="GitHubPullRequestState"><![CDATA[{
+  "prStates": [
+    {
+      "id": {
+        "id": "PR_kwDOQ_V3_c7VLBfr",
+        "number": 4
+      },
+      "lastSeen": 1777043795836
+    }
+  ]
+}]]></component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/SMacMurray/SE-I-Group-Project.git&quot;,
-    &quot;accountId&quot;: &quot;2725d8c0-c490-4f00-87ce-4e875b3c3011&quot;
+    &quot;accountId&quot;: &quot;d93d024d-2caf-41bd-ab2d-d15cb09bfa83&quot;
+  },
+  &quot;recentNewPullRequestHead&quot;: {
+    &quot;server&quot;: {
+      &quot;useHttp&quot;: false,
+      &quot;host&quot;: &quot;github.com&quot;,
+      &quot;port&quot;: null,
+      &quot;suffix&quot;: null
+    },
+    &quot;owner&quot;: &quot;SMacMurray&quot;,
+    &quot;repository&quot;: &quot;SE-I-Group-Project&quot;
   }
 }</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
 }</component>
-  <component name="ProjectId" id="3BwcUtg2w8jaED4SXlSgM2YfvAZ" />
+  <component name="ProjectId" id="3Cma7A4uHn1L1JQHzXsJ78wwu19" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -67,76 +59,66 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Application.Main.executor": "Run",
-    "Application.Unnamed.executor": "Run",
-    "Downloaded.Files.Path.Enabled": "false",
-    "Repository.Attach.Annotations": "false",
-    "Repository.Attach.JavaDocs": "false",
-    "Repository.Attach.Sources": "false",
+    "JUnit.ReserveRoomTesting.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Libraries",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.20344828",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
-    "vue.rearranger.settings.migration": "true"
+    "last_opened_file_path": "/Users/joelflanagan/Downloads/SE-I-Group-Project"
   }
 }]]></component>
-  <component name="RecentsManager">
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="stay_and_shop_system.user.ui" />
-    </key>
-  </component>
   <component name="RunManager">
-    <configuration name="Unnamed" type="Application" factoryName="Application" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="stay_and_shop_system.Main" />
+    <configuration default="true" type="JetRunConfigurationType">
       <module name="GroupProject" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="GroupProject" />
+      <option name="filePath" />
+      <method v="2" />
+    </configuration>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-30f59d01ecdd-2fc7cc6b9a17-intellij.indexing.shared.core-IU-253.30387.90" />
+        <option value="bundled-jdk-30f59d01ecdd-26cb7f24e5b0-intellij.indexing.shared.core-IU-253.29346.240" />
       </set>
     </attachedChunks>
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="428cf44f-7588-43e7-9bd3-c1681c4f300e" name="Changes" comment="" />
-      <created>1775403596738</created>
+      <changelist id="9ce3b8bd-c022-4a38-82f7-0c3c38d890dd" name="Changes" comment="" />
+      <created>1776993029236</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1775403596738</updated>
-      <workItem from="1775518818417" duration="5900000" />
-      <workItem from="1775610133260" duration="1626000" />
-      <workItem from="1775774929849" duration="7169000" />
-      <workItem from="1775860694482" duration="9145000" />
-      <workItem from="1775871008409" duration="195000" />
-      <workItem from="1776281495931" duration="1319000" />
-      <workItem from="1776284104301" duration="5398000" />
-      <workItem from="1776387004767" duration="714000" />
+      <updated>1776993029236</updated>
     </task>
-    <task id="LOCAL-00001">
+    <task id="LOCAL-00001" summary="Merging Joel, Scott, Jeffery, and Gavin's current work.">
       <option name="closed" value="true" />
-      <created>1775513508300</created>
+      <created>1777044069842</created>
       <option name="number" value="00001" />
       <option name="presentableId" value="LOCAL-00001" />
       <option name="project" value="LOCAL" />
-      <updated>1775513508300</updated>
+      <updated>1777044069842</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Preparing for commit with Main.">
+      <option name="closed" value="true" />
+      <created>1777051171867</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1777051171867</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
-  <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="3" />
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Merging Joel, Scott, Jeffery, and Gavin's current work." />
+    <MESSAGE value="Preparing for commit with Main." />
+    <option name="LAST_COMMIT_MESSAGE" value="Preparing for commit with Main." />
   </component>
 </project>
