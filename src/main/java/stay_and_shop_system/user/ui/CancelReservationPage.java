@@ -5,12 +5,11 @@ import stay_and_shop_system.Main;
 import stay_and_shop_system.SetupUI;
 import stay_and_shop_system.occupancy.*;
 import stay_and_shop_system.occupancy.database.ReservationRepository;
-import stay_and_shop_system.user.*;
+import stay_and_shop_system.occupancy.ui.SearchRoomPage2;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
-import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -23,9 +22,21 @@ public class CancelReservationPage extends JFrame{
     private JPanel mainPane;
     private JPanel contentPane;
     private JPanel headerPane;
-    private Reservation cancelR;
+    private Reservation reservation;
+    private JPanel modifyDataPane;
+    private JPanel reservationDataPanel;
+    private JPanel centerWrapper;
+
+    private JButton modifySearchB;
+    private JTextField reservationGuestNumberJTF;
+    private JTextField reservationGuestNameJTF;
+    private JTextField reservationGuestEmailJTF;
+    private JTextField reservationCCNJTF;
 
     private ReservationController res = new ReservationController();
+
+    private int guestId = 0;
+    Object[] reservationData;
 
     public JTextArea createStyledJTextArea(String text) {
         JTextArea jta = new JTextArea(text);
@@ -36,7 +47,200 @@ public class CancelReservationPage extends JFrame{
 
         return jta;
     }
-    public CancelReservationPage(int guestId) {
+    public void createModifyDataPanel() {
+        modifyDataPane = new JPanel(new GridBagLayout());
+        modifyDataPane.setOpaque(false);
+        modifyDataPane.setPreferredSize(new Dimension(400, 600));
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.HORIZONTAL;
+        JLabel reservationTitleJL = new JLabel("");
+        reservationTitleJL.setFont(new Font("Serif", Font.ITALIC, 30));
+        reservationTitleJL.setForeground(ColorPalette.OCEAN_LIGHTBLUE);
+        c.gridx = 0;
+        c.gridy = 0;
+        c.gridwidth = 2;
+        c.insets = new Insets(60, 0, 0, 0);
+        modifyDataPane.add(reservationTitleJL, c);
+        JLabel reservationRoomSearchJL = new JLabel("Search For a Room: ");
+        reservationRoomSearchJL.setFont(new Font("Serif", Font.PLAIN, 20));
+        reservationRoomSearchJL.setForeground(ColorPalette.DESATURATED_DARKBLUE);
+        c.gridx = 0;
+        c.gridy = 1;
+        c.gridwidth = 1;
+        c.insets = new Insets(40, 0, 0, 0);
+        c.fill = GridBagConstraints.HORIZONTAL;
+//        c.anchor = GridBagConstraints.LINE_START;
+        modifyDataPane.add(reservationRoomSearchJL, c);
+        modifySearchB = new JButton("Room Number " + reservation.getRoomNumber());
+        modifySearchB.setName(Integer.toString(reservation.getRoomNumber()));
+        modifySearchB.setFont(new Font("Serif", Font.PLAIN, 18));
+        modifySearchB.setForeground(ColorPalette.OCEAN_BLUE);
+        modifySearchB.setBackground(ColorPalette.OCEAN_DARKBLUE);
+        modifySearchB.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                reservationData = new Object[] { reservation, Integer.parseInt(reservationGuestNumberJTF.getText()),
+                                                reservationGuestNameJTF.getText(), reservationGuestEmailJTF.getText(),
+                                                reservationCCNJTF.getText(), null, guestId};
+                SearchRoomPage2 newFrame = new SearchRoomPage2(reservationData);
+                dispose();
+            }
+        });
+        c.gridx = 1;
+        c.gridy = 1;
+        c.gridwidth = 1;
+        c.insets = new Insets(40, 0, 0, 0);
+        modifyDataPane.add(modifySearchB, c);
+//        c.anchor = GridBagConstraints.LINE_START;
+        JLabel reservationGuestNumberJL = new JLabel("Guest Number: ");
+        reservationGuestNumberJL.setFont(new Font("Serif", Font.PLAIN, 20));
+        reservationGuestNumberJL.setForeground(ColorPalette.DESATURATED_DARKBLUE);
+        c.gridx = 0;
+        c.gridy = 2;
+        c.insets = new Insets(0, 0, 0, 0);
+        modifyDataPane.add(reservationGuestNumberJL, c);
+        reservationGuestNumberJTF = new JTextField(16);
+        reservationGuestNumberJTF.setBorder(BorderFactory.createMatteBorder(2,2,2,2, ColorPalette.SATURATED_LIGHTBLUE));
+        c.gridx = 1;
+        c.gridy = 2;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        modifyDataPane.add(reservationGuestNumberJTF, c);
+        JLabel reservationGuestNameJL = new JLabel("Guest Name: ");
+        reservationGuestNameJL.setFont(new Font("Serif", Font.PLAIN, 20));
+        reservationGuestNameJL.setForeground(ColorPalette.DESATURATED_DARKBLUE);
+        c.gridx = 0;
+        c.gridy = 4;
+        modifyDataPane.add(reservationGuestNameJL, c);
+        reservationGuestNameJTF = new JTextField(16);
+        reservationGuestNameJTF.setBorder(BorderFactory.createMatteBorder(2,2,2,2, ColorPalette.SATURATED_LIGHTBLUE));
+        c.gridx = 1;
+        c.gridy = 4;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        modifyDataPane.add(reservationGuestNameJTF, c);
+        JLabel reservationGuestEmailJL = new JLabel("Guest Email: ");
+        reservationGuestEmailJL.setFont(new Font("Serif", Font.PLAIN, 20));
+        reservationGuestEmailJL.setForeground(ColorPalette.DESATURATED_DARKBLUE);
+        c.gridx = 0;
+        c.gridy = 5;
+        modifyDataPane.add(reservationGuestEmailJL, c);
+        reservationGuestEmailJTF = new JTextField(16);
+        reservationGuestEmailJTF.setBorder(BorderFactory.createMatteBorder(2,2,2,2, ColorPalette.SATURATED_LIGHTBLUE));
+        c.gridx = 1;
+        c.gridy = 5;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        modifyDataPane.add(reservationGuestEmailJTF, c);
+        JLabel reservationCCNJL = new JLabel("Credit Card Number: ");
+        reservationCCNJL.setFont(new Font("Serif", Font.PLAIN, 20));
+        reservationCCNJL.setForeground(ColorPalette.DESATURATED_DARKBLUE);
+        c.gridx = 0;
+        c.gridy = 6;
+        modifyDataPane.add(reservationCCNJL, c);
+        reservationCCNJTF = new JTextField(16);
+        reservationCCNJTF.setBorder(BorderFactory.createMatteBorder(2,2,2,2, ColorPalette.SATURATED_LIGHTBLUE));
+        c.gridx = 1;
+        c.gridy = 6;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        modifyDataPane.add(reservationCCNJTF, c);
+        JButton modifyCancelB = new JButton("Cancel Changes");
+        modifyCancelB.setFont(new Font("Serif", Font.PLAIN, 20));
+        modifyCancelB.setForeground(ColorPalette.OCEAN_BLUE);
+        modifyCancelB.setBackground(ColorPalette.OCEAN_DARKBLUE);
+        modifyCancelB.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                centerWrapper.remove(modifyDataPane);
+                centerWrapper.add(reservationDataPanel, BorderLayout.CENTER);
+                contentPane.revalidate();
+                contentPane.repaint();
+            }
+        });
+        c.gridx = 0;
+        c.gridy = 7;
+        c.gridwidth = 2;
+        c.insets = new Insets(100, 0, 0, 0);
+        modifyDataPane.add(modifyCancelB, c);
+        JButton modifyChangeB = new JButton("Change Reservation");
+        modifyChangeB.setFont(new Font("Serif", Font.PLAIN, 20));
+        modifyChangeB.setForeground(ColorPalette.OCEAN_BLUE);
+        modifyChangeB.setBackground(ColorPalette.OCEAN_DARKBLUE);
+        modifyChangeB.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int choice = JOptionPane.showConfirmDialog(
+                        null,
+                        "Do you want to change this reservation?",
+                        "Change Reservation?",
+                        JOptionPane.YES_NO_OPTION
+                );
+                if (choice == JOptionPane.YES_OPTION) {
+                    boolean changeEmail = false;
+                    if (!reservationGuestEmailJTF.getText().equals(reservation.getGuestEmail())) {
+                        int emailChoice = JOptionPane.showConfirmDialog(
+                                null,
+                                "Are you sure you want to change the email? This will cause the guest Id to change.",
+                                "Change Email?",
+                                JOptionPane.YES_NO_OPTION
+                        );
+                        if (emailChoice == JOptionPane.NO_OPTION) {
+                            return;
+                        }
+                        changeEmail = true;
+                    }
+
+                    int roomNumber = Integer.parseInt(modifySearchB.getName());
+                    Reservation r;
+                    try {
+                        r = res.modifyReservation(reservation, roomNumber, Integer.parseInt(reservationGuestNumberJTF.getText()), reservationGuestNameJTF.getText(),
+                                reservationGuestEmailJTF.getText(), reservationCCNJTF.getText()
+                        );
+                    }
+                    catch (IllegalArgumentException exp) {
+                        JOptionPane.showMessageDialog(null, exp.getMessage());
+                        return;
+                    }
+
+                    if (changeEmail) {
+                        JOptionPane.showMessageDialog(null, "New Guest Id: " + r.getGuestId());
+                    }
+
+                    CancelReservationPage newFrame = new CancelReservationPage(guestId, null);
+                    dispose();
+                }
+            }
+        });
+        c.gridx = 0;
+        c.gridy = 8;
+        c.gridwidth = 2;
+        c.insets = new Insets(15, 0, 0, 0);
+        modifyDataPane.add(modifyChangeB, c);
+        JButton fillButton1 = new JButton(); // to force the components to align to the top
+        SetupUI.makeButtonInvisible(fillButton1);
+        c.gridx = 0;
+        c.gridy = 9;
+        c.gridwidth = 2;
+        c.weighty = 1;
+        c.insets = new Insets(0, 0, 0, 0);
+        modifyDataPane.add(fillButton1, c);
+
+        // Room Search
+        // Guest Num - Exception where num > rommMaxOcc
+        // GuestName
+        // GuestEmail - Alert, changing your email will change your guestId for this reservation. Better to not let them change it because will cause to have to search multiple reservations by certain guestIds each.
+        // Credit Card Numbert
+        // When Clerk Changes their email, will cause guestId to change
+
+        reservationTitleJL.setText("RESERVATION AT ROOM " + reservation.getRoomNumber());
+        String roomFloor;
+//        reservationRoomSearchJL.setText("");
+        reservationGuestNumberJTF.setText(Integer.toString(reservation.getGuestNumber()));
+        reservationGuestNameJTF.setText(reservation.getGuestName());
+        reservationGuestEmailJTF.setText(reservation.getGuestEmail());
+        reservationCCNJTF.setText(reservation.getCreditCardNumber());
+    }
+    public CancelReservationPage(int gId, Object[] reData) {
+        this.guestId = gId;
+        reservationData = reData;
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1000, 800);
         setLocationRelativeTo(null);
@@ -51,14 +255,15 @@ public class CancelReservationPage extends JFrame{
         contentPane.setBackground(ColorPalette.OCEAN_BLUE);
         mainPane.add(contentPane);
 
-        JPanel centerWrapper = new JPanel(new BorderLayout());
+        centerWrapper = new JPanel(new BorderLayout());
         centerWrapper.setOpaque(false);
         JSeparator verticalLine = new JSeparator(SwingConstants.VERTICAL);
         verticalLine.setForeground(ColorPalette.OCEAN_LIGHTBLUE);
         contentPane.add(verticalLine, BorderLayout.CENTER);
         centerWrapper.add(verticalLine, BorderLayout.LINE_START);
 
-        JPanel reservationDataPanel = new JPanel(new GridBagLayout());
+        // View Reservation Info
+        reservationDataPanel = new JPanel(new GridBagLayout());
         reservationDataPanel.setOpaque(false);
         reservationDataPanel.setPreferredSize(new Dimension(400, 600));
         GridBagConstraints c = new GridBagConstraints();
@@ -119,8 +324,8 @@ public class CancelReservationPage extends JFrame{
                         JOptionPane.YES_NO_OPTION
                 );
                 if (choice == JOptionPane.YES_OPTION) {
-                    ReservationRepository.deleteReservation(cancelR);
-                    CancelReservationPage newFrame = new CancelReservationPage(guestId);
+                    ReservationRepository.deleteReservation(reservation);
+                    CancelReservationPage newFrame = new CancelReservationPage(guestId, null);
                     dispose();
                 }
             }
@@ -129,17 +334,47 @@ public class CancelReservationPage extends JFrame{
         c.gridy = 6;
         c.insets = new Insets(150, 0, 0, 0);
         reservationDataPanel.add(reservationCancelB, c);
-        JButton fillButton1 = new JButton(); // to force the components to align to the top
+
+        // Making modifyDataPane
+        modifyDataPane = new JPanel();
+
+        JButton reservationModifyB = new JButton("Modify Reservation?");
+        reservationModifyB.setVisible(false);
+        reservationModifyB.setFont(new Font("Serif", Font.PLAIN, 20));
+        reservationModifyB.setForeground(ColorPalette.OCEAN_BLUE);
+        reservationModifyB.setBackground(ColorPalette.OCEAN_DARKBLUE);
+        reservationModifyB.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                centerWrapper.remove(reservationDataPanel);
+                createModifyDataPanel();
+                centerWrapper.add(modifyDataPane, BorderLayout.CENTER);
+
+                centerWrapper.revalidate();
+                centerWrapper.repaint();
+                contentPane.revalidate();
+                contentPane.repaint();
+            }
+        });
         c.gridx = 0;
         c.gridy = 7;
-        c.insets = new Insets(0, 0, 0, 0);
-        c.weighty = 0.5; // any number higher than 0 will work since the others are at 0;
+        c.insets = new Insets(50, 0, 0, 0);
+        c.weighty = 0;
+        reservationDataPanel.add(reservationModifyB, c);
+        JButton fillButton1 = new JButton();
         fillButton1.setOpaque(false);
         fillButton1.setContentAreaFilled(false);
         fillButton1.setBorderPainted(false);
         fillButton1.setFocusPainted(false);
+        c.gridx = 0;
+        c.gridy = 8;
+        c.insets = new Insets(0, 0, 0, 0);
+        c.weighty = 0.5; // any number higher than 0 will work since the others are at 0;
         reservationDataPanel.add(fillButton1, c);
-        centerWrapper.add(reservationDataPanel, BorderLayout.CENTER);
+
+
+
+//        centerWrapper.add(reservationDataPanel, BorderLayout.CENTER);
         contentPane.add(centerWrapper, BorderLayout.CENTER);
 
         // Making JPanels not overlap when showing menubutton
@@ -158,7 +393,6 @@ public class CancelReservationPage extends JFrame{
         JPanel reservationsPane = new JPanel(new GridBagLayout());
         reservationsPane.setBackground(ColorPalette.DESATURATED_LIGHTBLUE);
         int buttonsCount = 0;
-        // TODO: LOAD RESERVATIONS BY GUESTID.
         for (Reservation r : ReservationRepository.loadReservationsOfGuestId(guestId)) {
             System.out.println("FOUND RESERVATION");
             JButton reservationButton = new JButton("Reservation at room " + r.getRoomNumber());
@@ -177,21 +411,25 @@ public class CancelReservationPage extends JFrame{
             reservationButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    cancelR = ReservationRepository.loadReservationOfId(Integer.parseInt(e.getActionCommand()));
-                    reservationTitleJL.setText("RESERVATION AT ROOM " + cancelR.getRoomNumber());
+                    centerWrapper.remove(modifyDataPane);
+
+
+                    reservation = ReservationRepository.loadReservationOfId(Integer.parseInt(e.getActionCommand()));
+                    reservationTitleJL.setText("RESERVATION AT ROOM " + reservation.getRoomNumber());
                     String roomFloor;
-                    if (cancelR.getRoomNumber() >= 100 && cancelR.getRoomNumber() < 200) roomFloor = "Nature Retreat";
-                    else if (cancelR.getRoomNumber() >= 200 && cancelR.getRoomNumber() < 300) roomFloor = "Urban Elegance";
+                    if (reservation.getRoomNumber() >= 100 && reservation.getRoomNumber() < 200) roomFloor = "Nature Retreat";
+                    else if (reservation.getRoomNumber() >= 200 && reservation.getRoomNumber() < 300) roomFloor = "Urban Elegance";
                     else  roomFloor = "Vintage Charm";
                     reservationRoomFloorJL.setText("Room Floor: " + roomFloor);
                     // Startdate
-                    reservationStartDateJL.setText("Start Date: " + res.getDateFormatter().format(cancelR.getStartDate().getTime()));
-                    reservationEndDateJL.setText("End Date: " + res.getDateFormatter().format(cancelR.getEndDate().getTime()));
-                    reservationGuestCountJL.setText("Amount of Guests: " + cancelR.getGuestNumber());
-                    reservationRateJL.setText("Rate: " + cancelR.getRate());
+                    reservationStartDateJL.setText("Start Date: " + res.getDateFormatter().format(reservation.getStartDate().getTime()));
+                    reservationEndDateJL.setText("End Date: " + res.getDateFormatter().format(reservation.getEndDate().getTime()));
+                    reservationGuestCountJL.setText("Amount of Guests: " + reservation.getGuestNumber());
+                    reservationRateJL.setText("Rate: " + reservation.getRate());
                     reservationCancelB.setVisible(true);
+                    reservationModifyB.setVisible(true);
 
-                    if (!cancelR.getStartDate().before(Calendar.getInstance())) {
+                    if (!reservation.getStartDate().before(Calendar.getInstance())) {
                         reservationCancelB.setText("Cancel Reservation?");
                         reservationCancelB.setEnabled(true);
                     }
@@ -199,6 +437,10 @@ public class CancelReservationPage extends JFrame{
                         reservationCancelB.setText("Can't Cancel Reservation");
                         reservationCancelB.setEnabled(false);
                     }
+
+                    centerWrapper.add(reservationDataPanel, BorderLayout.CENTER);
+                    contentPane.revalidate();
+                    contentPane.repaint();
                     // Enddate
                     // Amount of Guests
                     // rate
@@ -209,6 +451,7 @@ public class CancelReservationPage extends JFrame{
             });
         }
         JButton fillButton2 = new JButton(); // to force the buttons to align to the top
+        fillButton2.setName("0");
         c.gridx = 0;
         c.gridy = buttonsCount;
         c.weighty = 0.5; // any number higher than 0 will work since the others are at 0;
@@ -242,6 +485,23 @@ public class CancelReservationPage extends JFrame{
         contentPane.add(reservationsWrapper, BorderLayout.LINE_START);
 
 
+        if (reservationData != null) {
+            for (Component btn : reservationsPane.getComponents()) {
+                if (btn instanceof JButton && Integer.parseInt(btn.getName()) == ((Reservation)reservationData[0]).getReservationId() ) {
+                    System.out.println(btn.getName() + " Btn name");
+                    ((JButton)btn).doClick();
+                    reservationModifyB.doClick();
+
+                    modifySearchB.setText("Room " + reservationData[5]);
+                    modifySearchB.setName(Integer.toString((int)reservationData[5]));
+                    reservationGuestNumberJTF.setText(Integer.toString((int)reservationData[1]));
+                    reservationGuestNameJTF.setText((String)reservationData[2]);
+                    reservationGuestEmailJTF.setText((String)reservationData[3]);
+                    reservationCCNJTF.setText((String)reservationData[4]);
+
+                }
+            }
+        }
 
 
         setVisible(true);

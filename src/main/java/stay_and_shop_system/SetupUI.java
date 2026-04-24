@@ -114,6 +114,7 @@ public class SetupUI {
         });
 
         if (user instanceof ClerkInterface) {
+
             JButton addRoomButton = setupSideBarButton("Add Room", 4, 0);
             c.gridx = 0;
             c.gridy = buttonCount++;
@@ -149,23 +150,45 @@ public class SetupUI {
             c.gridy = buttonCount++;
             buttonsPane.add(modifyMyInformationButton, c);
 
-            JButton modifyReservationButton = setupSideBarButton("Modify Guest Information", 4, 0);
+            // Cancel/Modification of Guest's reservation
+            JButton cancelReservationButton = setupSideBarButton("View Guest's Reservations", 4, 0);
             c.gridx = 0;
-            c.gridy = buttonCount++;
-            buttonsPane.add(modifyReservationButton, c);
-
-            JButton cancelReservationButton = setupSideBarButton("Cancel Guest Reservation", 4, 0);
-            c.gridx = 0;
-            c.gridy = buttonCount++;
+            c.gridy = buttonCount;
+            buttonCount++;
             buttonsPane.add(cancelReservationButton, c);
             cancelReservationButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    if (user instanceof GuestInterface guestUser) {
-                        CancelReservationPage newFrame = new CancelReservationPage(guestUser.getGuestId());
-                        frame.dispose();
-                    } else {
-                        JOptionPane.showMessageDialog(frame, "This clerk account is not also a guest.");
+                    String response = JOptionPane.showInputDialog(null, "Enter the guest's Id:", "View Reservations", JOptionPane.QUESTION_MESSAGE);
+                    if (response != null) { // if was not canceled or not empty
+                        response = (response.isEmpty()) ? "-1" : response;
+                        List<Reservation> reservationList = ReservationRepository.loadReservationsOfGuestId(Integer.parseInt(response));
+                        if (reservationList.isEmpty()) {
+                            JOptionPane.showMessageDialog(null, "There are no reservations attached to this guest Id");
+                        } else {
+                            CancelReservationPage newFrame = new CancelReservationPage(Integer.parseInt(response), null);
+                            frame.dispose();
+                        }
                     }
+                }
+            });
+
+
+            JButton makeReservationButton = setupSideBarButton("Make Guest's Reservation", 4, 0);
+            c.gridx = 0;
+            c.gridy = buttonCount;
+            buttonCount++;
+            buttonsPane.add(makeReservationButton, c);
+            makeReservationButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    String response = JOptionPane.showInputDialog(null, "Enter the guest's email:", "Make Reservation", JOptionPane.QUESTION_MESSAGE);
+                    if (response.isEmpty() || !Reservation.validateEmail(response)) {
+                        JOptionPane.showMessageDialog(null, "The email is invalid.");
+                    }
+                    else {
+                        SearchRoomPage2 newFrame = new SearchRoomPage2(new Object[] { response });
+                        frame.dispose();
+                    }
+
                 }
             });
 
@@ -237,7 +260,7 @@ public class SetupUI {
                         JOptionPane.showMessageDialog(null, "There are no reservations attached to this guest Id");
                     }
                     else {
-                        CancelReservationPage newFrame = new CancelReservationPage(((GuestInterface)user).getGuestId());
+                        CancelReservationPage newFrame = new CancelReservationPage(((GuestInterface)user).getGuestId(), null);
                         frame.dispose();
                     }
                 }
@@ -263,7 +286,7 @@ public class SetupUI {
                 }
             });
         }
-        else { // Not signed in
+        else if (UserRepository.getSessionAccount() == null){ // Not signed in
             // Need to find checked in reservation either by date or kept on the Guest.
             JButton checkGuestBill = setupSideBarButton("Check My Bill", 4, 0);
             c.gridx = 0;
@@ -292,7 +315,7 @@ public class SetupUI {
                         if (reservationList.isEmpty()) {
                             JOptionPane.showMessageDialog(null, "There are no reservations attached to this guest Id");
                         } else {
-                            CancelReservationPage newFrame = new CancelReservationPage(Integer.parseInt(response));
+                            CancelReservationPage newFrame = new CancelReservationPage(Integer.parseInt(response), null);
                             frame.dispose();
                         }
                     }
@@ -307,14 +330,17 @@ public class SetupUI {
             shopButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     // Whatever is shopped will be attatched to the reservation that fits within the current time (or the reservation  thats checked in based on how we implement it).
-                    List<Reservation> reservationList = ReservationRepository.loadReservationsOfGuestId(((GuestInterface)user).getGuestId());
-                    if (reservationList.isEmpty()) {
-                        JOptionPane.showMessageDialog(null, "There are no reservations attached to this guest Id");
-                    }
-                    else {
-                        ShoppingPage newFrame = new ShoppingPage();
-                        frame.dispose();
-                        throw new RuntimeException("TODO: Gavin needs to finish the Shopping");
+                    String response = JOptionPane.showInputDialog(null, "Enter your guest Id:", "View Reservations", JOptionPane.QUESTION_MESSAGE);
+                    if (response != null) { // if was not canceled or not empty
+                        response = (response.isEmpty()) ? "-1" : response;
+                        List<Reservation> reservationList = ReservationRepository.loadReservationsOfGuestId(Integer.parseInt(response));
+                        if (reservationList.isEmpty()) {
+                            JOptionPane.showMessageDialog(null, "There are no reservations attached to this guest Id");
+                        } else {
+                            ShoppingPage newFrame = new ShoppingPage();
+                            frame.dispose();
+                            throw new RuntimeException("TODO: Gavin needs to finish the Shopping");
+                        }
                     }
                 }
             });
@@ -467,7 +493,7 @@ public class SetupUI {
         bookRoomButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                SearchRoomPage2 newFrame = new SearchRoomPage2();
+                SearchRoomPage2 newFrame = new SearchRoomPage2(null);
 //                BookingPage newFrame = new BookingPage(new ArrayList<Room>());
 //                ReservationSuccessPage newFrame = new ReservationSuccessPage(102043040, 510.99, Calendar.getInstance(), Calendar.getInstance());
 

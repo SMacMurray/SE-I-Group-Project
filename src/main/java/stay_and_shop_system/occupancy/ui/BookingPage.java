@@ -255,7 +255,7 @@ public class BookingPage extends JFrame{
 						expDate.setTime(formatter.parse(guestExpDateText.getText()));
 						Object[] reserveInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(Integer.parseInt(currButton.getName())), rCr.getDateRange()[0],
 								rCr.getDateRange()[1], Integer.parseInt(guestCountText.getText()), guestNameText.getText(),
-								guestEmailText.getText(), guestPhoneText.getText(), guestCCN.getText(), guestCCV.getText(),
+								guestEmailText.getText(), guestPhoneText.getText(), guestCCNText.getText(), guestCCVText.getText(),
 								guestBillAText.getText(), expDate);
 
 						ReservationSuccessPage newFrame = new ReservationSuccessPage((int)reserveInfo[0], (double)reserveInfo[1],
@@ -401,6 +401,8 @@ public class BookingPage extends JFrame{
 			changeEditabilityOfReserveButton(true);
 			return;
 		}
+		System.out.println(expDate.getTime());
+		System.out.println(todayDate.getTime());
 		if (expDate.before(todayDate)) {
 			guestExpDateText.setBorder(BorderFactory.createMatteBorder(2,2,2,2, ColorPalette.INVALID_RED));
 			changeEditabilityOfReserveButton(true);
@@ -458,7 +460,7 @@ public class BookingPage extends JFrame{
 			reserveButton.setText("Reserve Room");
 		}
 	}
-	public void loadRoomsOnScreen(List<Room> rooms) {
+	public void loadRoomsOnScreen(List<Room> rooms, boolean modifyRoomBool) {
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.NONE;
 
@@ -521,7 +523,12 @@ public class BookingPage extends JFrame{
 					currButton = (JButton) e.getSource();
 					currButton.setEnabled(false);
 
-					checkForExceptions();
+					if (modifyRoomBool) {
+						changeEditabilityOfReserveButton(false);
+					}
+					else {
+						checkForExceptions();
+					}
 				}
 			});
 
@@ -582,7 +589,7 @@ public class BookingPage extends JFrame{
 
 
 	}
-	public BookingPage(List<Room> rooms, RoomCriteria roomCriteria) {
+	public BookingPage(List<Room> rooms, RoomCriteria roomCriteria, Object[] reservationData) {
 		rCr = roomCriteria;
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -599,7 +606,7 @@ public class BookingPage extends JFrame{
 
 		roomsPane = new JPanel(new GridLayout(0, 1));
 		roomsPane.setOpaque(false);
-		loadRoomsOnScreen(rooms);
+		loadRoomsOnScreen(rooms, (reservationData != null && reservationData.length > 1));
 
 		JPanel roomsWrapper = new JPanel(new GridBagLayout()); // To force what im wrapping to be it's preferred size bc BorderLayout doesnt repsect it.
 		roomsWrapper.setOpaque(false);
@@ -624,24 +631,75 @@ public class BookingPage extends JFrame{
 
 
 
-		JPanel progressWrapper = new JPanel(new FlowLayout());
-		progressWrapper.setOpaque(false);
-		JButton progressBar = makeProgressBar();
-		progressWrapper.add(progressBar);
-		background.add(progressWrapper, BorderLayout.PAGE_START);
+		if (reservationData == null || reservationData.length == 1) {
+			JPanel progressWrapper = new JPanel(new FlowLayout());
+			progressWrapper.setOpaque(false);
+			JButton progressBar = makeProgressBar();
+			progressWrapper.add(progressBar);
+			background.add(progressWrapper, BorderLayout.PAGE_START);
 
-		addGuestInformation();
-		addGuestInfoListeners();
+
+			addGuestInformation();
+			addGuestInfoListeners();
+			if (reservationData != null)  {
+				guestEmailText.setText((String)reservationData[0]);
+				guestEmailText.setEnabled(false);
+			}
+		}
+		else {
+			guestInfoPanel = new JPanel(new GridBagLayout());
+			guestInfoPanel.setPreferredSize(new Dimension(500, 350));
+			guestInfoPanel.setOpaque(false);
+
+			reserveButton = new JButton("Can't Reserve Room");
+			reserveButton.setEnabled(false);
+			reserveButton.setFont(new Font("Serif", Font.ITALIC, 27));
+			reserveButton.setForeground(ColorPalette.OCEAN_BLUE);
+			reserveButton.setBackground(ColorPalette.OCEAN_DARKBLUE);
+			reserveButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					int choice = JOptionPane.showConfirmDialog(
+							null,
+							"Do you want to choose this room " + currButton.getName() + "?",
+							"Choose Room " + currButton.getName() + "?",
+							JOptionPane.YES_NO_OPTION
+					);
+					if (choice == JOptionPane.YES_OPTION) {
+						int roomNum = Integer.parseInt(currButton.getName());
+						reservationData[5] = roomNum;
+
+						CancelReservationPage newFrame = new CancelReservationPage((int)reservationData[6], reservationData);
+						dispose();
+					}
+
+				}
+			});
+			GridBagConstraints c = new GridBagConstraints();
+			c.gridx = 0;
+			c.gridy = 0;
+			guestInfoPanel.add(reserveButton, c);
+
+
+		}
 		background.add(guestInfoPanel, BorderLayout.PAGE_END);
 
 		setVisible(true);
 
-		timer.start();
+		if (reservationData == null) {
+			timer.start();
+		}
+		else {
+
+
+		}
 
 	}
 	@Override
 	public void dispose() {
-		timer.stop();
+		if (timer != null) {
+			timer.stop();
+		}
 		super.dispose();
 	}
 	// Taken From: https://stackoverflow.com/questions/4530428/to-display-an-image/4530659#4530659

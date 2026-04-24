@@ -193,20 +193,21 @@ public class ReservationRepository {
 
 			ps.setInt(1, re.getRoomNumber());
 			ps.setInt(2, re.getGuestNumber());
-			ps.setString(3, dateFormatter.format(re.getStartDate().getTime()) );
-			ps.setString(4, dateFormatter.format(re.getEndDate().getTime()) );
+			ps.setString(3, re.getFormattedStartDate());
+			ps.setString(4, re.getFormattedEndDate());
 			ps.setString(5, re.getGuestName() );
 			ps.setString(6, re.getGuestEmail() );
 			ps.setString(7, re.getCreditCardNumber() );
 			ps.setDouble(8, re.getRate() );
 			ps.setDouble(9, re.getCost() );
-			ps.setInt(10, Objects.hash(re.getGuestId()));
-			ps.setInt(11, Objects.hash(re.getRoomNumber() + re.getGuestName()));
+			ps.setInt(10, re.getGuestId());
+			ps.setInt(11, re.getReservationId());
 			ps.setInt(12, prevReservationId);
 
 			int rowAdded = ps.executeUpdate();
 			if (rowAdded > 0) {
 				System.out.println("A row has been modified successfully! : ReservationRepository");
+				System.out.println(re + " \n : ReservationRepository");
 			} else {
 				System.out.println("Modification failed. : ReservationRepository");
 				// Notes:

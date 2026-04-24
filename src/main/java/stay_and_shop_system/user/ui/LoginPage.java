@@ -238,17 +238,17 @@ public class LoginPage extends JFrame {
     		if (contentPane.isAncestorOf(invalidLabel)) { // For testing purposes
     			contentPane.remove(invalidLabel);
     		}
-    		
+
     		invalidLabel = new JLabel(label);
     		invalidLabel.setHorizontalAlignment(SwingConstants.CENTER);
     		Dimension prefSize = invalidLabel.getPreferredSize(); // So the text fits exactly in the box more properly
     		invalidLabel.setBounds(280, 40, prefSize.width, prefSize.height);
     		invalidLabel.setForeground(Color.RED);
-    		
+
     		contentPane.add(invalidLabel);
     		contentPane.revalidate();
     		contentPane.repaint();
-    		
+
     		// Note to self: I need to find a user based on the Username, then check if the password is right
     		// This means that there can only be one Username for each person.
     	}
