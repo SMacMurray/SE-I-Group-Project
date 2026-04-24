@@ -67,4 +67,21 @@ public class ReservationController {
 
 		return reservation;
 	}
+	public void checkIn(Reservation reservation, Calendar checkInDate, int guestId) {
+		// Joel:
+		// If guestId does not match reservation, exit / throw exception .(to make sure the person that owns reservation checks out/in)
+		// Set the Check in Date of Reservation, Increment the cost by the rate by one time, and Update it in ReservationRepository
+		// Set the Room of the reservation as occupied, and Update it in RoomRepository
+
+
+	}
+	public void checkOut(Reservation reservation, int guestId) {
+		// Keep the Guest, since hotels usually keep the guest info.
+
+		// Joel:
+		// If guestId does not match reservation, exit / throw exception. (to make sure the person that owns reservation checks out/in)
+		// Set the Room of the reservation as unoccupied, and Update it in RoomRepository
+		// Keep the cost in a variable, Delete the reservation.
+		// Return the cost
+	}
 }

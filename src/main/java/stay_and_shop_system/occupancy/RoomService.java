@@ -5,7 +5,6 @@ import stay_and_shop_system.occupancy.database.RoomRepository;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class RoomService {
 	public static Room[] rooms = new Room[300]; // Might need to fix the size
@@ -61,7 +60,7 @@ public class RoomService {
 	public List<Room> findCandidateRooms(RoomCriteria rc) {
 		List<Room> candidateRooms = new ArrayList<>();
 
-		for (Room r : RoomRepository.loadReservations()) {
+		for (Room r : RoomRepository.loadRooms()) {
 			if (r != null) {
 				System.out.println("Not null room : Room Service");
 				boolean suitable = true;

@@ -12,6 +12,7 @@ public class Reservation {
 	private int guestNum = 0;
 	private Calendar start;
 	private Calendar end;
+	private Calendar checkIn;
 	private String guestName = "John Doe";
 	private String guestEmail = "johnDoe@gmail.com";
 	private String creditCardNumber = "9999-9999-9997";
@@ -58,6 +59,7 @@ public class Reservation {
 		cost = 0;
 		reservationId = Objects.hash(r.getNumber() + n + getFormattedEndDate());
 		guestId = Math.abs(Objects.hash(em));
+		checkIn = null;
 
 		System.out.println(rate + " : Reservation");
 		System.out.println(reservationId + " : Reservation");
@@ -89,6 +91,7 @@ public class Reservation {
 	public int getRoomNumber() { return roomNumber; }
 	public Calendar getStartDate() { return start; }
 	public Calendar getEndDate() { return end; }
+	public Calendar getCheckInDate() { return checkIn; }
 	public int getGuestNumber() { return guestNum; }
 	public String getGuestName() { return guestName; }
 	public String getGuestEmail() { return guestEmail; }
@@ -99,6 +102,7 @@ public class Reservation {
 	public int getGuestId() {return guestId; }
 	public String getFormattedStartDate() { return formatter.format(start.getTime()); }
 	public String getFormattedEndDate() { return formatter.format(end.getTime()); }
+	public String getFormattedCheckInDate() { return (checkIn != null) ? formatter.format(checkIn.getTime()) : "Null"; }
 
 	public void setRoom(Room r) {
 		r = room;
@@ -106,17 +110,18 @@ public class Reservation {
 		updateRoomNumber();
 		updateReservationId();
 	}
-	public void setStartDate(Calendar s) { s = start; }
+	public void setStartDate(Calendar s) { start = s; }
 	public void updateRoomNumber() { roomNumber = room.getNumber(); }
-	public void setEndDate(Calendar e) { e = end; }
-	public void setGuestNumber(int g) { g  = guestNum; }
+	public void setEndDate(Calendar e) { end = e; }
+	public void setCheckInDate(Calendar c) { checkIn = c; }
+	public void setGuestNumber(int g) { guestNum  = g; }
 	public void setGuestName(String n) {
 		n = guestName;
 		updateReservationId();
 	}
 	public void setGuestEmail(String email) { guestEmail = email; }
 	// TODO: MAKE INPUT VALIDATION FOR CREDIT CARD NUMBER
-	public void setCreditCardNumber(String cc) { cc = creditCardNumber; }
+	public void setCreditCardNumber(String cc) { creditCardNumber = cc; }
 	private void updateRate() {
 		rate = room.getDailyRate();
 	}
@@ -164,6 +169,7 @@ public class Reservation {
 		str += "\n Guest Num: " + guestNum;
 		str += "\n Start Date: " + getFormattedStartDate();
 		str += "\n End Date: " + getFormattedEndDate();
+		str += "\n CheckIn Date: " + getFormattedCheckInDate();
 		str += "\n Guest Name: " + guestName;
 		str += "\n Credit Card Number: " + creditCardNumber;
 		str += "\n Rate: " + rate;

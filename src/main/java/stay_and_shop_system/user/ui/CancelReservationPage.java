@@ -319,8 +319,8 @@ public class CancelReservationPage extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 int choice = JOptionPane.showConfirmDialog(
                         null,
-                        "Do you want to delete this reservation?",
-                        "Delete Reservation?",
+                        "Do you want to cancel this reservation? You will be deducted $2.50 in cancellation fees.",
+                        "Cancel Reservation?",
                         JOptionPane.YES_NO_OPTION
                 );
                 if (choice == JOptionPane.YES_OPTION) {
@@ -358,7 +358,7 @@ public class CancelReservationPage extends JFrame{
         });
         c.gridx = 0;
         c.gridy = 7;
-        c.insets = new Insets(50, 0, 0, 0);
+        c.insets = new Insets(25, 0, 0, 0);
         c.weighty = 0;
         reservationDataPanel.add(reservationModifyB, c);
         JButton fillButton1 = new JButton();
@@ -401,6 +401,7 @@ public class CancelReservationPage extends JFrame{
             reservationButton.setFont(new Font("Serif", Font.PLAIN, 23));
             reservationButton.setBackground(ColorPalette.SATURATED_BLUE);
             reservationButton.setPreferredSize(new Dimension(300, 50));
+            reservationButton.setName(Integer.toString(r.getReservationId()));
             reservationButton.setActionCommand(Integer.toString(r.getReservationId()));
             c.gridx = 0;
             c.gridy = buttonsCount;
@@ -487,18 +488,20 @@ public class CancelReservationPage extends JFrame{
 
         if (reservationData != null) {
             for (Component btn : reservationsPane.getComponents()) {
-                if (btn instanceof JButton && Integer.parseInt(btn.getName()) == ((Reservation)reservationData[0]).getReservationId() ) {
-                    System.out.println(btn.getName() + " Btn name");
-                    ((JButton)btn).doClick();
-                    reservationModifyB.doClick();
+                if (btn.getName() != null) {
+                    if (btn instanceof JButton && Integer.parseInt(btn.getName()) == ((Reservation) reservationData[0]).getReservationId()) {
+                        System.out.println(btn.getName() + " Btn name");
+                        ((JButton) btn).doClick();
+                        reservationModifyB.doClick();
 
-                    modifySearchB.setText("Room " + reservationData[5]);
-                    modifySearchB.setName(Integer.toString((int)reservationData[5]));
-                    reservationGuestNumberJTF.setText(Integer.toString((int)reservationData[1]));
-                    reservationGuestNameJTF.setText((String)reservationData[2]);
-                    reservationGuestEmailJTF.setText((String)reservationData[3]);
-                    reservationCCNJTF.setText((String)reservationData[4]);
+                        modifySearchB.setText("Room " + reservationData[5]);
+                        modifySearchB.setName(Integer.toString((int) reservationData[5]));
+                        reservationGuestNumberJTF.setText(Integer.toString((int) reservationData[1]));
+                        reservationGuestNameJTF.setText((String) reservationData[2]);
+                        reservationGuestEmailJTF.setText((String) reservationData[3]);
+                        reservationCCNJTF.setText((String) reservationData[4]);
 
+                    }
                 }
             }
         }

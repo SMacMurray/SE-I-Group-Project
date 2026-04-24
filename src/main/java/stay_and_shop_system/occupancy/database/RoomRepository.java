@@ -24,7 +24,8 @@ public class RoomRepository {
                     smokingStatus INTEGER NOT NULL,
                     bedTypes TEXT NOT NULL,
                     qualityLevel TEXT NOT NULL,
-                    roomSize TEXT NOT NULL
+                    roomSize TEXT NOT NULL,
+                    roomStatus INTEGER NOT NULL
                 );
                 """;
         try (Statement stmt = connection.createStatement()) {
@@ -42,7 +43,7 @@ public class RoomRepository {
         }
     }
 
-    public static List<Room> loadReservations() {
+    public static List<Room> loadRooms() {
         String loadSQL = "SELECT * FROM Rooms";
         List<Room> rooms = new ArrayList<>();
 
@@ -90,7 +91,7 @@ public class RoomRepository {
     }
     public static void addRoom(Room r) {
         // insert is SQL code.
-        String insert = "INSERT INTO Rooms (roomNumber, bedNumber, maxOccupancy, baseDailyRate, smokingStatus, bedTypes, qualityLevel, roomSize) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String insert = "INSERT INTO Rooms (roomNumber, bedNumber, maxOccupancy, baseDailyRate, smokingStatus, bedTypes, qualityLevel, roomSize, roomStatus) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = connection.prepareStatement(insert)) {
             //JOptionPane.showMessageDialog(null, "Successful Connection! : ReservationRepository");
 
@@ -112,6 +113,7 @@ public class RoomRepository {
             ps.setString(6, bedTypes);
             ps.setString(7, r.getQualityLevel().toString());
             ps.setString(8, r.getRoomSize().toString());
+            ps.setInt(9, r.getRoomStatus().ordinal());
 
             int rowAdded = ps.executeUpdate();
             if (rowAdded > 0) {
@@ -127,41 +129,6 @@ public class RoomRepository {
         catch (SQLException e) {
             e.printStackTrace();
 //			JOptionPane.showMessageDialog(null, e + " : ReservationRepository");
-        }
-    }
-    // Assuming you can't change the roomNumber of a room
-    public void modifyReservation(Room r) {
-        String modifySQL = "UPDATE Rooms SET roomNumber = ?, bedNumber = ?, maxOccupancy = ?, baseDailyRate = ?, smokingStatus = ?, bedTypes = ?, qualityLevel = ?, roomSize = ? WHERE roomNumber = ?";
-        try (PreparedStatement ps = connection.prepareStatement(modifySQL)) {
-
-            ps.setInt(1, r.getNumber());
-            ps.setInt(2, r.getBeds());
-            ps.setInt(3, r.getMaxOccupancy());
-            ps.setDouble(4, r.getBaseDailyRate());
-            ps.setInt(5, r.getSmokingStatus() ? 1 : 0);
-            String bedTypes = r.getBedTypes().getFirst().toString();
-            for( int i = 1; i < r.getBedTypes().size(); ++i) {
-                bedTypes += ", " + r.getBedTypes().get(i);
-                System.out.println("rich");
-            }
-            ps.setString(6, bedTypes);
-            ps.setString(7, r.getQualityLevel().toString());
-            ps.setString(8, r.getRoomSize().toString());
-            ps.setInt(9, r.getNumber());
-
-            int rowAdded = ps.executeUpdate();
-            if (rowAdded > 0) {
-                System.out.println("A row has been modified successfully! : ReservationRepository");
-            } else {
-                System.out.println("Modification failed. : ReservationRepository");
-                // Notes:
-                // In MySqL, a primary key (which i made the reservationId for the Reservations table) has to be unique.
-            }
-        }
-        catch(SQLException e) {
-            e.printStackTrace();
-
-            JOptionPane.showMessageDialog(null, e + " : ReservationRepository");
         }
     }
     public static Room mapResultSetToRoom(ResultSet rSet) throws SQLException, ParseException{
@@ -182,8 +149,12 @@ public class RoomRepository {
 
         Room.QualityLevel qualityLevel = Room.QualityLevel.valueOf(rSet.getString("qualityLevel"));
         Room.RoomSize roomSize = Room.RoomSize.valueOf(rSet.getString("roomSize"));
+        Room.RoomStatus roomStatus = Room.RoomStatus.values()[rSet.getInt("roomStatus")];
 
-        return new Room(roomNumber, bedNumber, maxOccupancy, baseDailyRate, smokingStatus, bedTypes, qualityLevel, roomSize);
+        Room room = new Room(roomNumber, bedNumber, maxOccupancy, baseDailyRate, smokingStatus, bedTypes, qualityLevel, roomSize);
+        room.setRoomStatus(roomStatus);
+
+        return room;
     }
 
     public static void updateRoom(int originalRoomNumber, Room r) {

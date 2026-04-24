@@ -32,6 +32,10 @@ public class Room {
 		Deluxe,
 		Standard
 	}
+	public enum RoomStatus {
+		UnOccupied,
+		Occupied
+	}
 	
 	private int number = 0;
 	private int beds = 0;
@@ -42,6 +46,7 @@ public class Room {
 	private List<BedType> bedTypes = new ArrayList<>();
 	private QualityLevel qualityLevel = QualityLevel.Executive;
 	private RoomSize roomSize = RoomSize.Single;
+	private RoomStatus roomStatus = RoomStatus.UnOccupied;
 	
 	// For Testing purposes
     public Room() {
@@ -58,7 +63,7 @@ public class Room {
 		roomSize = rs;
 
 		dailyRate = Math.round((q.getPrice() + baseDailyRate) * 100.0) / 100.0;
-	}
+    }
 	public int getNumber() { return number; }
 	public int getBeds() { return beds; }
 	public int getMaxOccupancy() { return maxOccupancy; }
@@ -67,6 +72,7 @@ public class Room {
 	public List<BedType> getBedTypes() { return bedTypes; }
 	public QualityLevel getQualityLevel() { return qualityLevel; }
 	public RoomSize getRoomSize() { return roomSize; }
+	public RoomStatus getRoomStatus() { return roomStatus; }
 	public double getDailyRate() {return dailyRate;}
 
 	public void setNumber(int n) { number = n; }
@@ -83,6 +89,7 @@ public class Room {
 		updateDailyRate();
 	}
 	public void setRoomSize(RoomSize rs) { roomSize = rs; }
+	public void setRoomStatus(RoomStatus rs) { roomStatus = rs; }
 	private void updateDailyRate() {
 		dailyRate = qualityLevel.getPrice() + baseDailyRate;
 	}
@@ -112,6 +119,7 @@ public class Room {
 		}
 		str += "\n Quality Level: " + qualityLevel.toString();
 		str += "\n RoomSize: " + roomSize.toString();
+		str += "\n RoomStatus: " + roomStatus.toString();
 
 		return str;
 	}

@@ -54,7 +54,7 @@ public class ReservationDataTable {
         }
     }
     // Assuming rooms are already loaded
-    // Joel: Im conflicted on if I want to combine loadReservations and loadReservationsOfName
+    // Joel: Im conflicted on if I want to combine loadRooms and loadReservationsOfName
     public List<Reservation> loadReservations() {
         String loadSQL = "SELECT * FROM Reservations";
         List<Reservation> reservations = new ArrayList<>();
