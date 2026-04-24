@@ -1,6 +1,7 @@
 package stay_and_shop_system.occupancy;
 
 import stay_and_shop_system.occupancy.database.ReservationRepository;
+import stay_and_shop_system.occupancy.database.RoomRepository;
 import stay_and_shop_system.user.*;
 
 import java.text.SimpleDateFormat;
@@ -12,6 +13,7 @@ public class ReservationController {
 	private static List<Reservation> reservations  = new ArrayList<>();
 
 	ReservationRepository rrp = new ReservationRepository();
+	RoomRepository rp = new RoomRepository();
 	private RoomService rs = new RoomService();
 	private GuestService gs = new GuestService();
 	private SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
@@ -26,7 +28,8 @@ public class ReservationController {
 		User user = UserRepository.getSessionAccount();
 		GuestInterface guest;
 		PaymentMethod pm = new PaymentMethod(creditCardNumber, ccv, billingAddr, expDate);
-		if (user == null) {
+		// Accounting for when Clerk is reserving a room for a guest and if the User is not signed in
+		if (user == null || (user instanceof ClerkInterface && !user.getEmail().equals(guestEmail))) {
 			if (!UserRepository.findUser(guestEmail)) {
 				guest = new Guest(guestEmail, guestName,  phoneNumber, pm);
 				UserRepository.addGuest(guest);
@@ -55,5 +58,13 @@ public class ReservationController {
 
 		return rooms;
 	}
+	public Reservation modifyReservation(Reservation reservation, int roomNumber, int guestNumber, String guestName, String guestEmail, String creditCardNumber) throws IllegalArgumentException {
+		Room room = RoomRepository.loadRoomOfRoomNumber(roomNumber);
+		int previousReservationId = reservation.getReservationId();
 
+		reservation.modifyReservation(room, guestNumber, guestName, guestEmail, creditCardNumber);
+		ReservationRepository.modifyReservation(previousReservationId, reservation);
+
+		return reservation;
+	}
 }

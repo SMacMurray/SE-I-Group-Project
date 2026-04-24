@@ -5,6 +5,7 @@ import java.util.Objects;
 
 // Handler for account related tasks.
 public class AccountController {
+    // Ignore email and phone numbers fields for now for simplicity.
     // In case we ever decide to change how passwords are hashed.
     private static int hashPassword(String password) { return Objects.hash(password); }
 
