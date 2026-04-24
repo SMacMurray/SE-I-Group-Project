@@ -3,6 +3,7 @@ package stay_and_shop_system;
 import stay_and_shop_system.occupancy.Reservation;
 import stay_and_shop_system.occupancy.database.ReservationRepository;
 import stay_and_shop_system.occupancy.ui.*;
+import stay_and_shop_system.store.ui.StorePage;
 import stay_and_shop_system.user.*;
 import stay_and_shop_system.user.ui.*;
 
@@ -279,7 +280,7 @@ public class SetupUI {
                         JOptionPane.showMessageDialog(null, "There are no reservations attached to this guest Id");
                     }
                     else {
-                        ShoppingPage newFrame = new ShoppingPage();
+                        StorePage newFrame = new StorePage();
                         frame.dispose();
                         throw new RuntimeException("TODO: Gavin needs to finish the Shopping");
                     }
@@ -337,7 +338,7 @@ public class SetupUI {
                         if (reservationList.isEmpty()) {
                             JOptionPane.showMessageDialog(null, "There are no reservations attached to this guest Id");
                         } else {
-                            ShoppingPage newFrame = new ShoppingPage();
+                            StorePage newFrame = new StorePage();
                             frame.dispose();
                             throw new RuntimeException("TODO: Gavin needs to finish the Shopping");
                         }
