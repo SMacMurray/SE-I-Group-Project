@@ -309,7 +309,6 @@ public class CancelReservationPage extends JFrame{
         c.gridx = 0;
         c.gridy = 5;
         reservationDataPanel.add(reservationRateJL, c);
-
         JButton reservationCancelB = new JButton("");
         reservationCancelB.setVisible(false);
         reservationCancelB.setFont(new Font("Serif", Font.PLAIN, 20));
@@ -359,25 +358,24 @@ public class CancelReservationPage extends JFrame{
         });
         c.gridx = 0;
         c.gridy = 7;
-        c.insets = new Insets(20, 0, 0, 0);
+        c.insets = new Insets(50, 0, 0, 0);
+        c.weighty = 0;
         reservationDataPanel.add(reservationModifyB, c);
-
-        JButton fillButton1 = new JButton(); // to force the components to align to the top
-        c.gridx = 0;
-        c.gridy = 8;
-        c.insets = new Insets(0, 0, 0, 0);
-        c.weighty = 0.5; // any number higher than 0 will work since the others are at 0;
+        JButton fillButton1 = new JButton();
         fillButton1.setOpaque(false);
         fillButton1.setContentAreaFilled(false);
         fillButton1.setBorderPainted(false);
         fillButton1.setFocusPainted(false);
+        c.gridx = 0;
+        c.gridy = 8;
+        c.insets = new Insets(0, 0, 0, 0);
+        c.weighty = 0.5; // any number higher than 0 will work since the others are at 0;
         reservationDataPanel.add(fillButton1, c);
 
 
 
 //        centerWrapper.add(reservationDataPanel, BorderLayout.CENTER);
         contentPane.add(centerWrapper, BorderLayout.CENTER);
-
 
         // Making JPanels not overlap when showing menubutton
         SetupUI.alterMenuButtonMouseEvent(headerPane, new MouseAdapter() {
@@ -398,7 +396,6 @@ public class CancelReservationPage extends JFrame{
         for (Reservation r : ReservationRepository.loadReservationsOfGuestId(guestId)) {
             System.out.println("FOUND RESERVATION");
             JButton reservationButton = new JButton("Reservation at room " + r.getRoomNumber());
-            reservationButton.setName(Integer.toString(r.getReservationId()));
             reservationButton.setHorizontalAlignment(SwingConstants.LEFT);
             reservationButton.setForeground(ColorPalette.OCEAN_LIGHTBLUE);
             reservationButton.setFont(new Font("Serif", Font.PLAIN, 23));

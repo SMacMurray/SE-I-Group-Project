@@ -1,21 +1,35 @@
 package stay_and_shop_system.user.ui;
 
+import org.jdesktop.swingx.JXLoginPane;
+import org.jdesktop.swingx.JXTextField;
 import stay_and_shop_system.*;
+import stay_and_shop_system.ui.RoundJButton;
+import stay_and_shop_system.ui.RoundJPasswordField;
+import stay_and_shop_system.ui.RoundJTextField;
 import stay_and_shop_system.user.*;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import java.awt.Color;
-import java.awt.Dimension;
+import javax.swing.plaf.basic.BasicScrollBarUI;
+
 
 public class LoginPage extends JFrame {
     private static final long serialVersionUID = 1L;
+    private JPanel popupPane;
+    private JPanel mainPane;
     private JPanel contentPane;
     private JLabel invalidLabel;
+    private JPanel pagePane;
 
+    static final String EMAIL_FIELD = "Email";
+    static final String PASSWORD_FIELD = "Password";
+    static final String USERNAME_FIELD = "Username";
+    static final String PHONENUMBER_FIELD = "Phone";
     static final String EMAIL_EMPTY = "Warning: email field is empty.";
     static final String USERNAME_EMPTY = "Warning: username field is empty.";
     static final String PASSWORD_EMPTY = "Warning: password field is empty.";
@@ -32,127 +46,117 @@ public class LoginPage extends JFrame {
      */
     public LoginPage() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(Main.WINDOW_W, Main.WINDOW_H);
-        setLocationRelativeTo(null);
+        setSize(1000, 800);
+        setLocationRelativeTo(null); // Centers the screen
         setTitle(Main.APP_TITLE);
-        contentPane = new JPanel();
-        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-        setContentPane(contentPane);
-        contentPane.setLayout(null);
 
-        JButton homeButton = new JButton(Main.HOME_TEXT);
-        homeButton.setBounds(0, 0, 140, 22);
-        homeButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                HomePage2 newFrame = new HomePage2(); //Opening the second JFrame
-                dispose(); //Disposing the First JFrame
+        // Header Stuff ------------------------------------------------------------------------------
+        Object[] uiObjects = SetupUI.initializeScreen(popupPane, mainPane, this);
+        popupPane = (JPanel) uiObjects[0];
+        mainPane = (JPanel) uiObjects[1];
+
+        pagePane = new JPanel(new GridBagLayout());
+        JScrollPane pageScrollPane = new JScrollPane(pagePane);
+        pageScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        pageScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        pageScrollPane.setBorder(null);
+        pageScrollPane.setViewportBorder(null);
+        pageScrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
+            @Override
+            protected void configureScrollBarColors() {
+                this.thumbColor = ColorPalette.SATURATED_LIGHTBLUE; // Color of the draggable bar
+                this.trackColor = ColorPalette.OCEAN_DARKBLUE; // Color of the background track
             }
         });
-        contentPane.add(homeButton);
+        mainPane.add(pageScrollPane, BorderLayout.CENTER);
+        // -------------------------------------------------------------------------------------------
 
-        JLabel usernameLabel = new JLabel("Username");
-        usernameLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        usernameLabel.setBounds((Main.WINDOW_W-170)/2, 20, 170, 20);
-        contentPane.add(usernameLabel);
+        contentPane = new JPanel( new GridBagLayout() );
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 0;
+        c.gridy = GridBagConstraints.RELATIVE;
+        c.insets = new Insets(10, 20, 10, 20);
 
-        JTextField usernameField = new JTextField();
-        usernameField.setBounds((Main.WINDOW_W-170)/2, 40, 170, 20);
-        contentPane.add(usernameField);
+        JLabel welcomeLabel = new JLabel("Welcome to the Ocean's Water Hotel");
+        welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        welcomeLabel.setForeground(ColorPalette.OCEAN_DARKBLUE);
+        welcomeLabel.setFont(new Font("Serif", Font.BOLD, 30));
+        welcomeLabel.setPreferredSize(new Dimension(500, 40));
+        contentPane.add(welcomeLabel, c);
 
-        JLabel passwordLabel = new JLabel("Password");
-        passwordLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        passwordLabel.setBounds((Main.WINDOW_W-110)/2, 60, 110, 14);
-        contentPane.add(passwordLabel);
+        JXTextField emailField = new RoundJTextField(25);
+        emailField.setPrompt(EMAIL_FIELD);
+        emailField.setPreferredSize(new Dimension(200, 30));
+        emailField.setBackground(contentPane.getBackground());
+        contentPane.add(emailField, c);
 
-        JPasswordField passwordField = new JPasswordField();
-        passwordField.setBounds((Main.WINDOW_W-170)/2, 80, 170, 20);
+        JXTextField passwordField = new RoundJPasswordField(25);
+        passwordField.setPrompt(PASSWORD_FIELD);
+        passwordField.setPreferredSize(new Dimension(200, 30));
+        passwordField.setBackground(contentPane.getBackground());
+        //passwordField.setEchoChar((char)0);
         contentPane.add(passwordField);
 
-        JToggleButton btnShowPassword = new JToggleButton();
-        btnShowPassword.setBounds((Main.WINDOW_W-170)/2+passwordField.getWidth(), 80, 20, 20);
-        btnShowPassword.addActionListener(new ActionListener() {
+        ImageIcon showPasswordIcon = new ImageIcon("src/main/resources/showPassword.png");
+        showPasswordIcon = new ImageIcon(showPasswordIcon.getImage().getScaledInstance((int)(showPasswordIcon.getIconWidth() * 0.2), (int)(showPasswordIcon.getIconHeight() * 0.2), Image.SCALE_SMOOTH));
+        ImageIcon hidePasswordIcon = new ImageIcon("src/main/resources/hidePassword.png");
+        hidePasswordIcon = new ImageIcon(hidePasswordIcon.getImage().getScaledInstance((int)(hidePasswordIcon.getIconWidth() * 0.0390625), (int)(hidePasswordIcon.getIconHeight() * 0.0390625), Image.SCALE_SMOOTH));
+
+        // This button is currently deprecated as SwingX does not have an equivalent JXPasswordField
+        // that would allow you to set echoChar... why.
+        // This is positioned absolutely, because I can not for the life of me figure out how to make
+        // this appear in line with the password field in GridBagLayout.
+        JToggleButton showPasswordButton = new JToggleButton();
+        showPasswordButton.setBounds(30, 300, 30, 30);
+        ImageIcon finalShowPasswordIcon = showPasswordIcon;
+        ImageIcon finalHidePasswordIcon = hidePasswordIcon;
+        showPasswordButton.setIcon(finalHidePasswordIcon);
+        showPasswordButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if (btnShowPassword.isSelected()) passwordField.setEchoChar((char)0);
-                else passwordField.setEchoChar('•');
-            }
-        });
-        contentPane.add(btnShowPassword);
-
-        JLabel emailLabel = new JLabel("Email");
-        emailLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        emailLabel.setBounds((Main.WINDOW_W-110)/2, 100, 110, 14);
-        contentPane.add(emailLabel);
-
-        JTextField emailField = new JTextField();
-        emailField.setBounds((Main.WINDOW_W-170)/2, 120, 170, 20);
-        contentPane.add(emailField);
-
-        JLabel phoneNumberLabel = new JLabel("Phone Number");
-        phoneNumberLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        phoneNumberLabel.setBounds((Main.WINDOW_W-110)/2, 140, 110, 14);
-        contentPane.add(phoneNumberLabel);
-
-        JTextField phoneNumberField = new JTextField();
-        phoneNumberField.setBounds((Main.WINDOW_W-170)/2, 160, 170, 20);
-        contentPane.add(phoneNumberField);
-
-        JPanel panel = new JPanel();
-        panel.setBackground(new Color(160, 160, 160));
-        panel.setBounds(143, 251, 360, 101);
-        contentPane.add(panel);
-        panel.setLayout(null);
-
-        JLabel lblNewLabel_3 = new JLabel("Not a member?");
-        lblNewLabel_3.setHorizontalAlignment(SwingConstants.CENTER);
-        lblNewLabel_3.setBounds((panel.getWidth()-240)/2, 11, 240, 14);
-        panel.add(lblNewLabel_3);
-
-        JButton btnCreateAccount = new JButton("Join Now");
-        btnCreateAccount.setBounds((panel.getWidth()-90)/2, 67, 90, 23);
-        btnCreateAccount.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                String username = usernameField.getText().trim();
-                String password = String.valueOf(passwordField.getPassword());
-                String email = emailField.getText().trim();
-                String phoneNumber = phoneNumberField.getText().trim();
-
-                String dialogMessage;
-                passwordField.setText("");
-
-                if (username.isEmpty()) dialogMessage = USERNAME_EMPTY;
-                else if (password.isEmpty()) dialogMessage = PASSWORD_EMPTY;
-                else if (email.isEmpty()) dialogMessage = EMAIL_EMPTY;
-                else if (phoneNumber.isEmpty()) dialogMessage = PHONENUMBER_EMPTY;
-                else {
-//                	JOptionPane.showMessageDialog(usernameLabel, dialogMessage);
-                    int res = AccountController.createAccount(email, username, password, phoneNumber);
-                    dialogMessage = switch (res) {
-                        case 0 -> ACCOUNT_CREATE_SUCCESS;
-                        case 1 -> ACCOUNT_ALREADY_EXISTS;
-                        case -1 -> FUBAR;
-                        default -> RESPONSE_MISSING;
-                    };
-
-                    // Create Account Success
-                    if (res == 0){
-                        HomePage2 newFrame = new HomePage2();
-                        dispose();
-                    }
+                showPasswordButton.setBackground(contentPane.getBackground());
+                if (showPasswordButton.isSelected()){
+                    //passwordField.setEchoChar((char)0);
+                    showPasswordButton.setIcon(finalShowPasswordIcon);
                 }
-
-                JOptionPane.showMessageDialog(usernameLabel, dialogMessage);
+                else{
+                    //passwordField.setEchoChar('•');
+                    showPasswordButton.setIcon(finalHidePasswordIcon);
+                }
             }
         });
-        panel.add(btnCreateAccount);
+        contentPane.add(passwordField, c);
 
-        JButton btnSignIn = new JButton("Sign In");
-        btnSignIn.setBounds((Main.WINDOW_W-90)/2, 190, 90, 22);
-        btnSignIn.addActionListener(new ActionListener() {
+        //mainPane.add(showPasswordButton);
+
+        JXTextField usernameField = new RoundJTextField(25);
+        usernameField.setPrompt(USERNAME_FIELD);
+        usernameField.setPreferredSize(new Dimension(200, 30));
+        usernameField.setBackground(contentPane.getBackground());
+        contentPane.add(usernameField, c);
+
+        JXTextField phoneNumberField = new RoundJTextField(25);
+        phoneNumberField.setPrompt(PHONENUMBER_FIELD);
+        phoneNumberField.setPreferredSize(new Dimension(200, 30));
+        phoneNumberField.setBackground(contentPane.getBackground());
+        contentPane.add(phoneNumberField, c);
+
+        JSeparator horizontalLine = new JSeparator(SwingConstants.HORIZONTAL);
+        horizontalLine.setPreferredSize(new Dimension(400, 10));
+        horizontalLine.setForeground(ColorPalette.OCEAN_LIGHTBLUE);
+        contentPane.add(horizontalLine, c);
+
+        JButton signInButton = new RoundJButton(25);
+        signInButton.setText("Sign In");
+        //signInButton.setBackground(Color.BLACK);
+        //signInButton.setForeground(Color.WHITE);
+        signInButton.setPreferredSize(new Dimension(100, 30));
+        signInButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String email = emailField.getText().trim();
-                String password = String.valueOf(passwordField.getPassword());
+                String password = String.valueOf(passwordField.getText());
                 String dialogMessage;
-                passwordField.setText("");
+                //passwordField.setPassword("");
+                //passwordField.setEchoChar((char)0);
 
                 if (email.isEmpty()) dialogMessage = EMAIL_EMPTY;
                 else if (password.isEmpty()) dialogMessage = PASSWORD_EMPTY;
@@ -170,36 +174,83 @@ public class LoginPage extends JFrame {
                         dispose();
                     }
                 }
-                JOptionPane.showMessageDialog(usernameLabel, dialogMessage);
+                JOptionPane.showMessageDialog(contentPane, dialogMessage);
             }
         });
-        contentPane.add(btnSignIn);
+        contentPane.add(signInButton, c);
 
-        JButton btnResetPassword = new JButton("Forgot password?");
-        btnResetPassword.setBounds((Main.WINDOW_W-170)/2, 224, 170, 22);
-        contentPane.add(btnResetPassword);
+        JPanel newMemberPanel = new JPanel(new GridBagLayout());
+        newMemberPanel.setBackground(ColorPalette.OCEAN_LIGHTBLUE);
+        newMemberPanel.setPreferredSize(new Dimension(200, 100));
 
+        JLabel newMemberLabel = new JLabel("Not a member?");
+        newMemberLabel.setFont(new Font("Serif", Font.BOLD, 20));
+        newMemberPanel.add(newMemberLabel, c);
 
+        JButton createAccountButton = new RoundJButton(25);
+        createAccountButton.setText("Join Now");
+        createAccountButton.setPreferredSize(new Dimension(100, 30));
+        createAccountButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String username = usernameField.getText().trim();
+                String password = String.valueOf(passwordField.getText());
+                String email = emailField.getText().trim();
+                String phoneNumber = phoneNumberField.getText().trim();
+
+                String dialogMessage;
+                //passwordField.setEchoChar((char)0);
+
+                if (username.isEmpty()) dialogMessage = USERNAME_EMPTY;
+                else if (password.isEmpty()) dialogMessage = PASSWORD_EMPTY;
+                else if (email.isEmpty()) dialogMessage = EMAIL_EMPTY;
+                else if (phoneNumber.isEmpty()) dialogMessage = PHONENUMBER_EMPTY;
+                else {
+                    int res = AccountController.createAccount(email, username, password, phoneNumber);
+                    dialogMessage = switch (res) {
+                        case 0 -> ACCOUNT_CREATE_SUCCESS;
+                        case 1 -> ACCOUNT_ALREADY_EXISTS;
+                        case -1 -> FUBAR;
+                        default -> RESPONSE_MISSING;
+                    };
+                    // Create Account Success
+                    if (res == 0){
+                        HomePage2 newFrame = new HomePage2();
+                        dispose();
+                    }
+                }
+                JOptionPane.showMessageDialog(contentPane, dialogMessage);
+            }
+        });
+        newMemberPanel.add(createAccountButton, c);
+
+        contentPane.add(newMemberPanel, c);
+
+        JPanel footer = new JPanel();
+        footer.setBackground(ColorPalette.DESATURATED_LIGHTBLUE);
+        footer.setPreferredSize(new Dimension(500, 100));
+        mainPane.add(footer, BorderLayout.SOUTH);
+
+        mainPane.add(contentPane, BorderLayout.CENTER);
         setVisible(true);
     }
     public void invalidInfo(String label) {
-        if (!contentPane.isAncestorOf(invalidLabel) || invalidLabel.getText() != label) { // If contentPane does not contain invalidLabel
-            if (contentPane.isAncestorOf(invalidLabel)) { // For testing purposes
-                contentPane.remove(invalidLabel);
-            }
+    	if (!contentPane.isAncestorOf(invalidLabel) || invalidLabel.getText() != label) { // If contentPane does not contain invalidLabel
+    		if (contentPane.isAncestorOf(invalidLabel)) { // For testing purposes
+    			contentPane.remove(invalidLabel);
+    		}
 
-            invalidLabel = new JLabel(label);
-            invalidLabel.setHorizontalAlignment(SwingConstants.CENTER);
-            Dimension prefSize = invalidLabel.getPreferredSize(); // So the text fits exactly in the box more properly
-            invalidLabel.setBounds(280, 40, prefSize.width, prefSize.height);
-            invalidLabel.setForeground(Color.RED);
+    		invalidLabel = new JLabel(label);
+    		invalidLabel.setHorizontalAlignment(SwingConstants.CENTER);
+    		Dimension prefSize = invalidLabel.getPreferredSize(); // So the text fits exactly in the box more properly
+    		invalidLabel.setBounds(280, 40, prefSize.width, prefSize.height);
+    		invalidLabel.setForeground(Color.RED);
 
-            contentPane.add(invalidLabel);
-            contentPane.revalidate();
-            contentPane.repaint();
+    		contentPane.add(invalidLabel);
+    		contentPane.revalidate();
+    		contentPane.repaint();
 
-            // Note to self: I need to find a user based on the Username, then check if the password is right
-            // This means that there can only be one Username for each person.
-        }
+    		// Note to self: I need to find a user based on the Username, then check if the password is right
+    		// This means that there can only be one Username for each person.
+    	}
     }
 }

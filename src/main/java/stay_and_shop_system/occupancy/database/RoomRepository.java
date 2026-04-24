@@ -185,4 +185,37 @@ public class RoomRepository {
 
         return new Room(roomNumber, bedNumber, maxOccupancy, baseDailyRate, smokingStatus, bedTypes, qualityLevel, roomSize);
     }
+
+    public static void updateRoom(int originalRoomNumber, Room r) {
+        String modifySQL = """
+        UPDATE Rooms
+        SET roomNumber = ?, bedNumber = ?, maxOccupancy = ?, baseDailyRate = ?,
+            smokingStatus = ?, bedTypes = ?, qualityLevel = ?, roomSize = ?
+        WHERE roomNumber = ?
+        """;
+
+        try (PreparedStatement ps = connection.prepareStatement(modifySQL)) {
+            ps.setInt(1, r.getNumber());
+            ps.setInt(2, r.getBeds());
+            ps.setInt(3, r.getMaxOccupancy());
+            ps.setDouble(4, r.getBaseDailyRate());
+            ps.setInt(5, r.getSmokingStatus() ? 1 : 0);
+
+            String bedTypes = String.join(", ",
+                    r.getBedTypes().stream().map(Enum::name).toList());
+
+            ps.setString(6, bedTypes);
+            ps.setString(7, r.getQualityLevel().toString());
+            ps.setString(8, r.getRoomSize().toString());
+            ps.setInt(9, originalRoomNumber);
+
+            int rowsUpdated = ps.executeUpdate();
+            if (rowsUpdated <= 0) {
+                System.out.println("Room update failed: RoomRepository");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, e + " : RoomRepository");
+        }
+    }
 }

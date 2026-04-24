@@ -9,21 +9,18 @@ import stay_and_shop_system.user.User;
 import java.awt.EventQueue;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.swing.JFrame;
 import com.formdev.flatlaf.FlatLightLaf;
 
-// Welcome to my big ball of mud design for making JFrames.
-
-
 public class Main extends JFrame {
     //static Dimension ScreenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    public static int WINDOW_W = 640;
-    public static int WINDOW_H = 400;
-    public static String APP_TITLE = "Stop & Shop: the illustrious hotel/luxury shopping experience, for all your stop & shopping needs!";
+    public static int WINDOW_W = 1000;
+    public static int WINDOW_H = 800;
+    public static String APP_TITLE = "The Ocean's Waters Hotel: the illustrious hotel/luxury shopping experience!";
     public static String HOME_TEXT = "Store Logo Here";
     // Use this to indicate what user is currently logged in, or null for logged out.
-    public static User SessionAccount = null;
 
 
     public static void main(String[] args) {
@@ -49,6 +46,7 @@ public class Main extends JFrame {
         RoomRepository.addRoom(new Room(200, 13, 46, 203.99, false, bts, Room.QualityLevel.Comfort, Room.RoomSize.Double));
 //        System.out.println(RoomRepository.loadRoomOfRoomNumber(200));
 
+        // UserRepository.createEmployeeAccount("joel@gmail.com", "joel@gmail.com", Objects.hash("0"), "0", User.UserType.CLERK.ordinal());
 
         EventQueue.invokeLater(new Runnable() {
             public void run() {

@@ -10,8 +10,8 @@ import java.util.Objects;
 
 public class UserRepository {
 	// Use this to indicate what user is currently logged in, or null for logged out.
-	public static User SessionAccount = null; // Change this to private when we've fixed the legacy code.
-	static final String DatabaseURL = "jdbc:sqlite:./data.db";
+	private static User SessionAccount = null; // Change this to private when we've fixed the legacy code.
+	static final String DatabaseURL = "jdbc:sqlite:./hotelSystem.db";
 	static final String DB_NOT_FOUND = "Critical error: a connection could not be establish with the database.";
 
 	public static User getSessionAccount(){ return SessionAccount; }
@@ -21,17 +21,19 @@ public class UserRepository {
 	// Used to create the account table
 	// Joel: Made the initAccountTable public so I could access it.
 	public static void initAccountTable(){
-		String sql = "CREATE TABLE IF NOT EXISTS Users ("
-				+ "	email text PRIMARY KEY,"
-				+ "	name text NOT NULL,"
-				+ "	password int,"
-				+ "	phoneNumber text NOT NULL,"
-				+ "	creditCardNumber text,"
-				+ "	ccv text,"
-				+ "	billingAddress text,"
-				+ "	expirationDate text,"
-				+ " priveleges text NOT NULL" // 0: Admin, 1: Clerk, 2: GuestAdmin, 3: GuestClerk, 4: Guest
-				+ ");";
+		String sql = """
+				CREATE TABLE IF NOT EXISTS Users (
+				email text PRIMARY KEY,
+				name text NOT NULL,
+				password int,
+				phoneNumber text NOT NULL,
+				creditCardNumber text,
+				ccv text,
+				billingAddress text,
+				expirationDate text,
+				priveleges text NOT NULL
+				);
+				"""; // 0: Admin, 1: Clerk, 2: GuestAdmin, 3: GuestClerk, 4: Guest
 		try (var connection = DatabaseConnection.connect()) {
 			System.out.println("Connection to SQLite has been established.");
 			connection.createStatement().execute(sql);
@@ -43,7 +45,9 @@ public class UserRepository {
 	}
 
 	public static void dropTable() {
-		String sql = "DROP TABLE IF EXISTS Users";
+		String sql = """
+			DROP TABLE IF EXISTS Users
+			""";
 		try (Connection connection = DatabaseConnection.connect();
 				Statement stmt = connection.createStatement()) {
 			stmt.execute(sql);
@@ -73,7 +77,9 @@ public class UserRepository {
 
 	// Creates a DB connection and initializes an Accounts table if it doesn't exist.
 	static java.sql.Connection connectToDatabase() throws SQLException {
-		String sql = "SELECT name FROM sqlite_master WHERE type='table' AND name='Users'";
+		String sql = """
+			SELECT name FROM sqlite_master WHERE type='table' AND name='Users'
+			""";
 		java.sql.Connection connection = DatabaseConnection.connect();
 		System.out.println("Connection to SQLite has been established.");
 		ResultSet res = connection.createStatement().executeQuery(sql);
@@ -87,7 +93,9 @@ public class UserRepository {
 
 	// Confirms whether a given user exists in the system.
 	public static boolean findAccount(String email) {
-		String sql = "SELECT EXISTS(SELECT 1 FROM Users WHERE email = ? AND password <> 0)";
+		String sql = """
+			SELECT EXISTS(SELECT 1 FROM Users WHERE email = ? AND password <> 0)
+			""";
 		try (var connection = DatabaseConnection.connect();
 			 var stmt = connection.prepareStatement(sql)) {
 			stmt.setString(1, email);
@@ -102,9 +110,11 @@ public class UserRepository {
 		return false;
 	}
 
-	// Finds user regardless of passwor
+	// Finds user regardless of password
 	public static boolean findUser(String email) {
-		String sql = "SELECT EXISTS(SELECT 1 FROM Users WHERE email = ?)";
+		String sql = """
+			SELECT EXISTS(SELECT 1 FROM Users WHERE email = ?)
+			""";
 		try (var connection = DatabaseConnection.connect();
 			 var stmt = connection.prepareStatement(sql)) {
 			stmt.setString(1, email);
@@ -121,9 +131,11 @@ public class UserRepository {
 
 	// Handles account creation for guests alone.
 	static boolean createAccount(String email, String username, int passwordHash, String phoneNumber){
-		String sql = "INSERT INTO Users (email, name, password, phoneNumber, creditCardNumber, ccv, billingAddress, expirationDate, priveleges)"
-				+" VALUES (?,?,?,?,?,?,?,?,4)"
-				+" RETURNING *";
+		String sql = """
+				INSERT INTO Users (email, name, password, phoneNumber, creditCardNumber, ccv, billingAddress, expirationDate, priveleges)
+				VALUES (?,?,?,?,?,?,?,?,4)
+				RETURNING *
+				""";
 		try (var connection = DatabaseConnection.connect();
 			 var stmt = connection.prepareStatement(sql)) {
 			if (findUserWithoutPassword(email)) {
@@ -146,9 +158,62 @@ public class UserRepository {
 		}
 		return false;
 	}
+
+	// Creates a clerk account without automatically logging in.
+	static boolean createClerk(String email, String username, int passwordHash, String phoneNumber){
+		String sql = """
+				INSERT INTO Users (email, name, password, phoneNumber, creditCardNumber, ccv, billingAddress, expirationDate, priveleges)
+				VALUES (?,?,?,?,?,?,?,?,1)
+				RETURNING *
+				""";
+		try (var connection = DatabaseConnection.connect();
+		     var stmt = connection.prepareStatement(sql)) {
+			if (findUserWithoutPassword(email)) {
+				deleteUser(email);
+			}
+
+			stmt.setString(1, email);
+			stmt.setString(2, username);
+			stmt.setInt(3, passwordHash);
+			stmt.setString(4, phoneNumber);
+			stmt.setString(5, null);
+			stmt.setString(6, null);
+			stmt.setString(7, null);
+			stmt.setString(8, null);
+			stmt.executeQuery();
+			return true;
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	// Updates the password
+	public static boolean updatePassword(String email, int passwordHash) {
+		String sql = """
+			UPDATE Users SET password = ? WHERE email = ? RETURNING *
+			""";
+		try (var connection = DatabaseConnection.connect();
+		     var stmt = connection.prepareStatement(sql)) {
+			stmt.setInt(1, passwordHash);
+			stmt.setString(2, email);
+			ResultSet res = stmt.executeQuery();
+			if (res.next()) {
+				return (res.getInt(3) == passwordHash);
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+		return false;
+	}
+
 	// Finds user regardless of passwor
 	public static boolean findUserWithoutPassword(String email) {
-		String sql = "SELECT EXISTS(SELECT 1 FROM Users WHERE email = ? AND password = 0)";
+		String sql = """
+			SELECT EXISTS(SELECT 1 FROM Users WHERE email = ? AND password = 0)
+			""";
 		try (var connection = DatabaseConnection.connect();
 			 var stmt = connection.prepareStatement(sql)) {
 			stmt.setString(1, email);
@@ -165,9 +230,11 @@ public class UserRepository {
 
 
 	public static boolean addGuest(GuestInterface guest) {
-		String sql = "INSERT INTO Users (email, name, password, phoneNumber, creditCardNumber, ccv, billingAddress, expirationDate, priveleges)"
-				+" VALUES (?,?,?,?,?,?,?,?,?)"
-				+" RETURNING *";
+		String sql = """
+			INSERT INTO Users (email, name, password, phoneNumber, creditCardNumber, ccv, billingAddress, expirationDate, priveleges)
+			VALUES (?,?,?,?,?,?,?,?,?)
+			RETURNING *
+			""";
 		try (var connection = DatabaseConnection.connect();
 			 var stmt = connection.prepareStatement(sql)) {
 
@@ -190,7 +257,9 @@ public class UserRepository {
 	}
 	public static void deleteUser(String email) {
 		// delete is SQL code.
-		String delete = "DELETE FROM Users WHERE email = ?";
+		String delete = """
+			DELETE FROM Users WHERE email = ?
+			""";
 		try (var connection = DatabaseConnection.connect();
 			 var ps = connection.prepareStatement(delete)) {
 			//JOptionPane.showMessageDialog(null, "Successful Connection! : ReservationRepository");
@@ -213,7 +282,9 @@ public class UserRepository {
 	}
 	// The parameter guest has the altered version of the typeId
 	public static boolean changeTypeId(GuestInterface guest) {
-		String modifySQL = "UPDATE Users SET priveleges = ? WHERE email = ?";
+		String modifySQL = """
+			UPDATE Users SET priveleges = ? WHERE email = ?
+			""";
 		try (Connection connection = DatabaseConnection.connect();
 			 PreparedStatement ps = connection.prepareStatement(modifySQL)) {
 
@@ -239,7 +310,9 @@ public class UserRepository {
 	}
 	// Validates a sign in, and sets SessionAccount if successful.
 	static boolean authenticate(String email, int passwordHash){
-		String sql = "SELECT * FROM Users WHERE email = ? and password = ?";
+		String sql = """
+			SELECT * FROM Users WHERE email = ? and password = ?
+			""";
 		try (var connection = DatabaseConnection.connect();
 			 var stmt = connection.prepareStatement(sql)){
 			stmt.setString(1, email);
@@ -366,9 +439,11 @@ public class UserRepository {
 		return false;
 	}
 	public static boolean createEmployeeAccount(String email, String username, int passwordHash, String phoneNumber, int privilege){
-		String sql = "INSERT INTO Users (email, name, password, phoneNumber, priveleges)"
-				+" VALUES (?,?,?,?,?)"
-				+" RETURNING *";
+		String sql = """
+			INSERT INTO Users (email, name, password, phoneNumber, priveleges)
+			VALUES (?,?,?,?,?)
+			RETURNING *
+			""";
 		try (var connection = DatabaseConnection.connect();
 			 var stmt = connection.prepareStatement(sql)) {
 			stmt.setString(1, email);

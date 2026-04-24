@@ -26,7 +26,7 @@ public class StorePage extends JFrame {
         homeButton.setBounds(0, 0, 140, 22);
         homeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                HomePage newFrame = new HomePage(); //Opening the second JFrame
+                HomePage2 newFrame = new HomePage2(); //Opening the second JFrame
                 dispose(); //Disposing the First JFrame
             }
         });

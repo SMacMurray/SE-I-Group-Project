@@ -4,8 +4,7 @@ import stay_and_shop_system.occupancy.Reservation;
 import stay_and_shop_system.occupancy.database.ReservationRepository;
 import stay_and_shop_system.occupancy.ui.*;
 import stay_and_shop_system.user.*;
-import stay_and_shop_system.user.ui.CancelReservationPage;
-import stay_and_shop_system.user.ui.LoginPage;
+import stay_and_shop_system.user.ui.*;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicScrollBarUI;
@@ -118,26 +117,37 @@ public class SetupUI {
 
             JButton addRoomButton = setupSideBarButton("Add Room", 4, 0);
             c.gridx = 0;
-            c.gridy = buttonCount;
-            buttonCount++;
+            c.gridy = buttonCount++;
             buttonsPane.add(addRoomButton, c);
-
-            JButton viewRoomsButton = setupSideBarButton("View All Rooms", 4, 0);
-            c.gridx = 0;
-            c.gridy = buttonCount;
-            buttonCount++;
-            buttonsPane.add(viewRoomsButton, c);
+            addRoomButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    ClerkAddRoomPage newFrame = new ClerkAddRoomPage();
+                    frame.dispose();
+                }
+            });
 
             JButton modifyRoomButton = setupSideBarButton("Modify Room", 4, 0);
             c.gridx = 0;
-            c.gridy = buttonCount;
-            buttonCount++;
+            c.gridy = buttonCount++;
             buttonsPane.add(modifyRoomButton, c);
+
+            modifyRoomButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    ModifyRoomPage newFrame = new ModifyRoomPage();
+                    frame.dispose();
+                }
+            });
+
+            JButton viewRoomsButton = setupSideBarButton("View All Rooms", 4, 0);
+            c.gridx = 0;
+            c.gridy = buttonCount++;
+            buttonsPane.add(viewRoomsButton, c);
 
             JButton modifyMyInformationButton = setupSideBarButton("Modify My Information", 4, 0);
             c.gridx = 0;
-            c.gridy = buttonCount;
-            buttonCount++;
+            c.gridy = buttonCount++;
             buttonsPane.add(modifyMyInformationButton, c);
 
             // Cancel/Modification of Guest's reservation
@@ -188,26 +198,39 @@ public class SetupUI {
             buttonCount++;
             buttonsPane.add(checkGuestBill, c);
 
-            JButton checkGuest = setupSideBarButton("Chteck-in/Check-out Guest", 4, 0);
-            c.gridx = 0;
-            c.gridy = buttonCount;
-            buttonCount++;
-            buttonsPane.add(checkGuest, c);
-
+            checkGuestBill.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    CombinedBillPage newFrame = new CombinedBillPage(true);
+                    frame.dispose();
+                }
+            });
         }
         if (user instanceof AdminInterface) {
             // Based on the Project 12 deliverable, the Admin does not change the default password(since the clerk would), but can leave a predefined email.
-            JButton addRoomButton = setupSideBarButton("Create Hotel Clerk", 4, 0);
+            JButton createClerkButton = setupSideBarButton("Create Hotel Clerk", 4, 0);
             c.gridx = 0;
             c.gridy = buttonCount;
             buttonCount++;
-            buttonsPane.add(addRoomButton, c);
+            createClerkButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    CreateHotelClerkPage newFrame = new CreateHotelClerkPage();
+                    frame.dispose();
+                }
+            });
+            buttonsPane.add(createClerkButton, c);
 
             // Joel: Make sure to check User has a password in the first place.
             JButton resetUserPassButton = setupSideBarButton("Reset User Password", 4, 0);
             c.gridx = 0;
             c.gridy = buttonCount;
             buttonCount++;
+            resetUserPassButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    ResetPasswordPage newFrame = new ResetPasswordPage();
+                    frame.dispose();
+                }
+            });
             buttonsPane.add(resetUserPassButton, c);
         }
         if (user instanceof GuestInterface) {
@@ -217,6 +240,13 @@ public class SetupUI {
             c.gridy = buttonCount;
             buttonCount++;
             buttonsPane.add(checkGuestBill, c);
+            checkGuestBill.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    CombinedBillPage newFrame = new CombinedBillPage(false);
+                    frame.dispose();
+                }
+            });
 
             JButton cancelReservationButton = setupSideBarButton("View My Reservations", 4, 0);
             c.gridx = 0;
@@ -256,7 +286,7 @@ public class SetupUI {
                 }
             });
         }
-        else { // Not signed in
+        else if (UserRepository.getSessionAccount() == null){ // Not signed in
             // Need to find checked in reservation either by date or kept on the Guest.
             JButton checkGuestBill = setupSideBarButton("Check My Bill", 4, 0);
             c.gridx = 0;
@@ -264,8 +294,10 @@ public class SetupUI {
             buttonCount++;
             buttonsPane.add(checkGuestBill, c);
             checkGuestBill.addActionListener(new ActionListener() {
+                @Override
                 public void actionPerformed(ActionEvent e) {
-
+                    CombinedBillPage newFrame = new CombinedBillPage(false);
+                    frame.dispose();
                 }
             });
 
@@ -347,7 +379,7 @@ public class SetupUI {
         accountStatusTextArea.setEditable(false);
         accountStatusTextArea.setFont(new Font("Serif", Font.PLAIN, 18));
         accountStatusTextArea.setForeground(ColorPalette.OCEAN_LIGHTBLUE);
-        if (UserRepository.SessionAccount != null) {
+        if (UserRepository.getSessionAccount() != null) {
             accountStatusTextArea.setText("LOGGED IN AS: " + UserRepository.getSessionAccount().getName());
         }
         c.gridx = 0;
