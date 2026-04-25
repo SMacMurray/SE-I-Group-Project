@@ -1,9 +1,15 @@
 package stay_and_shop_system.occupancy;
 
+import com.google.i18n.phonenumbers.NumberParseException;
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.Phonenumber;
+import org.apache.commons.validator.routines.checkdigit.LuhnCheckDigit;
+import stay_and_shop_system.ColorPalette;
 import stay_and_shop_system.occupancy.database.ReservationRepository;
 import stay_and_shop_system.occupancy.database.RoomRepository;
 import stay_and_shop_system.user.*;
 
+import javax.swing.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -21,7 +27,44 @@ public class ReservationController {
 	public SimpleDateFormat getDateFormatter() {
 		return formatter;
 	}
-	public Object[] reserveRoom(Room room, Calendar start, Calendar end, int guestNum, String guestName, String guestEmail, String phoneNumber, String creditCardNumber, String ccv, String billingAddr, Calendar expDate ) {
+	public Object[] reserveRoom(Room room, Calendar start, Calendar end, int guestNum,
+								String guestName, String guestEmail, String phoneNumber,
+								String creditCardNumber, String ccv, String billingAddr,
+								Calendar expDate ) throws IllegalArgumentException {
+		if (room == null || start == null || end == null || guestName == null
+				|| guestName.isEmpty() || guestEmail == null || guestEmail.isEmpty() ||
+				phoneNumber == null || phoneNumber.isEmpty() || creditCardNumber == null ||
+				creditCardNumber.isEmpty() || ccv == null || ccv.isEmpty() ||
+				billingAddr == null || billingAddr.isEmpty() || expDate == null) {
+			throw new IllegalArgumentException("At least one input is empty.");
+		}
+		if (LuhnCheckDigit.LUHN_CHECK_DIGIT.isValid(creditCardNumber)) {
+			throw new IllegalArgumentException("The credit card number is invalid.");
+		}
+		if (LuhnCheckDigit.LUHN_CHECK_DIGIT.isValid(creditCardNumber)) {
+			throw new IllegalArgumentException("The credit card number is invalid.");
+		}
+		PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
+		Phonenumber.PhoneNumber guestPhoneNumber = new Phonenumber.PhoneNumber();
+		boolean validPhoneNumber = false;
+		try {
+			// Parsing international phone number
+			guestPhoneNumber = phoneUtil.parse(phoneNumber, null);
+
+			validPhoneNumber = phoneUtil.isValidNumber(guestPhoneNumber);
+		} catch (NumberParseException e) {
+			throw new IllegalArgumentException("The international phone number given is invalid");
+		}
+		if (!validPhoneNumber) {
+			throw new IllegalArgumentException("The international phone number given is invalid");
+		}
+		if (!Reservation.validateEmail(guestEmail)) {
+			throw new IllegalArgumentException("The email is invalid.");
+		}
+		if (ccv.length() > 4 || ccv.length() < 3 || !ccv.matches("[0-9]+")) {
+			throw new IllegalArgumentException("The CCV is invalid.");
+		}
+
 		Reservation reservation = new Reservation(room, start, end, guestNum, guestName, guestEmail,  creditCardNumber);
 		reservation.calculateTotal();
 

@@ -314,10 +314,6 @@ public class BookingPage extends JFrame{
 		boolean exception = false;
 		JTextField[] jts = new JTextField[] {guestNameText, guestEmailText, guestCCNText, guestCCVText, guestBillAText, guestExpDateText};
 
-		for (int i = 0; i < jts.length; ++i) {
-
-		}
-
 		if (guestNameText.getText().isEmpty()) {
 			guestNameText.setBorder(BorderFactory.createMatteBorder(2,2,2,2, ColorPalette.INVALID_RED));
 			changeEditabilityOfReserveButton(true);
