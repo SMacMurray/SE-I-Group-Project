@@ -68,8 +68,21 @@ public class BookingPage extends JFrame{
 		c.gridx = 0;
 		c.gridy = 0;
 		pagePane.add(background, c);
+		JScrollPane backgroundWrapper = new JScrollPane(pagePane);
+		backgroundWrapper.setViewportBorder(null);
+		backgroundWrapper.setBorder(null);
+		backgroundWrapper.setOpaque(false);
+		backgroundWrapper.getViewport().setOpaque(false);
+		backgroundWrapper.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
+			@Override
+			protected void configureScrollBarColors() {
+				this.thumbColor = ColorPalette.SATURATED_LIGHTBLUE; // Color of the draggable bar
+				this.trackColor = ColorPalette.OCEAN_DARKBLUE; // Color of the background track
+			}
+		});
+		backgroundWrapper.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 //        pagePane = new ImagePanel("src/main/resources/HomePageOcean.jpeg");
-		mainPane.add(pagePane, BorderLayout.CENTER);
+		mainPane.add(backgroundWrapper, BorderLayout.CENTER);
 
 		return background;
 	}
@@ -276,6 +289,7 @@ public class BookingPage extends JFrame{
 		c.gridheight = 4;
 		c.gridwidth = 2;
 		c.weightx = 0.5;
+		c.insets = new Insets(0, 0, 0, 45);
 		c.fill = GridBagConstraints.HORIZONTAL;
 		reserveBWrapper.add(reserveButton);
 		guestInfoPanel.add(reserveBWrapper, c);

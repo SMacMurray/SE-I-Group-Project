@@ -1,6 +1,7 @@
 package stay_and_shop_system;
 
 import stay_and_shop_system.occupancy.Reservation;
+import stay_and_shop_system.occupancy.Room;
 import stay_and_shop_system.occupancy.database.ReservationRepository;
 import stay_and_shop_system.occupancy.ui.*;
 import stay_and_shop_system.store.ui.StorePage;
@@ -10,6 +11,7 @@ import stay_and_shop_system.user.ui.*;
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -507,7 +509,7 @@ public class SetupUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 SearchRoomPage2 newFrame = new SearchRoomPage2(null);
-//                BookingPage newFrame = new BookingPage(new ArrayList<Room>());
+//                BookingPage newFrame = new BookingPage(new ArrayList<Room>(), null, null);
 //                ReservationSuccessPage newFrame = new ReservationSuccessPage(102043040, 510.99, Calendar.getInstance(), Calendar.getInstance());
 
                 frame.dispose();
