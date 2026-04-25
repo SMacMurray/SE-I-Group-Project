@@ -7,6 +7,7 @@ import stay_and_shop_system.user.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static stay_and_shop_system.occupancy.Room.RoomStatus.Occupied;
 import static stay_and_shop_system.occupancy.Room.RoomStatus.UnOccupied;
 
 
@@ -77,6 +78,9 @@ public class ReservationController {
 		if (reservation.getGuestId() != guestId) {
 			throw new IllegalArgumentException();
 		}
+		Room room = reservation.getRoom();
+		room.setRoomStatus(Occupied);
+		RoomRepository.updateRoom(room.getNumber(), room);
 		reservation.setCheckInDate(checkInDate);
 		reservation.setCost(reservation.getCost() + reservation.getRate());
 		ReservationRepository.modifyReservation(reservation.getReservationId(), reservation);
