@@ -496,8 +496,8 @@ public class SetupUI {
         bookRoomButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                SearchRoomPage2 newFrame = new SearchRoomPage2(null);
-                BookingPage newFrame = new BookingPage(new ArrayList<Room>(), null, null);
+                SearchRoomPage2 newFrame = new SearchRoomPage2(null);
+//                BookingPage newFrame = new BookingPage(new ArrayList<Room>(), null, null);
 //                ReservationSuccessPage newFrame = new ReservationSuccessPage(102043040, 510.99, Calendar.getInstance(), Calendar.getInstance());
 
                 frame.dispose();
