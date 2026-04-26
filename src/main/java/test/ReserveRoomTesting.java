@@ -19,8 +19,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ReserveRoomTesting {
     ReservationController rc = new ReservationController();
@@ -29,7 +28,8 @@ public class ReserveRoomTesting {
     String email = "jollyJill@gmail.com";
     String name = "Jolly Jill";
     String password = "jollyGillyDons#love";
-    String phoneNumber = "909-909-9999";
+    String phoneNumber = "+1 909-909-9999";
+
     @BeforeAll
     static void beforeAll() {
 //        LoadCSV.loadRooms();
@@ -58,6 +58,116 @@ public class ReserveRoomTesting {
 
     }
     @Test
+    void nullOrEmptyInput() {
+        Calendar expDate = Calendar.getInstance();
+        SimpleDateFormat expFormatter = new SimpleDateFormat("MM/yy");
+        try {
+            expDate.setTime(expFormatter.parse("11/27"));
+        }
+        catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), null, null, 2, name, email, phoneNumber, "4242 4242 4242 4242", "334", "1334 Firing My side at Drive", expDate);
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            Object[] reservationInfo = rc.reserveRoom(null, Calendar.getInstance(), null, 2, name, email, phoneNumber, "4242 4242 4242 4242", "334", "1334 Firing My side at Drive", expDate);
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), 2, name, email, phoneNumber, "4242 4242 4242 4242", "334", "1334 Firing My side at Drive", expDate);
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), 0, "John", email, phoneNumber, "4242 4242 4242 4242", "334", "1334 Firing My side at Drive", expDate);
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), 2, "", email, phoneNumber, "4242 4242 4242 4242", "334", "1334 Firing My side at Drive", expDate);
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), 2, null, email, phoneNumber, "4242 4242 4242 4242", "334", "1334 Firing My side at Drive", expDate);
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), 2, name, "", phoneNumber, "4242 4242 4242 4242", "334", "1334 Firing My side at Drive", expDate);
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), 2, name, null, phoneNumber, "4242 4242 4242 4242", "334", "1334 Firing My side at Drive", expDate);
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), 2, name, email, "", "4242 4242 4242 4242", "334", "1334 Firing My side at Drive", expDate);
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), 2, name, email, null, "4242 4242 4242 4242", "334", "1334 Firing My side at Drive", expDate);
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), 2, name, email, phoneNumber, null, "334", "1334 Firing My side at Drive", expDate);
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), 2, name, email, phoneNumber, "", "334", "1334 Firing My side at Drive", expDate);
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), 2, name, email, phoneNumber, "42", "", "1334 Firing My side at Drive", expDate);
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), 2, name, email, phoneNumber, "42", "334", "", expDate);
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), 2, name, email, phoneNumber, "42", "334", null, expDate);
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), 2, name, email, phoneNumber, "42", "334", "John", null);
+        });
+    }
+    @Test
+    void invalidInput() {
+        Calendar laterThanEndDate = Calendar.getInstance();
+        laterThanEndDate.set(Calendar.DAY_OF_MONTH, 1);
+        Calendar beforeTodayDate = Calendar.getInstance();
+        beforeTodayDate.set(Calendar.YEAR, 1990);
+        Calendar invalidExpDate = Calendar.getInstance();
+        int invalidGuestNum = 0;
+        String invalidCreditCard = "3";
+        String invalidCCV = "3";
+        String invalidCCV2 = "33a";
+        String invalidPhoneNumber = "909-999-9999";
+        String invalidPhoneNumber2 = "+1 909-999-999";
+        Calendar expDate = Calendar.getInstance();
+        SimpleDateFormat expFormatter = new SimpleDateFormat("MM/yy");
+        try {
+            expDate.setTime(expFormatter.parse("11/27"));
+        }
+        catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), laterThanEndDate, Calendar.getInstance(), 2, name, email, phoneNumber, "42", "334", "John", expDate);
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), beforeTodayDate, beforeTodayDate, 2, name, email, phoneNumber, "42", "334", "John", expDate);
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), 2, name, email, phoneNumber, "42", "334", "John", invalidExpDate);
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), invalidGuestNum, name, email, phoneNumber, "42", "334", "John", expDate);
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), 2, name, email, phoneNumber, invalidCreditCard, "334", "John", expDate);
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), invalidGuestNum, name, email, phoneNumber, "42", invalidCCV, "John", expDate);
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), invalidGuestNum, name, email, phoneNumber, "42", invalidCCV2, "John", expDate);
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), invalidGuestNum, name, email, invalidPhoneNumber, "42", "334", "John", expDate);
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), invalidGuestNum, name, email, invalidPhoneNumber2, "42", "334", "John", expDate);
+        });
+    }
+    @Test
     void newGuestMakesReservation() {
         Calendar start = Calendar.getInstance();
         Calendar end = Calendar.getInstance();
@@ -78,7 +188,7 @@ public class ReserveRoomTesting {
         for (Reservation r : ReservationRepository.loadReservations()) {
             System.out.println(r);
         }
-        Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), start, end, 2, "Jolly Jill", guestEmail, "909-909-9099", "4242 4242 4242 4242", "334", "1334 Firing My side at Drive", expDate);
+        Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), start, end, 2, "Jolly Jill", guestEmail, "+1 909-909-9099", "4242 4242 4242 4242", "334", "1334 Firing My side at Drive", expDate);
         for (Reservation r : ReservationRepository.loadReservations()) {
             System.out.println(r);
         }
@@ -89,7 +199,7 @@ public class ReserveRoomTesting {
         assertEquals(total, RoomRepository.loadRoomOfRoomNumber(101).getDailyRate());
 
         // This now considers that the User has a session account assigned.
-        reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(200), start, end2, 2, "Jolly Jill", guestEmail, "909-909-9099", "4242 4242 4242 4242", "334", "1334 Firing My side at Drive", expDate);
+        reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(200), start, end2, 2, "Jolly Jill", guestEmail, "+1 909-909-9099", "4242 4242 4242 4242", "334", "1334 Firing My side at Drive", expDate);
 
         guestId = (int)reservationInfo[0];
         total = (double)reservationInfo[1];

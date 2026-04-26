@@ -137,7 +137,7 @@ public class RoomRepository {
         int roomNumber = rSet.getInt("roomNumber");
         int bedNumber = rSet.getInt("bedNumber");
         int maxOccupancy = rSet.getInt("maxOccupancy");
-        double baseDailyRate = rSet.getInt("baseDailyRate");
+        double baseDailyRate = rSet.getDouble("baseDailyRate");
         boolean smokingStatus = rSet.getBoolean("smokingStatus");
 
         List<Room.BedType> bedTypes = new ArrayList<>();

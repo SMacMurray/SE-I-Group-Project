@@ -4,12 +4,10 @@ import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 import org.apache.commons.validator.routines.checkdigit.LuhnCheckDigit;
-import stay_and_shop_system.ColorPalette;
 import stay_and_shop_system.occupancy.database.ReservationRepository;
 import stay_and_shop_system.occupancy.database.RoomRepository;
 import stay_and_shop_system.user.*;
 
-import javax.swing.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -17,11 +15,6 @@ import java.util.*;
 public class ReservationController {
 	// Won't stop saying can't make a type of ArrayList or smth, had to cut the entire code than paste it
 	private static List<Reservation> reservations  = new ArrayList<>();
-
-	ReservationRepository rrp = new ReservationRepository();
-	RoomRepository rp = new RoomRepository();
-	private RoomService rs = new RoomService();
-	private GuestService gs = new GuestService();
 	private SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
 
 	public SimpleDateFormat getDateFormatter() {
@@ -41,8 +34,8 @@ public class ReservationController {
 		if (LuhnCheckDigit.LUHN_CHECK_DIGIT.isValid(creditCardNumber)) {
 			throw new IllegalArgumentException("The credit card number is invalid.");
 		}
-		if (LuhnCheckDigit.LUHN_CHECK_DIGIT.isValid(creditCardNumber)) {
-			throw new IllegalArgumentException("The credit card number is invalid.");
+		if (guestNum <= 0) {
+			throw new IllegalArgumentException("The guest number can't be 0 or less");
 		}
 		PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
 		Phonenumber.PhoneNumber guestPhoneNumber = new Phonenumber.PhoneNumber();
@@ -64,6 +57,33 @@ public class ReservationController {
 		if (ccv.length() > 4 || ccv.length() < 3 || !ccv.matches("[0-9]+")) {
 			throw new IllegalArgumentException("The CCV is invalid.");
 		}
+		Calendar todayDate = Calendar.getInstance();
+		try {
+			// Getting rid of the minutes and seconds in today's date.
+			todayDate.setTime(formatter.parse(formatter.format(Calendar.getInstance().getTime())));
+		}
+		catch (Exception e) {
+			throw new RuntimeException("Could not parse today's date.");
+		}
+		if (start.after(end)) {
+			throw new IllegalArgumentException("The start date can't be after the end date.");
+		}
+		if (start.after(todayDate)) {
+			throw new IllegalArgumentException("The start date can't be after today's date.");
+		}
+		SimpleDateFormat expFormatter = new SimpleDateFormat("MM/yy");
+		Calendar todayExpDate = Calendar.getInstance();
+		try {
+			// Getting rid of the minutes and seconds in today's date.
+			todayExpDate.setTime(expFormatter.parse(expFormatter.format(Calendar.getInstance().getTime())));
+		}
+		catch (Exception e) {
+			throw new RuntimeException("Could not parse today's date.");
+		}
+		if (!expDate.after(todayExpDate)) {
+			throw new IllegalArgumentException("The credit card is expired.");
+		}
+
 
 		Reservation reservation = new Reservation(room, start, end, guestNum, guestName, guestEmail,  creditCardNumber);
 		reservation.calculateTotal();
