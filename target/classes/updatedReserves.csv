@@ -1,0 +1,26 @@
+roomNumber,beds,maxOccupancy,baseDailyRate,smokingStatus,bedTypes,qualityLevel,roomSize
+101,3,3,10.0,Prohibited,"Twin, King",Executive,Single
+113,1,1,1.0,Permitted,Twin,Economy,Single
+114,4,4,12.3,Permitted,"King, Full",Executive,Single
+117,1,1,14.5,Permitted,"Queen, Full",Executive,Single
+119,1,1,5.5,Permitted,Twin,Economy,Double
+123,4,3,1000000.0,Permitted,"Twin, Full",Economy,Single
+130,34,1,19932.99,Permitted,"King, Full",Economy,Single
+150,4,4,13.99,Permitted,Full,Business,Family
+200,2,4,20.99,Permitted,"Queen, King",Economy,Deluxe
+201,2,150,0.99,Permitted,"Queen, Twin",Comfort,Family
+202,2,3,4.0,Prohibited,"King, Full",Comfort,Suite
+205,3,3,10.0,Permitted,Twin,Economy,Single
+209,2,1,100.0,Permitted,Full,Executive,Single
+210,5,10000,500.99,Permitted,"Twin, Queen, King",Comfort,Deluxe
+220,2,4,3099.99,Prohibited,"Full, Queen",Business,Standard
+228,1,1,10.99,Prohibited,Queen,Business,Single
+230,3,2,1304.0,Permitted,"Full, Queen",Business,Single
+232,2,1,250.99,Permitted,"Full, Twin",Business,Single
+239,2,1,23.99,Prohibited,Queen,Executive,Deluxe
+244,1,1,0.99,Permitted,King,Business,Single
+245,1,1,1.0,Prohibited,Full,Business,Single
+246,3,3,24.33,Prohibited,"Twin, King",Executive,Suite
+249,10,4,5.0,Prohibited,"Twin, Full, Queen",Business,Double
+250,10,9,5.99,Permitted,"Twin, King, Full, Queen",Business,Single
+399,3,5,5000.99,Prohibited,"King, Full",Comfort,Deluxe
