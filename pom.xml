@@ -22,15 +22,6 @@
             <version>5.3.1</version>
             <scope>compile</scope>
         </dependency>
-        <!--Was able to do this through this command:
-            mvn install:install-file -Dfile=libs/mysql-connector-j-9.6.0.jar -DgroupId=libs.database
-            -DartifactId=mysql-connector-j-9.6.0-jar -Dversion=1.0 -Dpackaging=jar
-            -->
-        <dependency>
-            <groupId>libs.database</groupId>
-            <artifactId>mysql-connector-j-9.6.0-jar</artifactId>
-            <version>1.0</version>
-        </dependency>
 
         <!-- For text field prompts (hints) -->
         <dependency>
@@ -39,7 +30,7 @@
             <version>1.6.1</version>
             <scope>compile</scope>
         </dependency>
-
+        
 
         <!-- Source: https://mvnrepository.com/artifact/com.formdev/flatlaf -->
         <!--        For design (initialized in main) -->
@@ -82,7 +73,7 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>6.1.0-M1</version>
+            <version>RELEASE</version>
             <scope>compile</scope>
         </dependency>
 
