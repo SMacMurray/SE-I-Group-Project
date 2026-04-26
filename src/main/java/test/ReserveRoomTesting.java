@@ -1,5 +1,6 @@
 package test;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -391,6 +392,13 @@ public class ReserveRoomTesting {
         assertEquals(guest.getPassword(), g.getPassword());
         assertEquals(guest.getPhoneNumber(), g.getPhoneNumber());
 
+    }
+
+    @AfterAll
+    static void dropTables() {
+        RoomRepository.dropTable();
+        ReservationRepository.dropTable();
+        UserRepository.dropTable();
     }
 //AccountSystem => UserRepository
 //Made JUnit Testing for ReserveRoom combined with UserRepository

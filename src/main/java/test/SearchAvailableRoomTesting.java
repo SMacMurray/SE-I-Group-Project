@@ -1,5 +1,6 @@
 package test;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -283,5 +284,11 @@ public class SearchAvailableRoomTesting {
         assertTrue(searchedRooms.contains(RoomRepository.loadRoomOfRoomNumber(145)));
         assertTrue(searchedRooms.contains(RoomRepository.loadRoomOfRoomNumber(230)));
         assertEquals(6, searchedRooms.size());
+    }
+
+    @AfterAll
+    static void dropTables() {
+        RoomRepository.dropTable();
+        ReservationRepository.dropTable();
     }
 }
