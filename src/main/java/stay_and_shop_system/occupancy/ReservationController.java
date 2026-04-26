@@ -11,6 +11,9 @@ import stay_and_shop_system.user.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static stay_and_shop_system.occupancy.Room.RoomStatus.Occupied;
+import static stay_and_shop_system.occupancy.Room.RoomStatus.UnOccupied;
+
 
 public class ReservationController {
 	// Won't stop saying can't make a type of ArrayList or smth, had to cut the entire code than paste it
@@ -135,10 +138,17 @@ public class ReservationController {
 		// If guestId does not match reservation, exit / throw exception .(to make sure the person that owns reservation checks out/in)
 		// Set the Check in Date of Reservation, Increment the cost by the rate by one time, and Update it in ReservationRepository
 		// Set the Room of the reservation as occupied, and Update it in RoomRepository
-
-
+		if (reservation.getGuestId() != guestId) {
+			throw new IllegalArgumentException();
+		}
+		Room room = reservation.getRoom();
+		room.setRoomStatus(Occupied);
+		RoomRepository.updateRoom(room.getNumber(), room);
+		reservation.setCheckInDate(checkInDate);
+		reservation.setCost(reservation.getCost() + reservation.getRate());
+		ReservationRepository.modifyReservation(reservation.getReservationId(), reservation);
 	}
-	public void checkOut(Reservation reservation, int guestId) {
+	public double checkOut(Reservation reservation, int guestId) {
 		// Keep the Guest, since hotels usually keep the guest info.
 
 		// Joel:
@@ -146,5 +156,14 @@ public class ReservationController {
 		// Set the Room of the reservation as unoccupied, and Update it in RoomRepository
 		// Keep the cost in a variable, Delete the reservation.
 		// Return the cost
+		if (reservation.getGuestId() != guestId) {
+			throw new IllegalArgumentException();
+		}
+		Room room = reservation.getRoom();
+		double cost = reservation.getCost();
+		room.setRoomStatus(UnOccupied);
+		RoomRepository.updateRoom(room.getNumber(), room);
+		ReservationRepository.deleteReservation(reservation);
+		return cost;
 	}
 }

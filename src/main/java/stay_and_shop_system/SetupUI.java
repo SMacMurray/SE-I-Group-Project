@@ -118,6 +118,18 @@ public class SetupUI {
 
         if (user instanceof ClerkInterface) {
 
+            JButton checkInButton = setupSideBarButton("Check In Guest", 4, 0);
+            c.gridx = 0;
+            c.gridy = buttonCount++;
+            buttonsPane.add(checkInButton, c);
+            checkInButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    CheckInPage newFrame = new CheckInPage();
+                    frame.dispose();
+                }
+            });
+
             JButton addRoomButton = setupSideBarButton("Add Room", 4, 0);
             c.gridx = 0;
             c.gridy = buttonCount++;
