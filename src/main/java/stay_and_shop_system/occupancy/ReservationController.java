@@ -128,7 +128,13 @@ public class ReservationController {
 		return rooms;
 	}
 	public Reservation modifyReservation(Reservation reservation, int roomNumber, int guestNumber, String guestName, String guestEmail, String creditCardNumber) throws IllegalArgumentException {
+		if (reservation == null) {
+			throw new IllegalArgumentException("Reservation is null");
+		}
 		Room room = RoomRepository.loadRoomOfRoomNumber(roomNumber);
+		if (room == null) {
+			throw new IllegalArgumentException("The room number given does not exist in the room repository");
+		}
 		int previousReservationId = reservation.getReservationId();
 
 		reservation.modifyReservation(room, guestNumber, guestName, guestEmail, creditCardNumber);

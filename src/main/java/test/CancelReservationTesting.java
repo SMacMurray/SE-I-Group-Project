@@ -144,5 +144,6 @@ public class CancelReservationTesting {
     static void dropTables() {
         RoomRepository.dropTable();
         ReservationRepository.dropTable();
+        UserRepository.dropTable();
     }
 }

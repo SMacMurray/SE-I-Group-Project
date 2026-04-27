@@ -124,7 +124,8 @@ public class ReserveRoomTesting {
         beforeTodayDate.set(Calendar.YEAR, 1990);
         Calendar invalidExpDate = Calendar.getInstance();
         int invalidGuestNum = 0;
-        int invalidGuestNum2 = 101; // More than the room max occupancy
+        int outOfRangeGuestNum = 101; // More than the room max occupancy
+        int outOfRangeGuestNum2 = -101; // More than the room max occupancy
         String invalidCreditCard = "3";
         String invalidCCV = "3";
         String invalidCCV2 = "33a";
@@ -153,7 +154,10 @@ public class ReserveRoomTesting {
             Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), invalidGuestNum, name, email, phoneNumber, "42", "334", "John", expDate);
         });
         assertThrows(IllegalArgumentException.class, () -> {
-            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), invalidGuestNum2, name, email, phoneNumber, "42", "334", "John", expDate);
+            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), outOfRangeGuestNum, name, email, phoneNumber, "42", "334", "John", expDate);
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), outOfRangeGuestNum2, name, email, phoneNumber, "42", "334", "John", expDate);
         });
         assertThrows(IllegalArgumentException.class, () -> {
             Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), 2, name, email, phoneNumber, invalidCreditCard, "334", "John", expDate);

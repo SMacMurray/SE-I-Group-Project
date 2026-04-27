@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import stay_and_shop_system.occupancy.Room.BedType;
+import stay_and_shop_system.user.UserRepository;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -290,5 +291,6 @@ public class SearchAvailableRoomTesting {
     static void dropTables() {
         RoomRepository.dropTable();
         ReservationRepository.dropTable();
+        UserRepository.dropTable();
     }
 }

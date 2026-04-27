@@ -69,10 +69,10 @@ public class Reservation {
 		if (r == null) throw new IllegalArgumentException("Room is null");
 		if (gN <= 0) throw new IllegalArgumentException("Guest Number is invalid");
 		if (gN > r.getMaxOccupancy()) throw new IllegalArgumentException("Guest Number can't be higher than room guest number");
-		if (n.isEmpty()) throw new IllegalArgumentException("Name can't be empty");
-		if (em.isEmpty()) throw new IllegalArgumentException("Email can't be empty");
+		if (n == null || n.isEmpty()) throw new IllegalArgumentException("Name can't be empty");
+		if (em == null || em.isEmpty()) throw new IllegalArgumentException("Email can't be empty");
 		if (!Reservation.validateEmail(em)) throw new IllegalArgumentException("Not a valid email");
-		if (cc.isEmpty()) throw new IllegalArgumentException("Credit Card Number can't be empty");
+		if (cc == null || cc.isEmpty()) throw new IllegalArgumentException("Credit Card Number can't be empty");
 		if (!LuhnCheckDigit.LUHN_CHECK_DIGIT.isValid(cc.replaceAll(" ", ""))) throw new IllegalArgumentException("Credit Card Number is not a valid one.");
 
 		room = r;
