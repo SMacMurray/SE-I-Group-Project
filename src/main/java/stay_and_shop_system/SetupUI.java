@@ -160,6 +160,14 @@ public class SetupUI {
             c.gridy = buttonCount++;
             buttonsPane.add(viewRoomsButton, c);
 
+            viewRoomsButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    ViewAllRoomsPage newFrame = new ViewAllRoomsPage();
+                    frame.dispose();
+                }
+            });
+
             JButton modifyMyInformationButton = setupSideBarButton("Modify My Information", 4, 0);
             c.gridx = 0;
             c.gridy = buttonCount++;
