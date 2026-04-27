@@ -37,7 +37,7 @@ public class CancelReservationTesting {
     static Calendar expDate = Calendar.getInstance();
     static Calendar todayDate;
     static SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
-    static SimpleDateFormat expFormatter = new SimpleDateFormat("MM/yy");
+    static SimpleDateFormat expFormatter = new SimpleDateFormat("MM/yyyy");
 
     @BeforeAll
     static void init() {
@@ -70,7 +70,7 @@ public class CancelReservationTesting {
             throw new RuntimeException("Could not parse today's date.");
         }
         try {
-            expDate.setTime(expFormatter.parse("11/27"));
+            expDate.setTime(expFormatter.parse("11/2027"));
         }
         catch (ParseException e) {
             e.printStackTrace();

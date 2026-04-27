@@ -130,10 +130,10 @@ public class Reservation {
 		reservationId = Objects.hash(room.getNumber() + guestName + getFormattedEndDate());
 	}
 
-	public void calculateTotal() {
+	public void calculateProjectedTotal() {
 		long diffInMillis = Math.abs(end.getTime().getTime() - start.getTime().getTime());
 		long daysBetween = TimeUnit.DAYS.convert(diffInMillis, TimeUnit.MILLISECONDS);
-		System.out.println("Days Betweeb: " + daysBetween);
+		System.out.println("Days Between: " + daysBetween);
 		daysBetween += 1;
 
 		cost = Math.round((rate * daysBetween) * 100.0) / 100.0;

@@ -221,7 +221,7 @@ public class BookingPage extends JFrame{
 
 		JPanel guestExpDateWrapper = new JPanel();
 		guestExpDateWrapper.setOpaque(false);
-		JLabel guestExpDate = new JLabel("Expiration Date: ");
+		JLabel guestExpDate = new JLabel("Expiration Date(MM/yyyy): ");
 		guestExpDate.setFont(new Font("Serif", Font.ITALIC, 16));
 		guestExpDateText = new JTextField(16);
 		guestExpDateText.setBorder(BorderFactory.createMatteBorder(2,2,2,2, ColorPalette.SATURATED_LIGHTBLUE));
@@ -266,11 +266,17 @@ public class BookingPage extends JFrame{
 					try {
 						Calendar expDate = Calendar.getInstance();
 						expDate.setTime(formatter.parse(guestExpDateText.getText()));
-						Object[] reserveInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(Integer.parseInt(currButton.getName())), rCr.getDateRange()[0],
-								rCr.getDateRange()[1], Integer.parseInt(guestCountText.getText()), guestNameText.getText(),
-								guestEmailText.getText(), guestPhoneText.getText(), guestCCNText.getText(), guestCCVText.getText(),
-								guestBillAText.getText(), expDate);
-
+						Object[] reserveInfo;
+						try {
+							reserveInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(Integer.parseInt(currButton.getName())), rCr.getDateRange()[0],
+									rCr.getDateRange()[1], Integer.parseInt(guestCountText.getText()), guestNameText.getText(),
+									guestEmailText.getText(), guestPhoneText.getText(), guestCCNText.getText(), guestCCVText.getText(),
+									guestBillAText.getText(), expDate);
+						}
+						catch (IllegalArgumentException exp) {
+							JOptionPane.showMessageDialog(null, exp.getMessage());
+							return;
+						}
 						ReservationSuccessPage newFrame = new ReservationSuccessPage((int)reserveInfo[0], (double)reserveInfo[1],
 								rCr.getDateRange()[0], rCr.getDateRange()[1]);
 					}
@@ -399,7 +405,7 @@ public class BookingPage extends JFrame{
 
 		Calendar expDate = Calendar.getInstance();
 		Calendar todayDate = Calendar.getInstance();
-		SimpleDateFormat formatter = new SimpleDateFormat("MM/yy");
+		SimpleDateFormat formatter = new SimpleDateFormat("MM/yyyy");
 		try {
 			expDate.setTime(formatter.parse(guestExpDateText.getText()));
 			// Getting rid of the minutes and seconds in today's date.
@@ -514,6 +520,14 @@ public class BookingPage extends JFrame{
 			c3.gridy = 1;
 			roomInfoPanel.add(costLabel, c3);
 
+			JLabel guestCountLabel = new JLabel("Max Occupancy: " + r.getMaxOccupancy() + " guests");
+			guestCountLabel.setFont(new Font("Serif", Font.ITALIC, 15));
+			guestCountLabel.setPreferredSize(new Dimension(300, 50));
+			guestCountLabel.setForeground(ColorPalette.DESATURATED_DARKBLUE);
+			c3.gridx = 0;
+			c3.gridy = 2;
+			roomInfoPanel.add(guestCountLabel, c3);
+
 			JButton bookButton = new JButton("BOOK NOW");
 			bookButton.setFont(new Font("Serif", Font.ITALIC, 20));
 			bookButton.setForeground(ColorPalette.OCEAN_BLUE);
@@ -548,7 +562,6 @@ public class BookingPage extends JFrame{
 			roomImg.setBackground(ColorPalette.INVALID_RED);
 			c2.gridx = 0;
 			c2.gridy = 1;
-			c2.insets = new Insets(10, 0, 0, 0);
 			roomPanel.add(roomImg, c2);
 //			c.gridx = 0;
 //			c.gridy = i;
@@ -635,7 +648,6 @@ public class BookingPage extends JFrame{
 				this.trackColor = ColorPalette.OCEAN_DARKBLUE; // Color of the background track
 			}
 		});
-		roomsScrollPane.add(new JLabel("Joms"));
 		roomsWrapper.add(roomsScrollPane);
 		background.add(roomsWrapper, BorderLayout.CENTER);
 
