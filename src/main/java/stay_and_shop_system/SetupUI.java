@@ -165,6 +165,14 @@ public class SetupUI {
             c.gridy = buttonCount++;
             buttonsPane.add(modifyMyInformationButton, c);
 
+            modifyMyInformationButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    ModifyMyInformationPage newFrame = new ModifyMyInformationPage();
+                    frame.dispose();
+                }
+            });
+
             // Cancel/Modification of Guest's reservation
             JButton cancelReservationButton = setupSideBarButton("View Guest's Reservations", 4, 0);
             c.gridx = 0;
