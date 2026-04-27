@@ -89,6 +89,7 @@ public class CancelReservationTesting {
         AccountController.createAccount(email, name, password, phoneNumber);
         assertEquals(Math.abs(Objects.hash(email)), ((GuestInterface)UserRepository.getSessionAccount()).getGuestId());
         assertThrows(NullPointerException.class, () -> ReservationRepository.deleteReservation(null));
+
         //
         // loadreservation by guest id;
         // getGuest Id
@@ -98,6 +99,7 @@ public class CancelReservationTesting {
     void searchReservationById() {
         AccountController.createAccount(email, name, password, phoneNumber);
         GuestInterface guest = ((GuestInterface)UserRepository.getSessionAccount());
+
 
         for (Room r : RoomRepository.loadRooms()) {
             rc.reserveRoom(r, todayDate, todayDate, guestNum, name, email, phoneNumber, creditCardNumber, ccv, billingAddr,
@@ -118,6 +120,9 @@ public class CancelReservationTesting {
             }
             return true;
         });
+
+        // Empty reservation Search
+        assertTrue(ReservationRepository.loadReservationsOfGuestId(0).isEmpty());
     }
     @Test
     void deleteReservation() {
