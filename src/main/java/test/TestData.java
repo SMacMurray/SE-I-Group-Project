@@ -41,6 +41,11 @@ public class TestData {
                     qualityLevel, roomSize
                     );
             RoomRepository.addRoom(r);
+
+            if (i - (100 * (int)(i / 100)) > 50) {
+                i = (100 * ((int)((i) / 100) + 1)); // Going to next floor. Allowing for adding rooms.
+
+            }
         }
     }
     @AfterAll
