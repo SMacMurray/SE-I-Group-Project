@@ -19,6 +19,7 @@ public class LoadTesting {
         RoomRepository.createTable();
     }
     // For UI loading time testing.
+    // Could not find a way to prevent loading rooms on the screen affecting the scroll pane.
     @Test
     void load300Rooms() {
         for (int i = 100; i < 400; ++i) {
