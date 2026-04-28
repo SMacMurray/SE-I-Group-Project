@@ -52,4 +52,25 @@ public class AccountController {
         }
         return 1;
     }
+
+    public static int updateCurrentUserInformation(String newEmail, String username, String phoneNumber, String newPassword) {
+        User currentUser = UserRepository.getSessionAccount();
+
+        if (currentUser == null) {
+            return 2;
+        }
+
+        String oldEmail = currentUser.getEmail();
+
+        if (!oldEmail.equals(newEmail) && UserRepository.findUser(newEmail)) {
+            return 1;
+        }
+
+        Integer passwordHash = null;
+        if (newPassword != null && !newPassword.trim().isEmpty()) {
+            passwordHash = hashPassword(newPassword);
+        }
+
+        return UserRepository.updateCurrentUserInformation(oldEmail, newEmail, username, phoneNumber, passwordHash) ? 0 : -1;
+    }
 }
