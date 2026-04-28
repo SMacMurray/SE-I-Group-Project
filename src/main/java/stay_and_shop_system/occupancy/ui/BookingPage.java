@@ -503,6 +503,7 @@ public class BookingPage extends JFrame{
 			protected void process(List<Room> chunks) {
 				for (Room r : chunks) {
 					JPanel roomPanel = new JPanel(new GridBagLayout());
+					roomPanel.setBackground(ColorPalette.OCEAN_LIGHTBLUE);
 					roomPanel.setPreferredSize(new Dimension(700, 440));
 					GridBagConstraints c2 = new GridBagConstraints();
 
