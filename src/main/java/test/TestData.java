@@ -28,7 +28,7 @@ public class TestData {
     }
     // For UI loading time testing.
     @Test
-    void load300Rooms() {
+    void load150Rooms() {
         for (int i = 100; i < 400; ++i) {
             List< Room.BedType> bedTypes = new ArrayList<>();
             for (int j = 0; j < (Math.random() * 100) % 4; ++j)  {
