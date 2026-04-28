@@ -73,7 +73,6 @@ public class RoomRepository {
         Room room = null;
 
         try (ResultSet rSet = connection.createStatement().executeQuery(loadSQL)) {
-
             if (rSet.next()) {
                 room = mapResultSetToRoom(rSet);
             }
@@ -137,7 +136,7 @@ public class RoomRepository {
         int roomNumber = rSet.getInt("roomNumber");
         int bedNumber = rSet.getInt("bedNumber");
         int maxOccupancy = rSet.getInt("maxOccupancy");
-        double baseDailyRate = rSet.getInt("baseDailyRate");
+        double baseDailyRate = rSet.getDouble("baseDailyRate");
         boolean smokingStatus = rSet.getBoolean("smokingStatus");
 
         List<Room.BedType> bedTypes = new ArrayList<>();

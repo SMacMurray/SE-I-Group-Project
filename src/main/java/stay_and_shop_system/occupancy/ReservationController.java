@@ -1,5 +1,9 @@
 package stay_and_shop_system.occupancy;
 
+import com.google.i18n.phonenumbers.NumberParseException;
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.Phonenumber;
+import org.apache.commons.validator.routines.checkdigit.LuhnCheckDigit;
 import stay_and_shop_system.occupancy.database.ReservationRepository;
 import stay_and_shop_system.occupancy.database.RoomRepository;
 import stay_and_shop_system.user.*;
@@ -14,19 +18,81 @@ import static stay_and_shop_system.occupancy.Room.RoomStatus.UnOccupied;
 public class ReservationController {
 	// Won't stop saying can't make a type of ArrayList or smth, had to cut the entire code than paste it
 	private static List<Reservation> reservations  = new ArrayList<>();
-
-	ReservationRepository rrp = new ReservationRepository();
-	RoomRepository rp = new RoomRepository();
-	private RoomService rs = new RoomService();
-	private GuestService gs = new GuestService();
 	private SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
 
 	public SimpleDateFormat getDateFormatter() {
 		return formatter;
 	}
-	public Object[] reserveRoom(Room room, Calendar start, Calendar end, int guestNum, String guestName, String guestEmail, String phoneNumber, String creditCardNumber, String ccv, String billingAddr, Calendar expDate ) {
+	public Object[] reserveRoom(Room room, Calendar start, Calendar end, int guestNum,
+								String guestName, String guestEmail, String phoneNumber,
+								String creditCardNumber, String ccv, String billingAddr,
+								Calendar expDate ) throws IllegalArgumentException {
+		if (room == null || start == null || end == null || guestName == null
+				|| guestName.isEmpty() || guestEmail == null || guestEmail.isEmpty() ||
+				phoneNumber == null || phoneNumber.isEmpty() || creditCardNumber == null ||
+				creditCardNumber.isEmpty() || ccv == null || ccv.isEmpty() ||
+				billingAddr == null || billingAddr.isEmpty() || expDate == null) {
+			throw new IllegalArgumentException("At least one input is empty.");
+		}
+		if (!LuhnCheckDigit.LUHN_CHECK_DIGIT.isValid(creditCardNumber.replaceAll(" ", ""))) {
+			throw new IllegalArgumentException("The credit card number is invalid.");
+		}
+		if (guestNum <= 0) {
+			throw new IllegalArgumentException("The guest number can't be 0 or less");
+		}
+		if (guestNum > room.getMaxOccupancy()) {
+			throw new IllegalArgumentException("The guest number can't be more than the room's max occupancy.");
+		}
+		PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
+		Phonenumber.PhoneNumber guestPhoneNumber = new Phonenumber.PhoneNumber();
+		boolean validPhoneNumber = false;
+		try {
+			// Parsing international phone number
+			guestPhoneNumber = phoneUtil.parse(phoneNumber, null);
+
+			validPhoneNumber = phoneUtil.isValidNumber(guestPhoneNumber);
+		} catch (NumberParseException e) {
+			throw new IllegalArgumentException("The international phone number given is invalid");
+		}
+		if (!validPhoneNumber) {
+			throw new IllegalArgumentException("The international phone number given is invalid");
+		}
+		if (!Reservation.validateEmail(guestEmail)) {
+			throw new IllegalArgumentException("The email is invalid.");
+		}
+		if (ccv.length() > 4 || ccv.length() < 3 || !ccv.matches("[0-9]+")) {
+			throw new IllegalArgumentException("The CCV is invalid.");
+		}
+		Calendar todayDate = Calendar.getInstance();
+		try {
+			// Getting rid of the minutes and seconds in today's date.
+			todayDate.setTime(formatter.parse(formatter.format(Calendar.getInstance().getTime())));
+		}
+		catch (Exception e) {
+			throw new RuntimeException("Could not parse today's date.");
+		}
+		if (start.after(end)) {
+			throw new IllegalArgumentException("The start date can't be after the end date.");
+		}
+		if (start.before(todayDate)) {
+			throw new IllegalArgumentException("The start date can't be before today's date.");
+		}
+		SimpleDateFormat expFormatter = new SimpleDateFormat("MM/yyyy");
+		Calendar todayExpDate = Calendar.getInstance();
+		try {
+			// Getting rid of the minutes and seconds in today's date.
+			todayExpDate.setTime(expFormatter.parse(expFormatter.format(Calendar.getInstance().getTime())));
+		}
+		catch (Exception e) {
+			throw new RuntimeException("Could not parse today's date.");
+		}
+		if (!expDate.after(todayExpDate)) {
+			throw new IllegalArgumentException("The credit card is expired.");
+		}
+
+
 		Reservation reservation = new Reservation(room, start, end, guestNum, guestName, guestEmail,  creditCardNumber);
-		reservation.calculateTotal();
+		reservation.calculateProjectedTotal();
 
 		User user = UserRepository.getSessionAccount();
 		GuestInterface guest;
@@ -62,7 +128,13 @@ public class ReservationController {
 		return rooms;
 	}
 	public Reservation modifyReservation(Reservation reservation, int roomNumber, int guestNumber, String guestName, String guestEmail, String creditCardNumber) throws IllegalArgumentException {
+		if (reservation == null) {
+			throw new IllegalArgumentException("Reservation is null");
+		}
 		Room room = RoomRepository.loadRoomOfRoomNumber(roomNumber);
+		if (room == null) {
+			throw new IllegalArgumentException("The room number given does not exist in the room repository");
+		}
 		int previousReservationId = reservation.getReservationId();
 
 		reservation.modifyReservation(room, guestNumber, guestName, guestEmail, creditCardNumber);
