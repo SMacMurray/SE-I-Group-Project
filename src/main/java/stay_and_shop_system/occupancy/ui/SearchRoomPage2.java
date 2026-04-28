@@ -652,7 +652,19 @@ public class SearchRoomPage2 extends JFrame{
 
                 RoomCriteria rc = new RoomCriteria(guestRange, bedRange, smokingStatuses, roomRanges, bedTypes, roomSizes, costRange, dateRange);
 
-                BookingPage newFrame = new BookingPage(sc.searchAvailableRooms(rc), rc, reservationData);
+                List<Room> availableRooms;
+                try {
+                    availableRooms = sc.searchAvailableRooms(rc);
+                } catch (IllegalArgumentException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage());
+                    return;
+                }
+                if (availableRooms.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "There are no available rooms of the given criteria.");
+                    return;
+                }
+
+                BookingPage newFrame = new BookingPage(availableRooms, rc, reservationData);
                 dispose();
             }
         });
