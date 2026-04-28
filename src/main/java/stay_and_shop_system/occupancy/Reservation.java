@@ -120,7 +120,6 @@ public class Reservation {
 		updateReservationId();
 	}
 	public void setGuestEmail(String email) { guestEmail = email; }
-	// TODO: MAKE INPUT VALIDATION FOR CREDIT CARD NUMBER
 	public void setCreditCardNumber(String cc) { creditCardNumber = cc; }
 	private void updateRate() {
 		rate = room.getDailyRate();
