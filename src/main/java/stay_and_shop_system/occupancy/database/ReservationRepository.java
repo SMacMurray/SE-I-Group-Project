@@ -113,10 +113,11 @@ public class ReservationRepository {
 		String loadSQL = " SELECT * FROM Reservations WHERE reservationId = " + id;
 		Reservation reservation = null;
 
-		try (ResultSet rSet = connection.createStatement().executeQuery(loadSQL)) {
-			rSet.next();
 
-			reservation = mapResultSetToReservation(rSet);
+		try (ResultSet rSet = connection.createStatement().executeQuery(loadSQL)) {
+			if (rSet.next()) {
+				reservation = mapResultSetToReservation(rSet);
+			}
 		}
 		catch (SQLException | ParseException e) {
 			e.printStackTrace();
@@ -194,7 +195,10 @@ public class ReservationRepository {
 			JOptionPane.showMessageDialog(null, e + " : ReservationRepository");
 		}
 	}
-	public static void modifyReservation(int prevReservationId, Reservation re) {
+	public static void modifyReservation(int prevReservationId, Reservation re) throws IllegalArgumentException {
+		if (loadReservationOfId(prevReservationId) == null) {
+			throw new IllegalArgumentException("The previous reservation id is not in the repository");
+		}
 		String modifySQL = "UPDATE Reservations SET roomNumber = ?, guestNumber = ?, startDate = ?, endDate = ?, checkInDate = ?, guestName = ?, guestEmail = ?, creditCardNumber = ?, rate = ?, cost = ?, guestId = ?, reservationId = ? WHERE reservationId = ?";
 		try (PreparedStatement ps = connection.prepareStatement(modifySQL)) {
 
