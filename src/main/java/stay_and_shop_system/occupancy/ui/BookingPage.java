@@ -7,7 +7,6 @@ import org.apache.commons.validator.routines.checkdigit.LuhnCheckDigit;
 import stay_and_shop_system.*;
 import stay_and_shop_system.occupancy.*;
 import stay_and_shop_system.occupancy.database.RoomRepository;
-import stay_and_shop_system.user.PaymentMethod;
 import stay_and_shop_system.user.ui.CancelReservationPage;
 
 import javax.imageio.ImageIO;
@@ -137,10 +136,13 @@ public class BookingPage extends JFrame{
 		c.anchor = GridBagConstraints.LINE_START;
 		String internalPadding = "               ";
 
+		Color jLabelTextColor = ColorPalette.SATURATED_LIGHTBLUE;
+
 		JPanel guestNameWrapper = new JPanel();
 		guestNameWrapper.setOpaque(false);
 		// Dont ask me why I did this.
 		JLabel guestName = new JLabel("Full Name:                 ");
+		guestName.setForeground(jLabelTextColor);
 		guestName.setFont(new Font("Serif", Font.ITALIC, 16));
 		guestNameText = new JTextField(12);
 		guestNameText.setBorder(BorderFactory.createMatteBorder(2,2,2,2, ColorPalette.SATURATED_LIGHTBLUE));
@@ -157,6 +159,7 @@ public class BookingPage extends JFrame{
 		guestEmailWrapper.setOpaque(false);
 		JLabel guestEmail = new JLabel("Email:                        ");
 		guestEmail.setFont(new Font("Serif", Font.ITALIC, 16));
+		guestEmail.setForeground(jLabelTextColor);
 		guestEmailText = new JTextField(16);
 		guestEmailText.setBorder(BorderFactory.createMatteBorder(2,2,2,2, ColorPalette.SATURATED_LIGHTBLUE));
 		guestEmailWrapper.add(guestEmail);
@@ -169,6 +172,7 @@ public class BookingPage extends JFrame{
 		JPanel guestPhoneWrapper = new JPanel();
 		guestPhoneWrapper.setOpaque(false);
 		JLabel guestPhone = new JLabel("Phone Number(Inter.): ");
+		guestPhone.setForeground(jLabelTextColor);
 		guestPhone.setFont(new Font("Serif", Font.ITALIC, 16));
 		guestPhoneText = new JTextField(16);
 		guestPhoneText.setBorder(BorderFactory.createMatteBorder(2,2,2,2, ColorPalette.SATURATED_LIGHTBLUE));
@@ -182,6 +186,7 @@ public class BookingPage extends JFrame{
 		JPanel guestCCNWrapper = new JPanel();
 		guestCCNWrapper.setOpaque(false);
 		JLabel guestCCN = new JLabel("Credit Card Number: ");
+		guestCCN.setForeground(jLabelTextColor);
 		guestCCN.setFont(new Font("Serif", Font.ITALIC, 16));
 		guestCCNText = new JTextField(16);
 		guestCCNText.setBorder(BorderFactory.createMatteBorder(2,2,2,2, ColorPalette.SATURATED_LIGHTBLUE));
@@ -197,6 +202,7 @@ public class BookingPage extends JFrame{
 		guestCCVWrapper.setOpaque(false);
 		JLabel guestCCV = new JLabel("CCV:                 ");
 		guestCCV.setFont(new Font("Serif", Font.ITALIC, 16));
+		guestCCV.setForeground(jLabelTextColor);
 		guestCCVText = new JTextField(16);
 		guestCCVText.setBorder(BorderFactory.createMatteBorder(2,2,2,2, ColorPalette.SATURATED_LIGHTBLUE));
 		guestCCVWrapper.add(guestCCV);
@@ -210,6 +216,7 @@ public class BookingPage extends JFrame{
 		guestBillAWrapper.setOpaque(false);
 		JLabel guestBillA = new JLabel("Billing Address: ");
 		guestBillA.setFont(new Font("Serif", Font.ITALIC, 16));
+		guestBillA.setForeground(jLabelTextColor);
 		guestBillAText = new JTextField(16);
 		guestBillAText.setBorder(BorderFactory.createMatteBorder(2,2,2,2, ColorPalette.SATURATED_LIGHTBLUE));
 		guestBillAWrapper.add(guestBillA);
@@ -221,8 +228,9 @@ public class BookingPage extends JFrame{
 
 		JPanel guestExpDateWrapper = new JPanel();
 		guestExpDateWrapper.setOpaque(false);
-		JLabel guestExpDate = new JLabel("Expiration Date: ");
+		JLabel guestExpDate = new JLabel("Expiration Date(MM/yyyy): ");
 		guestExpDate.setFont(new Font("Serif", Font.ITALIC, 16));
+		guestExpDate.setForeground(jLabelTextColor);
 		guestExpDateText = new JTextField(16);
 		guestExpDateText.setBorder(BorderFactory.createMatteBorder(2,2,2,2, ColorPalette.SATURATED_LIGHTBLUE));
 		guestExpDateWrapper.add(guestExpDate);
@@ -236,6 +244,7 @@ public class BookingPage extends JFrame{
 		guestCountWrapper.setOpaque(false);
 		JLabel guestCount = new JLabel("Amount of Guests: ");
 		guestCount.setFont(new Font("Serif", Font.ITALIC, 16));
+		guestCount.setForeground(jLabelTextColor);
 		guestCountText = new JTextField(16);
 		guestCountText.setBorder(BorderFactory.createMatteBorder(2,2,2,2, ColorPalette.SATURATED_LIGHTBLUE));
 		guestCountWrapper.add(guestCount);
@@ -266,11 +275,17 @@ public class BookingPage extends JFrame{
 					try {
 						Calendar expDate = Calendar.getInstance();
 						expDate.setTime(formatter.parse(guestExpDateText.getText()));
-						Object[] reserveInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(Integer.parseInt(currButton.getName())), rCr.getDateRange()[0],
-								rCr.getDateRange()[1], Integer.parseInt(guestCountText.getText()), guestNameText.getText(),
-								guestEmailText.getText(), guestPhoneText.getText(), guestCCNText.getText(), guestCCVText.getText(),
-								guestBillAText.getText(), expDate);
-
+						Object[] reserveInfo;
+						try {
+							reserveInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(Integer.parseInt(currButton.getName())), rCr.getDateRange()[0],
+									rCr.getDateRange()[1], Integer.parseInt(guestCountText.getText()), guestNameText.getText(),
+									guestEmailText.getText(), guestPhoneText.getText(), guestCCNText.getText(), guestCCVText.getText(),
+									guestBillAText.getText(), expDate);
+						}
+						catch (IllegalArgumentException exp) {
+							JOptionPane.showMessageDialog(null, exp.getMessage());
+							return;
+						}
 						ReservationSuccessPage newFrame = new ReservationSuccessPage((int)reserveInfo[0], (double)reserveInfo[1],
 								rCr.getDateRange()[0], rCr.getDateRange()[1]);
 					}
@@ -399,7 +414,7 @@ public class BookingPage extends JFrame{
 
 		Calendar expDate = Calendar.getInstance();
 		Calendar todayDate = Calendar.getInstance();
-		SimpleDateFormat formatter = new SimpleDateFormat("MM/yy");
+		SimpleDateFormat formatter = new SimpleDateFormat("MM/yyyy");
 		try {
 			expDate.setTime(formatter.parse(guestExpDateText.getText()));
 			// Getting rid of the minutes and seconds in today's date.
@@ -474,90 +489,113 @@ public class BookingPage extends JFrame{
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.NONE;
 
-		int i = 0;
-		for (Room r : rooms) {
-			JPanel roomPanel = new JPanel(new GridBagLayout());
-			roomPanel.setPreferredSize(new Dimension(700, 440));
-			GridBagConstraints c2 = new GridBagConstraints();
-
-			// 4 X 4
-			JLabel roomTitle = new JLabel("ROOM #" + r.getNumber() + " " + floorNumberToString(r.getNumber()) + " " + r.getRoomSize().toString());
-			roomTitle.setFont(new Font("Serif", Font.ITALIC, 20));
-			roomTitle.setForeground(ColorPalette.DESATURATED_DARKBLUE);
-			c2.gridx = 0;
-			c2.gridy = 0;
-			c2.weightx = 2;
-			roomPanel.add(roomTitle, c2);
-			// return button's name to find room
-
-			JPanel roomInfoPanel = new JPanel(new GridBagLayout());
-			roomInfoPanel.setOpaque(false);
-			GridBagConstraints c3 = new GridBagConstraints();
-			c2.gridx = 1;
-			c2.gridy = 1;
-			c2.weightx = 1;
-			roomPanel.add(roomInfoPanel, c2);
-
-			JLabel bedsLabel = new JLabel("Bed Types: " + makeBedTypesString(r.getBedTypes()));
-			bedsLabel.setFont(new Font("Serif", Font.ITALIC, 15));
-			bedsLabel.setPreferredSize(new Dimension(300, 50));
-			bedsLabel.setForeground(ColorPalette.DESATURATED_DARKBLUE);
-			c3.gridx = 0;
-			c3.gridy = 0;
-			roomInfoPanel.add(bedsLabel, c3);
-
-			JLabel costLabel = new JLabel("Cost: $" + r.getDailyRate() + " per night");
-			costLabel.setFont(new Font("Serif", Font.ITALIC, 15));
-			costLabel.setPreferredSize(new Dimension(300, 50));
-			costLabel.setForeground(ColorPalette.DESATURATED_DARKBLUE);
-			c3.gridx = 0;
-			c3.gridy = 1;
-			roomInfoPanel.add(costLabel, c3);
-
-			JButton bookButton = new JButton("BOOK NOW");
-			bookButton.setFont(new Font("Serif", Font.ITALIC, 20));
-			bookButton.setForeground(ColorPalette.OCEAN_BLUE);
-			bookButton.setPreferredSize(new Dimension(250, 50));
-			bookButton.setBackground(ColorPalette.OCEAN_DARKBLUE);
-			c2.gridx = 1;
-			c2.gridy = 2;
-			c2.insets = new Insets(20, 0, 0, 0);
-			roomPanel.add(bookButton, c2);
-			bookButton.setName(Integer.toString(r.getNumber()));
-			bookButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					if (currButton != null) {
-						currButton.setEnabled(true);
-						prevButton = currButton;
-					}
-					currButton = (JButton) e.getSource();
-					currButton.setEnabled(false);
-
-					if (modifyRoomBool) {
-						changeEditabilityOfReserveButton(false);
-					}
-					else {
-						checkForExceptions();
-					}
+		new SwingWorker<Void, Room>() {
+			@Override
+			protected Void doInBackground() throws Exception {
+				int i = 0;
+				for (Room r : rooms) {
+					publish(r);
 				}
-			});
 
-			JLabel roomImg = new JLabel("Loading...");
-			roomImg.setPreferredSize(new Dimension(325, 225));
-			roomImg.setOpaque(true);
-			roomImg.setBackground(ColorPalette.INVALID_RED);
-			c2.gridx = 0;
-			c2.gridy = 1;
-			c2.insets = new Insets(10, 0, 0, 0);
-			roomPanel.add(roomImg, c2);
+				return null;
+			}
+			@Override
+			protected void process(List<Room> chunks) {
+				for (Room r : chunks) {
+					JPanel roomPanel = new JPanel(new GridBagLayout());
+					roomPanel.setBackground(ColorPalette.OCEAN_LIGHTBLUE);
+					roomPanel.setPreferredSize(new Dimension(700, 440));
+					GridBagConstraints c2 = new GridBagConstraints();
+
+					// 4 X 4
+					JLabel roomTitle = new JLabel("ROOM #" + r.getNumber() + " " + floorNumberToString(r.getNumber()) + " " + r.getRoomSize().toString());
+					roomTitle.setFont(new Font("Serif", Font.ITALIC, 20));
+					roomTitle.setForeground(ColorPalette.DESATURATED_DARKBLUE);
+					c2.gridx = 0;
+					c2.gridy = 0;
+					c2.weightx = 2;
+					roomPanel.add(roomTitle, c2);
+					// return button's name to find room
+
+					JPanel roomInfoPanel = new JPanel(new GridBagLayout());
+					roomInfoPanel.setOpaque(false);
+					GridBagConstraints c3 = new GridBagConstraints();
+					c2.gridx = 1;
+					c2.gridy = 1;
+					c2.weightx = 1;
+					roomPanel.add(roomInfoPanel, c2);
+
+					JLabel bedsLabel = new JLabel("Bed Types: " + makeBedTypesString(r.getBedTypes()));
+					bedsLabel.setFont(new Font("Serif", Font.ITALIC, 15));
+					bedsLabel.setPreferredSize(new Dimension(300, 50));
+					bedsLabel.setForeground(ColorPalette.DESATURATED_DARKBLUE);
+					c3.gridx = 0;
+					c3.gridy = 0;
+					roomInfoPanel.add(bedsLabel, c3);
+
+					JLabel costLabel = new JLabel("Cost: $" + r.getDailyRate() + " per night");
+					costLabel.setFont(new Font("Serif", Font.ITALIC, 15));
+					costLabel.setPreferredSize(new Dimension(300, 50));
+					costLabel.setForeground(ColorPalette.DESATURATED_DARKBLUE);
+					c3.gridx = 0;
+					c3.gridy = 1;
+					roomInfoPanel.add(costLabel, c3);
+
+					JLabel guestCountLabel = new JLabel("Max Occupancy: " + r.getMaxOccupancy() + " guests");
+					guestCountLabel.setFont(new Font("Serif", Font.ITALIC, 15));
+					guestCountLabel.setPreferredSize(new Dimension(300, 50));
+					guestCountLabel.setForeground(ColorPalette.DESATURATED_DARKBLUE);
+					c3.gridx = 0;
+					c3.gridy = 2;
+					roomInfoPanel.add(guestCountLabel, c3);
+
+					JButton bookButton = new JButton("BOOK NOW");
+					bookButton.setFont(new Font("Serif", Font.ITALIC, 20));
+					bookButton.setForeground(ColorPalette.OCEAN_BLUE);
+					bookButton.setPreferredSize(new Dimension(250, 50));
+					bookButton.setBackground(ColorPalette.OCEAN_DARKBLUE);
+					c2.gridx = 1;
+					c2.gridy = 2;
+					c2.insets = new Insets(20, 0, 0, 0);
+					roomPanel.add(bookButton, c2);
+					bookButton.setName(Integer.toString(r.getNumber()));
+					bookButton.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							if (currButton != null) {
+								currButton.setEnabled(true);
+								prevButton = currButton;
+							}
+							currButton = (JButton) e.getSource();
+							currButton.setEnabled(false);
+
+							if (modifyRoomBool) {
+								changeEditabilityOfReserveButton(false);
+							} else {
+								checkForExceptions();
+							}
+						}
+					});
+
+					JLabel roomImg = new JLabel("Loading...");
+					roomImg.setPreferredSize(new Dimension(325, 225));
+					roomImg.setOpaque(true);
+					roomImg.setBackground(ColorPalette.INVALID_RED);
+					c2.gridx = 0;
+					c2.gridy = 1;
+					roomPanel.add(roomImg, c2);
 //			c.gridx = 0;
 //			c.gridy = i;
 //			++i;
 //			roomsPane.add(roomPanel, c);
-			roomsPane.add(roomPanel);
-			loadImageForRoom(roomImg, r.getNumber());
+					roomsPane.add(roomPanel);
+					loadImageForRoom(roomImg, r.getNumber());
 
-		}
+					roomsPane.revalidate();
+					roomsPane.repaint();
+				}
+			}
+
+		}.execute();
 	}
 	public String floorNumberToString(int number) {
 		if (number >= 100 && number < 200) {
@@ -614,31 +652,6 @@ public class BookingPage extends JFrame{
 		JLabel background = createBackground();
 		background.setLayout(new BorderLayout());
 
-		roomsPane = new JPanel(new GridLayout(0, 1));
-		roomsPane.setOpaque(false);
-		loadRoomsOnScreen(rooms, (reservationData != null && reservationData.length > 1));
-
-		JPanel roomsWrapper = new JPanel(new GridBagLayout()); // To force what im wrapping to be it's preferred size bc BorderLayout doesnt repsect it.
-		roomsWrapper.setOpaque(false);
-		JScrollPane roomsScrollPane = new JScrollPane(roomsPane);
-		roomsScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		roomsScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		roomsScrollPane.setOpaque(false);
-		roomsScrollPane.getViewport().setOpaque(false);
-		roomsScrollPane.setBorder(null);
-		roomsScrollPane.setViewportBorder(null);
-		roomsScrollPane.setPreferredSize(new Dimension(700, 440));
-		roomsScrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
-			@Override
-			protected void configureScrollBarColors() {
-				this.thumbColor = ColorPalette.SATURATED_LIGHTBLUE; // Color of the draggable bar
-				this.trackColor = ColorPalette.OCEAN_DARKBLUE; // Color of the background track
-			}
-		});
-		roomsScrollPane.add(new JLabel("Joms"));
-		roomsWrapper.add(roomsScrollPane);
-		background.add(roomsWrapper, BorderLayout.CENTER);
-
 
 
 		if (reservationData == null || reservationData.length == 1) {
@@ -693,16 +706,40 @@ public class BookingPage extends JFrame{
 
 		}
 		background.add(guestInfoPanel, BorderLayout.PAGE_END);
-
-		setVisible(true);
-
 		if (reservationData == null) {
 			timer.start();
 		}
-		else {
+
+		roomsPane = new JPanel(new GridLayout(0, 1));
+		roomsPane.setOpaque(false);
+		loadRoomsOnScreen(rooms, (reservationData != null && reservationData.length > 1));
+
+		JPanel roomsWrapper = new JPanel(new GridBagLayout()); // To force what im wrapping to be it's preferred size bc BorderLayout doesnt repsect it.
+		roomsWrapper.setOpaque(false);
+		JScrollPane roomsScrollPane = new JScrollPane(roomsPane);
+		roomsScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		roomsScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		roomsScrollPane.setOpaque(false);
+		roomsScrollPane.getViewport().setOpaque(false);
+		roomsScrollPane.setBorder(null);
+		roomsScrollPane.setViewportBorder(null);
+		roomsScrollPane.setPreferredSize(new Dimension(700, 440));
+		roomsScrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
+			@Override
+			protected void configureScrollBarColors() {
+				this.thumbColor = ColorPalette.SATURATED_LIGHTBLUE; // Color of the draggable bar
+				this.trackColor = ColorPalette.OCEAN_DARKBLUE; // Color of the background track
+			}
+		});
+		roomsWrapper.add(roomsScrollPane);
+		background.add(roomsWrapper, BorderLayout.CENTER);
 
 
-		}
+
+
+		setVisible(true);
+
+
 
 	}
 	@Override
@@ -744,8 +781,8 @@ public class BookingPage extends JFrame{
 				imgContainer.setOpaque(false);
 				System.out.println("done()");
 
-				roomsPane.revalidate();
-				roomsPane.repaint();
+//				roomsPane.revalidate();
+//				roomsPane.repaint();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

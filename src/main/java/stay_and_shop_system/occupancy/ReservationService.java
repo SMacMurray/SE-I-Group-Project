@@ -6,7 +6,8 @@ import stay_and_shop_system.user.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-
+// Why is this here?
+// If this is deprecated, can the author please remove this?
 public class ReservationService {
     // Won't stop saying can't make a type of ArrayList or smth, had to cut the entire code than paste it
     private static List<Reservation> reservations  = new ArrayList<>();

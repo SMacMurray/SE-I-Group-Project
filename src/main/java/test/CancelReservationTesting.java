@@ -37,7 +37,7 @@ public class CancelReservationTesting {
     static Calendar expDate = Calendar.getInstance();
     static Calendar todayDate;
     static SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
-    static SimpleDateFormat expFormatter = new SimpleDateFormat("MM/yy");
+    static SimpleDateFormat expFormatter = new SimpleDateFormat("MM/yyyy");
 
     @BeforeAll
     static void init() {
@@ -70,7 +70,7 @@ public class CancelReservationTesting {
             throw new RuntimeException("Could not parse today's date.");
         }
         try {
-            expDate.setTime(expFormatter.parse("11/27"));
+            expDate.setTime(expFormatter.parse("11/2027"));
         }
         catch (ParseException e) {
             e.printStackTrace();
@@ -89,6 +89,7 @@ public class CancelReservationTesting {
         AccountController.createAccount(email, name, password, phoneNumber);
         assertEquals(Math.abs(Objects.hash(email)), ((GuestInterface)UserRepository.getSessionAccount()).getGuestId());
         assertThrows(NullPointerException.class, () -> ReservationRepository.deleteReservation(null));
+
         //
         // loadreservation by guest id;
         // getGuest Id
@@ -98,6 +99,7 @@ public class CancelReservationTesting {
     void searchReservationById() {
         AccountController.createAccount(email, name, password, phoneNumber);
         GuestInterface guest = ((GuestInterface)UserRepository.getSessionAccount());
+
 
         for (Room r : RoomRepository.loadRooms()) {
             rc.reserveRoom(r, todayDate, todayDate, guestNum, name, email, phoneNumber, creditCardNumber, ccv, billingAddr,
@@ -118,6 +120,9 @@ public class CancelReservationTesting {
             }
             return true;
         });
+
+        // Empty reservation Search
+        assertTrue(ReservationRepository.loadReservationsOfGuestId(0).isEmpty());
     }
     @Test
     void deleteReservation() {
@@ -139,5 +144,6 @@ public class CancelReservationTesting {
     static void dropTables() {
         RoomRepository.dropTable();
         ReservationRepository.dropTable();
+        UserRepository.dropTable();
     }
 }

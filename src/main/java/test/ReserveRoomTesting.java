@@ -61,43 +61,41 @@ public class ReserveRoomTesting {
     @Test
     void nullOrEmptyInput() {
         Calendar expDate = Calendar.getInstance();
-        SimpleDateFormat expFormatter = new SimpleDateFormat("MM/yy");
+        SimpleDateFormat expFormatter = new SimpleDateFormat("MM/yyyy");
         try {
-            expDate.setTime(expFormatter.parse("11/27"));
+            expDate.setTime(expFormatter.parse("11/2027"));
         }
         catch (ParseException e) {
             e.printStackTrace();
         }
 
+        String creditCardNumber = "42";
         assertThrows(IllegalArgumentException.class, () -> {
-            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), null, null, 2, name, email, phoneNumber, "4242 4242 4242 4242", "334", "1334 Firing My side at Drive", expDate);
+            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), null, null, 2, name, email, phoneNumber, creditCardNumber, "334", "1334 Firing My side at Drive", expDate);
         });
         assertThrows(IllegalArgumentException.class, () -> {
-            Object[] reservationInfo = rc.reserveRoom(null, Calendar.getInstance(), null, 2, name, email, phoneNumber, "4242 4242 4242 4242", "334", "1334 Firing My side at Drive", expDate);
+            Object[] reservationInfo = rc.reserveRoom(null, Calendar.getInstance(), null, 2, name, email, phoneNumber, creditCardNumber, "334", "1334 Firing My side at Drive", expDate);
         });
         assertThrows(IllegalArgumentException.class, () -> {
-            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), 2, name, email, phoneNumber, "4242 4242 4242 4242", "334", "1334 Firing My side at Drive", expDate);
+            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), 0, "John", email, phoneNumber, creditCardNumber, "334", "1334 Firing My side at Drive", expDate);
         });
         assertThrows(IllegalArgumentException.class, () -> {
-            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), 0, "John", email, phoneNumber, "4242 4242 4242 4242", "334", "1334 Firing My side at Drive", expDate);
+            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), 2, "", email, phoneNumber, creditCardNumber, "334", "1334 Firing My side at Drive", expDate);
         });
         assertThrows(IllegalArgumentException.class, () -> {
-            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), 2, "", email, phoneNumber, "4242 4242 4242 4242", "334", "1334 Firing My side at Drive", expDate);
+            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), 2, null, email, phoneNumber, creditCardNumber, "334", "1334 Firing My side at Drive", expDate);
         });
         assertThrows(IllegalArgumentException.class, () -> {
-            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), 2, null, email, phoneNumber, "4242 4242 4242 4242", "334", "1334 Firing My side at Drive", expDate);
+            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), 2, name, "", phoneNumber, creditCardNumber, "334", "1334 Firing My side at Drive", expDate);
         });
         assertThrows(IllegalArgumentException.class, () -> {
-            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), 2, name, "", phoneNumber, "4242 4242 4242 4242", "334", "1334 Firing My side at Drive", expDate);
+            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), 2, name, null, phoneNumber, creditCardNumber, "334", "1334 Firing My side at Drive", expDate);
         });
         assertThrows(IllegalArgumentException.class, () -> {
-            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), 2, name, null, phoneNumber, "4242 4242 4242 4242", "334", "1334 Firing My side at Drive", expDate);
+            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), 2, name, email, "", creditCardNumber, "334", "1334 Firing My side at Drive", expDate);
         });
         assertThrows(IllegalArgumentException.class, () -> {
-            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), 2, name, email, "", "4242 4242 4242 4242", "334", "1334 Firing My side at Drive", expDate);
-        });
-        assertThrows(IllegalArgumentException.class, () -> {
-            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), 2, name, email, null, "4242 4242 4242 4242", "334", "1334 Firing My side at Drive", expDate);
+            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), 2, name, email, null, creditCardNumber, "334", "1334 Firing My side at Drive", expDate);
         });
         assertThrows(IllegalArgumentException.class, () -> {
             Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), 2, name, email, phoneNumber, null, "334", "1334 Firing My side at Drive", expDate);
@@ -121,11 +119,13 @@ public class ReserveRoomTesting {
     @Test
     void invalidInput() {
         Calendar laterThanEndDate = Calendar.getInstance();
-        laterThanEndDate.set(Calendar.DAY_OF_MONTH, 1);
+        laterThanEndDate.set(Calendar.YEAR, 2999);
         Calendar beforeTodayDate = Calendar.getInstance();
         beforeTodayDate.set(Calendar.YEAR, 1990);
         Calendar invalidExpDate = Calendar.getInstance();
         int invalidGuestNum = 0;
+        int outOfRangeGuestNum = 101; // More than the room max occupancy
+        int outOfRangeGuestNum2 = -101; // More than the room max occupancy
         String invalidCreditCard = "3";
         String invalidCCV = "3";
         String invalidCCV2 = "33a";
@@ -135,6 +135,7 @@ public class ReserveRoomTesting {
         SimpleDateFormat expFormatter = new SimpleDateFormat("MM/yy");
         try {
             expDate.setTime(expFormatter.parse("11/27"));
+            invalidExpDate.setTime(expFormatter.parse(expFormatter.format(Calendar.getInstance().getTime())));
         }
         catch (ParseException e) {
             e.printStackTrace();
@@ -153,35 +154,42 @@ public class ReserveRoomTesting {
             Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), invalidGuestNum, name, email, phoneNumber, "42", "334", "John", expDate);
         });
         assertThrows(IllegalArgumentException.class, () -> {
+            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), outOfRangeGuestNum, name, email, phoneNumber, "42", "334", "John", expDate);
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), outOfRangeGuestNum2, name, email, phoneNumber, "42", "334", "John", expDate);
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
             Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), 2, name, email, phoneNumber, invalidCreditCard, "334", "John", expDate);
         });
         assertThrows(IllegalArgumentException.class, () -> {
-            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), invalidGuestNum, name, email, phoneNumber, "42", invalidCCV, "John", expDate);
+            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), 2, name, email, phoneNumber, "42", invalidCCV, "John", expDate);
         });
         assertThrows(IllegalArgumentException.class, () -> {
-            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), invalidGuestNum, name, email, phoneNumber, "42", invalidCCV2, "John", expDate);
+            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), 2, name, email, phoneNumber, "42", invalidCCV2, "John", expDate);
         });
         assertThrows(IllegalArgumentException.class, () -> {
-            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), invalidGuestNum, name, email, invalidPhoneNumber, "42", "334", "John", expDate);
+            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), 2, name, email, invalidPhoneNumber, "42", "334", "John", expDate);
         });
         assertThrows(IllegalArgumentException.class, () -> {
-            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), invalidGuestNum, name, email, invalidPhoneNumber2, "42", "334", "John", expDate);
+            Object[] reservationInfo = rc.reserveRoom(RoomRepository.loadRoomOfRoomNumber(101), Calendar.getInstance(), Calendar.getInstance(), 2, name, email, invalidPhoneNumber2, "42", "334", "John", expDate);
         });
+
     }
     @Test
     void newGuestMakesReservation() {
         Calendar start = Calendar.getInstance();
+        start.set(Calendar.DAY_OF_MONTH, start.get(Calendar.DAY_OF_MONTH) + 1);
         Calendar end = Calendar.getInstance();
+        end.set(Calendar.DAY_OF_MONTH, end.get(Calendar.DAY_OF_MONTH) + 1);
         Calendar end2 = Calendar.getInstance();
+        end2.set(Calendar.DAY_OF_MONTH, end2.get(Calendar.DAY_OF_MONTH) + 3);
         Calendar expDate = Calendar.getInstance();
+        SimpleDateFormat expFormatter = new SimpleDateFormat("MM/yyyy");
         String guestEmail = "jollyJill@gmail.com";
 
-        SimpleDateFormat expFormatter = new SimpleDateFormat("MM/yy");
         try {
-            start.setTime(rc.getDateFormatter().parse("2026/4/20"));
-            end.setTime(rc.getDateFormatter().parse("2026/4/20"));
-            end2.setTime(rc.getDateFormatter().parse("2026/4/27"));
-            expDate.setTime(expFormatter.parse("11/27"));
+            expDate.setTime(expFormatter.parse("11/2027"));
         }
         catch (ParseException e) {
             e.printStackTrace();
@@ -206,7 +214,7 @@ public class ReserveRoomTesting {
         total = (double)reservationInfo[1];
 
         assertEquals(guestId, Math.abs(Objects.hash(guestEmail)));
-        assertEquals(RoomRepository.loadRoomOfRoomNumber(200).getDailyRate() * 8, total);
+        assertEquals(RoomRepository.loadRoomOfRoomNumber(200).getDailyRate() * 3, total);
 
         assertTrue(UserRepository.findUser(guestEmail));
 
@@ -222,15 +230,15 @@ public class ReserveRoomTesting {
         // UserRepository.setUser(admin);
 
         Calendar start = Calendar.getInstance();
+        start.set(Calendar.DAY_OF_MONTH, start.get(Calendar.DAY_OF_MONTH) + 1);
         Calendar end = Calendar.getInstance();
+        end.set(Calendar.DAY_OF_MONTH, end.get(Calendar.DAY_OF_MONTH) + 1);
         Calendar end2 = Calendar.getInstance();
+        end2.set(Calendar.DAY_OF_MONTH, end2.get(Calendar.DAY_OF_MONTH) + 3);
         Calendar expDate = Calendar.getInstance();
-        SimpleDateFormat expFormatter = new SimpleDateFormat("MM/yy");
+        SimpleDateFormat expFormatter = new SimpleDateFormat("MM/yyyy");
         try {
-            start.setTime(rc.getDateFormatter().parse("2026/4/20"));
-            end.setTime(rc.getDateFormatter().parse("2026/4/20"));
-            end2.setTime(rc.getDateFormatter().parse("2026/4/27"));
-            expDate.setTime(expFormatter.parse("11/27"));
+            expDate.setTime(expFormatter.parse("11/2027"));
         }
         catch (ParseException e) {
             e.printStackTrace();
@@ -263,7 +271,7 @@ public class ReserveRoomTesting {
         total = (double)reservationInfo[1];
 
         assertEquals(guestId, Math.abs(Objects.hash(email)));
-        assertEquals(RoomRepository.loadRoomOfRoomNumber(200).getDailyRate() * 8, total);
+        assertEquals(RoomRepository.loadRoomOfRoomNumber(200).getDailyRate() * 3, total);
 
         assertTrue(UserRepository.findUser(email));
 
@@ -290,15 +298,15 @@ public class ReserveRoomTesting {
         // UserRepository.setUser(admin);
 
         Calendar start = Calendar.getInstance();
+        start.set(Calendar.DAY_OF_MONTH, start.get(Calendar.DAY_OF_MONTH) + 1);
         Calendar end = Calendar.getInstance();
+        end.set(Calendar.DAY_OF_MONTH, end.get(Calendar.DAY_OF_MONTH) + 1);
         Calendar end2 = Calendar.getInstance();
+        end2.set(Calendar.DAY_OF_MONTH, end2.get(Calendar.DAY_OF_MONTH) + 3);
         Calendar expDate = Calendar.getInstance();
-        SimpleDateFormat expFormatter = new SimpleDateFormat("MM/yy");
+        SimpleDateFormat expFormatter = new SimpleDateFormat("MM/yyyy");
         try {
-            start.setTime(rc.getDateFormatter().parse("2026/4/20"));
-            end.setTime(rc.getDateFormatter().parse("2026/4/20"));
-            end2.setTime(rc.getDateFormatter().parse("2026/4/27"));
-            expDate.setTime(expFormatter.parse("11/27"));
+            expDate.setTime(expFormatter.parse("11/2027"));
         }
         catch (ParseException e) {
             e.printStackTrace();
@@ -331,7 +339,7 @@ public class ReserveRoomTesting {
         total = (double)reservationInfo[1];
 
         assertEquals(guestId, Math.abs(Objects.hash(email)));
-        assertEquals(RoomRepository.loadRoomOfRoomNumber(200).getDailyRate() * 8, total);
+        assertEquals(RoomRepository.loadRoomOfRoomNumber(200).getDailyRate() * 3, total);
 
         assertTrue(UserRepository.findUser(email));
 
@@ -355,15 +363,15 @@ public class ReserveRoomTesting {
         UserRepository.createEmployeeAccount(email, name, Objects.hash(password), phoneNumber, 4);
 
         Calendar start = Calendar.getInstance();
+        start.set(Calendar.DAY_OF_MONTH, start.get(Calendar.DAY_OF_MONTH) + 1);
         Calendar end = Calendar.getInstance();
+        end.set(Calendar.DAY_OF_MONTH, end.get(Calendar.DAY_OF_MONTH) + 1);
         Calendar end2 = Calendar.getInstance();
+        end2.set(Calendar.DAY_OF_MONTH, end2.get(Calendar.DAY_OF_MONTH) + 3);
         Calendar expDate = Calendar.getInstance();
-        SimpleDateFormat expFormatter = new SimpleDateFormat("MM/yy");
+        SimpleDateFormat expFormatter = new SimpleDateFormat("MM/yyyy");
         try {
-            start.setTime(rc.getDateFormatter().parse("2026/4/20"));
-            end.setTime(rc.getDateFormatter().parse("2026/4/20"));
-            end2.setTime(rc.getDateFormatter().parse("2026/4/27"));
-            expDate.setTime(expFormatter.parse("11/27"));
+            expDate.setTime(expFormatter.parse("11/2027"));
         }
         catch (ParseException e) {
             e.printStackTrace();

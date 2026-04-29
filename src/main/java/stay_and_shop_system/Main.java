@@ -28,25 +28,7 @@ public class Main extends JFrame {
         SetupUI.setUpJOptionPaneDesign();
         ReservationRepository.createTable();
         UserRepository.initAccountTable();
-
-        // This part below is for testing
-//        ReservationRepository.dropTable();
-        ReservationRepository.createTable();
-
-//        RoomRepository.dropTable();
         RoomRepository.createTable();
-
-        List<Room.BedType> bts = new ArrayList<>();
-        bts.add(Room.BedType.Full);
-        bts.add(Room.BedType.King);
-        RoomRepository.addRoom(new Room(101, 100, 100, 101.01, true, bts, Room.QualityLevel.Executive, Room.RoomSize.Deluxe));
-//        System.out.println(RoomRepository.loadRoomOfRoomNumber(101));
-        bts.add(Room.BedType.Queen);
-        bts.add(Room.BedType.King);
-        RoomRepository.addRoom(new Room(200, 13, 46, 203.99, false, bts, Room.QualityLevel.Comfort, Room.RoomSize.Double));
-//        System.out.println(RoomRepository.loadRoomOfRoomNumber(200));
-
-        // UserRepository.createEmployeeAccount("joel@gmail.com", "joel@gmail.com", Objects.hash("0"), "0", User.UserType.CLERK.ordinal());
 
         EventQueue.invokeLater(new Runnable() {
             public void run() {

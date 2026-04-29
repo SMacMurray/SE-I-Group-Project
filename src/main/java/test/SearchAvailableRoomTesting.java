@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import stay_and_shop_system.occupancy.Room.BedType;
+import stay_and_shop_system.user.UserRepository;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -35,7 +36,7 @@ public class SearchAvailableRoomTesting {
     String billingAddr = "1047 Treee Freee drive";
     String ccv = "444";
     static Calendar expDate = Calendar.getInstance();
-    static SimpleDateFormat expFormatter = new SimpleDateFormat("MM/yy");
+    static SimpleDateFormat expFormatter = new SimpleDateFormat("MM/yyyy");
 
     @BeforeAll
     static void init() {
@@ -83,7 +84,7 @@ public class SearchAvailableRoomTesting {
             throw new RuntimeException("Could not parse today's date.");
         }
         try {
-            expDate.setTime(expFormatter.parse("11/27"));
+            expDate.setTime(expFormatter.parse("11/2027"));
         }
         catch (ParseException e) {
             e.printStackTrace();
@@ -290,5 +291,6 @@ public class SearchAvailableRoomTesting {
     static void dropTables() {
         RoomRepository.dropTable();
         ReservationRepository.dropTable();
+        UserRepository.dropTable();
     }
 }

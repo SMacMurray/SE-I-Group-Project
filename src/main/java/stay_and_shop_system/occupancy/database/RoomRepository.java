@@ -73,7 +73,6 @@ public class RoomRepository {
         Room room = null;
 
         try (ResultSet rSet = connection.createStatement().executeQuery(loadSQL)) {
-
             if (rSet.next()) {
                 room = mapResultSetToRoom(rSet);
             }

@@ -27,7 +27,7 @@ public class CreateHotelClerkPage extends JFrame {
     private JPanel pagePane;
 
     static final String EMAIL_FIELD = "Email";
-    static final String PASSWORD_FIELD = "Password";
+    static final String PASSWORD_FIELD = "Password (defaults to \"Password\")";
     static final String USERNAME_FIELD = "Username";
     static final String PHONENUMBER_FIELD = "Phone";
     static final String EMAIL_EMPTY = "Warning: email field is empty.";
@@ -125,9 +125,10 @@ public class CreateHotelClerkPage extends JFrame {
 
                 String dialogMessage;
 
+                if (password.isEmpty()) password = "Password";
+
                 if (!(UserRepository.getSessionAccount() instanceof AdminInterface)) dialogMessage = INVALID_PRIVILEGES;
                 else if (username.isEmpty()) dialogMessage = USERNAME_EMPTY;
-                else if (password.isEmpty()) dialogMessage = PASSWORD_EMPTY;
                 else if (email.isEmpty()) dialogMessage = EMAIL_EMPTY;
                 else if (phoneNumber.isEmpty()) dialogMessage = PHONENUMBER_EMPTY;
                 else {

@@ -34,11 +34,14 @@ public class ReservationController {
 				billingAddr == null || billingAddr.isEmpty() || expDate == null) {
 			throw new IllegalArgumentException("At least one input is empty.");
 		}
-		if (LuhnCheckDigit.LUHN_CHECK_DIGIT.isValid(creditCardNumber)) {
+		if (!LuhnCheckDigit.LUHN_CHECK_DIGIT.isValid(creditCardNumber.replaceAll(" ", ""))) {
 			throw new IllegalArgumentException("The credit card number is invalid.");
 		}
 		if (guestNum <= 0) {
 			throw new IllegalArgumentException("The guest number can't be 0 or less");
+		}
+		if (guestNum > room.getMaxOccupancy()) {
+			throw new IllegalArgumentException("The guest number can't be more than the room's max occupancy.");
 		}
 		PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
 		Phonenumber.PhoneNumber guestPhoneNumber = new Phonenumber.PhoneNumber();
@@ -71,10 +74,10 @@ public class ReservationController {
 		if (start.after(end)) {
 			throw new IllegalArgumentException("The start date can't be after the end date.");
 		}
-		if (start.after(todayDate)) {
-			throw new IllegalArgumentException("The start date can't be after today's date.");
+		if (start.before(todayDate)) {
+			throw new IllegalArgumentException("The start date can't be before today's date.");
 		}
-		SimpleDateFormat expFormatter = new SimpleDateFormat("MM/yy");
+		SimpleDateFormat expFormatter = new SimpleDateFormat("MM/yyyy");
 		Calendar todayExpDate = Calendar.getInstance();
 		try {
 			// Getting rid of the minutes and seconds in today's date.
@@ -89,7 +92,7 @@ public class ReservationController {
 
 
 		Reservation reservation = new Reservation(room, start, end, guestNum, guestName, guestEmail,  creditCardNumber);
-		reservation.calculateTotal();
+		reservation.calculateProjectedTotal();
 
 		User user = UserRepository.getSessionAccount();
 		GuestInterface guest;
@@ -125,7 +128,13 @@ public class ReservationController {
 		return rooms;
 	}
 	public Reservation modifyReservation(Reservation reservation, int roomNumber, int guestNumber, String guestName, String guestEmail, String creditCardNumber) throws IllegalArgumentException {
+		if (reservation == null) {
+			throw new IllegalArgumentException("Reservation is null");
+		}
 		Room room = RoomRepository.loadRoomOfRoomNumber(roomNumber);
+		if (room == null) {
+			throw new IllegalArgumentException("The room number given does not exist in the room repository");
+		}
 		int previousReservationId = reservation.getReservationId();
 
 		reservation.modifyReservation(room, guestNumber, guestName, guestEmail, creditCardNumber);
