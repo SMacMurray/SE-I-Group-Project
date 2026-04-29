@@ -34,6 +34,8 @@ public class LoginPage extends JFrame {
     static final String USERNAME_EMPTY = "Warning: username field is empty.";
     static final String PASSWORD_EMPTY = "Warning: password field is empty.";
     static final String PHONENUMBER_EMPTY = "Warning: phone number field is empty.";
+    static final String INVALID_EMAIL = "Warning: please enter a valid email.";
+    static final String INVALID_PHONENUMBER = "Warning: please enter a valid phone number.";
     static final String LOGIN_SUCCESS = "Successfully logged in! Redirecting you to homepage.";
     static final String LOGIN_FAILURE = "The username and/or password you have entered are incorrect.";
     static final String ACCOUNT_CREATE_SUCCESS = "Account created successfully! You are now logged in.";
@@ -209,6 +211,8 @@ public class LoginPage extends JFrame {
                     dialogMessage = switch (res) {
                         case 0 -> ACCOUNT_CREATE_SUCCESS;
                         case 1 -> ACCOUNT_ALREADY_EXISTS;
+                        case 2 -> INVALID_PHONENUMBER;
+                        case 3 -> INVALID_EMAIL;
                         case -1 -> FUBAR;
                         default -> RESPONSE_MISSING;
                     };
