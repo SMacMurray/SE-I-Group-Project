@@ -52,6 +52,7 @@ public class AccountController {
 
     public static int login(String email, String password){
         int hash = hashPassword(password);
+        if (!Reservation.validateEmail(email)) { return 3; }
         return (UserRepository.authenticate(email, hash) ? 0 : 1);
     }
 
