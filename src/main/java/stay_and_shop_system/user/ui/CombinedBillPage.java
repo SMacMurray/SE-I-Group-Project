@@ -89,17 +89,26 @@ public class CombinedBillPage extends JFrame {
         emailField.setFont(new Font("Serif", Font.PLAIN, 16));
         lookupPanel.add(emailField);
 
+        JLabel reservationIdLabel = new JLabel("Reservation ID:");
+        reservationIdLabel.setForeground(ColorPalette.OCEAN_LIGHTBLUE);
+        reservationIdLabel.setFont(new Font("Serif", Font.PLAIN, 18));
+
+        JTextField reservationIdField = new JTextField(10);
+        reservationIdField.setFont(new Font("Serif", Font.PLAIN, 16));
+
+        if (!clerkMode) {
+            lookupPanel.add(reservationIdLabel);
+            lookupPanel.add(reservationIdField);
+        }
+
         JButton loadButton = new JButton("Load Bill");
         loadButton.setFont(new Font("Serif", Font.BOLD, 16));
         loadButton.setBackground(ColorPalette.OCEAN_LIGHTBLUE);
         loadButton.setForeground(ColorPalette.OCEAN_DARKBLUE);
         lookupPanel.add(loadButton);
 
-        if (!clerkMode) {
-            String sessionEmail = "";
-            if (UserRepository.getSessionAccount() != null) {
-                sessionEmail = UserRepository.getSessionAccount().getEmail();
-            }
+        if (!clerkMode && UserRepository.getSessionAccount() != null) {
+            String sessionEmail = UserRepository.getSessionAccount().getEmail();
             emailField.setText(sessionEmail);
             emailField.setEditable(false);
         }
@@ -147,12 +156,44 @@ public class CombinedBillPage extends JFrame {
                 return;
             }
 
-            List<Reservation> reservations = billService.getReservationsForEmail(email);
+            List<Reservation> reservations;
+
+            if (clerkMode) {
+                reservations = billService.getReservationsForEmail(email);
+            } else {
+                String reservationIdText = reservationIdField.getText().trim();
+
+                if (reservationIdText.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Please enter your reservation ID.");
+                    return;
+                }
+
+                int reservationId;
+
+                try {
+                    reservationId = Integer.parseInt(reservationIdText);
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Reservation ID must be a number.");
+                    return;
+                }
+
+                reservations = billService.getReservationsForEmailAndReservationId(email, reservationId);
+
+                if (reservations.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "No bill found for that email and reservation ID.");
+                    billArea.setText("");
+                    stayTotalLabel.setText("Stay Total: $0.00");
+                    shoppingTotalLabel.setText("Shopping Total: $0.00");
+                    combinedTotalLabel.setText("Combined Total: $0.00");
+                    return;
+                }
+            }
+
             List<Product> products = billService.getProductsForEmail(email);
 
-            double stayTotal = billService.getStayTotal(email);
+            double stayTotal = billService.getStayTotal(reservations);
             double shoppingTotal = billService.getShoppingTotal(email);
-            double combinedTotal = billService.getCombinedTotal(email);
+            double combinedTotal = stayTotal + shoppingTotal;
 
             stayTotalLabel.setText(String.format("Stay Total: $%.2f", stayTotal));
             shoppingTotalLabel.setText(String.format("Shopping Total: $%.2f", shoppingTotal));

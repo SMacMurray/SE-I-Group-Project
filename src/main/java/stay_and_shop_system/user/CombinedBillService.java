@@ -21,6 +21,18 @@ public class CombinedBillService {
         return ReservationRepository.loadReservationsOfGuestId(guestId);
     }
 
+    public List<Reservation> getReservationsForEmailAndReservationId(String email, int reservationId) {
+        List<Reservation> matchingReservations = new ArrayList<>();
+
+        for (Reservation reservation : getReservationsForEmail(email)) {
+            if (reservation != null && reservation.getReservationId() == reservationId) {
+                matchingReservations.add(reservation);
+            }
+        }
+
+        return matchingReservations;
+    }
+
     public List<Product> getProductsForEmail(String email) {
         return storeService.getCart(email);
     }
@@ -30,6 +42,15 @@ public class CombinedBillService {
         for (Reservation reservation : getReservationsForEmail(email)) {
             total += calculateReservationTotal(reservation);
         }
+        return roundMoney(total);
+    }
+    public double getStayTotal(List<Reservation> reservations) {
+        double total = 0.0;
+
+        for (Reservation reservation : reservations) {
+            total += calculateReservationTotal(reservation);
+        }
+
         return roundMoney(total);
     }
 

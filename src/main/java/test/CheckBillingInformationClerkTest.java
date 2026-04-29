@@ -1,4 +1,4 @@
-package stay_and_shop_system.billing;
+package test;
 
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
