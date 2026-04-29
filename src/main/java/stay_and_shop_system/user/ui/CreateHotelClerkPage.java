@@ -32,8 +32,9 @@ public class CreateHotelClerkPage extends JFrame {
     static final String PHONENUMBER_FIELD = "Phone";
     static final String EMAIL_EMPTY = "Warning: email field is empty.";
     static final String USERNAME_EMPTY = "Warning: username field is empty.";
-    static final String PASSWORD_EMPTY = "Warning: password field is empty.";
     static final String PHONENUMBER_EMPTY = "Warning: phone number field is empty.";
+    static final String INVALID_EMAIL = "Warning: please enter a valid email.";
+    static final String INVALID_PHONENUMBER = "Warning: please enter a valid phone number.";
     static final String INVALID_PRIVILEGES = "Error: you do not have the required privileges to access the features on this page.";
     static final String ACCOUNT_CREATE_SUCCESS = "A new Clerk account has been successfully created.";
     static final String ACCOUNT_ALREADY_EXISTS = "Warning: an account with the given email already exists.";
@@ -136,6 +137,8 @@ public class CreateHotelClerkPage extends JFrame {
                     dialogMessage = switch (res) {
                         case 0 -> ACCOUNT_CREATE_SUCCESS;
                         case 1 -> ACCOUNT_ALREADY_EXISTS;
+                        case 2 -> INVALID_PHONENUMBER;
+                        case 3 -> INVALID_EMAIL;
                         case -1 -> FUBAR;
                         default -> RESPONSE_MISSING;
                     };
