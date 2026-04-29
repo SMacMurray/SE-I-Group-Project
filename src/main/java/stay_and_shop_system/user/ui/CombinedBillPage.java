@@ -89,16 +89,16 @@ public class CombinedBillPage extends JFrame {
         emailField.setFont(new Font("Serif", Font.PLAIN, 16));
         lookupPanel.add(emailField);
 
-        JLabel reservationIdLabel = new JLabel("Reservation ID:");
-        reservationIdLabel.setForeground(ColorPalette.OCEAN_LIGHTBLUE);
-        reservationIdLabel.setFont(new Font("Serif", Font.PLAIN, 18));
+        JLabel guestIdLabel = new JLabel("Guest ID:");
+        guestIdLabel.setForeground(ColorPalette.OCEAN_LIGHTBLUE);
+        guestIdLabel.setFont(new Font("Serif", Font.PLAIN, 18));
 
-        JTextField reservationIdField = new JTextField(10);
-        reservationIdField.setFont(new Font("Serif", Font.PLAIN, 16));
+        JTextField guestIdField = new JTextField(10);
+        guestIdField.setFont(new Font("Serif", Font.PLAIN, 16));
 
         if (!clerkMode) {
-            lookupPanel.add(reservationIdLabel);
-            lookupPanel.add(reservationIdField);
+            lookupPanel.add(guestIdLabel);
+            lookupPanel.add(guestIdField);
         }
 
         JButton loadButton = new JButton("Load Bill");
@@ -161,26 +161,26 @@ public class CombinedBillPage extends JFrame {
             if (clerkMode) {
                 reservations = billService.getReservationsForEmail(email);
             } else {
-                String reservationIdText = reservationIdField.getText().trim();
+                String guestIdText = guestIdField.getText().trim();
 
-                if (reservationIdText.isEmpty()) {
+                if (guestIdText.isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Please enter your reservation ID.");
                     return;
                 }
 
-                int reservationId;
+                int guestId;
 
                 try {
-                    reservationId = Integer.parseInt(reservationIdText);
+                    guestId = Integer.parseInt(guestIdText);
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(null, "Reservation ID must be a number.");
                     return;
                 }
 
-                reservations = billService.getReservationsForEmailAndReservationId(email, reservationId);
+                reservations = billService.getReservationsForEmailAndGuestId(email, guestId);
 
                 if (reservations.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "No bill found for that email and reservation ID.");
+                    JOptionPane.showMessageDialog(null, "No bill found for that email and guest ID.");
                     billArea.setText("");
                     stayTotalLabel.setText("Stay Total: $0.00");
                     shoppingTotalLabel.setText("Shopping Total: $0.00");

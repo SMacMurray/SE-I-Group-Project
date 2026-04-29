@@ -21,11 +21,11 @@ public class CombinedBillService {
         return ReservationRepository.loadReservationsOfGuestId(guestId);
     }
 
-    public List<Reservation> getReservationsForEmailAndReservationId(String email, int reservationId) {
+    public List<Reservation> getReservationsForEmailAndGuestId(String email, int guestId) {
         List<Reservation> matchingReservations = new ArrayList<>();
 
         for (Reservation reservation : getReservationsForEmail(email)) {
-            if (reservation != null && reservation.getReservationId() == reservationId) {
+            if (reservation != null && reservation.getGuestId() == guestId) {
                 matchingReservations.add(reservation);
             }
         }
