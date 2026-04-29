@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Ocean's Waters Hotel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:      #0f1b2d;
+      --navy-mid:  #1a2e4a;
+      --navy-soft: #2c4a6e;
+      --steel:     #7a9abf;
+      --steel-lt:  #b8cfe0;
+      --mist:      #dde8f0;
+      --fog:       #edf2f7;
+      --page-bg:   #e8eef4;
+      --footer-bg: #c5d8e8;
+      --white:     #ffffff;
+      --text-dark: #0f1b2d;
+      --text-mid:  #4a6080;
+      --text-soft: #7a9abf;
+      --gold:      #b8943f;
+      --gold-lt:   #d4b06a;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      background: var(--page-bg);
+      color: var(--text-dark);
+    }
+
+    /* ── LAYOUT ── */
+    .page-wrap {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--navy);
+      height: 62px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      position: relative;
+    }
+
+    .header {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 6px;
+    }
+
+    .header span {
+      display: block;
+      width: 22px;
+      height: 1.5px;
+      background: var(--white);
+      transition: opacity 0.2s;
+    }
+
+    .header:hover span { opacity: 0.7; }
+
+    .header-logo {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem;
+      font-weight: 400;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--white);
+      white-space: nowrap;
+      text-decoration: none;
+    }
+
+    .header-logo em {
+      font-style: italic;
+      font-weight: 300;
+      color: var(--steel-lt);
+    }
+
+    .header-cta {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--navy);
+      background: var(--steel-lt);
+      border: none;
+      padding: 0.55rem 1.35rem;
+      cursor: pointer;
+      transition: background 0.2s;
+      text-decoration: none;
+    }
+
+    .header-cta:hover { background: var(--mist); }
+
+    /* ── MAIN ── */
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3.5rem 1.5rem;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 480px;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.7s 0.15s ease forwards;
+    }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── CARD HEADER ── */
+    .card-head {
+      text-align: center;
+      margin-bottom: 2.25rem;
+    }
+
+    .card-eyebrow {
+      display: block;
+      font-size: 0.58rem;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--steel);
+      margin-bottom: 0.75rem;
+    }
+
+    .card-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.1rem;
+      font-weight: 400;
+      color: var(--navy);
+      line-height: 1.2;
+    }
+
+    .card-title em {
+      font-style: italic;
+      font-weight: 300;
+      color: var(--navy-soft);
+    }
+
+    .card-rule {
+      width: 36px;
+      height: 1px;
+      background: var(--gold);
+      margin: 1rem auto 0;
+    }
+
+    /* ── SIGN IN PANEL ── */
+    .panel {
+      background: var(--white);
+      border: 0.5px solid var(--mist);
+      padding: 2.25rem 2.5rem 2rem;
+      margin-bottom: 1px;
+    }
+
+    .panel-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--steel);
+      display: block;
+      margin-bottom: 1.25rem;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .field {
+      position: relative;
+    }
+
+    .field input {
+      width: 100%;
+      height: 48px;
+      padding: 0 1rem 0 2.75rem;
+      background: var(--fog);
+      border: 0.5px solid var(--mist);
+      border-radius: 0;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 300;
+      color: var(--text-dark);
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .field input::placeholder {
+      color: var(--text-soft);
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+    }
+
+    .field input:focus {
+      background: var(--white);
+      border-color: var(--steel);
+    }
+
+    .field-icon {
+      position: absolute;
+      left: 0.9rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 14px;
+      height: 14px;
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
+    .field-divider {
+      height: 0.5px;
+      background: linear-gradient(to right, transparent, var(--steel-lt), transparent);
+      margin: 0.25rem 0 1.5rem;
+    }
+
+    .forgot {
+      display: block;
+      text-align: right;
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      color: var(--text-soft);
+      text-decoration: none;
+      margin-top: -0.5rem;
+      margin-bottom: 1.5rem;
+      transition: color 0.15s;
+    }
+
+    .forgot:hover { color: var(--navy-soft); }
+
+    .btn-signin {
+      width: 100%;
+      height: 48px;
+      background: var(--navy);
+      color: var(--white);
+      border: none;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.12s;
+    }
+
+    .btn-signin:hover  { background: var(--navy-mid); }
+    .btn-signin:active { transform: scale(0.99); }
+
+    /* ── JOIN PANEL ── */
+    .join-panel {
+      background: var(--steel);
+      padding: 1.75rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .join-text h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: var(--white);
+      margin-bottom: 0.2rem;
+    }
+
+    .join-text p {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.65);
+      letter-spacing: 0.04em;
+    }
+
+    .btn-join {
+      white-space: nowrap;
+      flex-shrink: 0;
+      padding: 0.7rem 1.75rem;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.55);
+      color: var(--white);
+      font-family: 'Jost', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s, border-color 0.2s;
+      display: inline-block;
+    }
+
+    .btn-join:hover {
+      background: rgba(255,255,255,0.15);
+      border-color: rgba(255,255,255,0.85);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--footer-bg);
+      padding: 1.25rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--navy-soft);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .footer-links a {
+      font-size: 0.62rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--navy-soft);
+      text-decoration: none;
+      opacity: 0.7;
+      transition: opacity 0.15s;
+    }
+
+    .footer-links a:hover { opacity: 1; }
+
+    .footer-copy {
+      font-size: 0.62rem;
+      color: var(--navy-soft);
+      opacity: 0.5;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-wrap">
+
+    <!-- HEADER -->
+    <header>
+      <div class="header" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </div>
+      <a href="/" class="header-logo">The <em>Ocean's</em> Waters Hotel</a>
+      <a href="/search_rooms" class="header-cta">Book Room</a>
+    </header>
+
+    <!-- MAIN -->
+    <main>
+      <div class="login-card">
+
+        <div class="card-head">
+          <span class="card-eyebrow">Member Portal</span>
+          <h1 class="card-title">Welcome to the<br/><em>Ocean's Waters</em></h1>
+          <div class="card-rule"></div>
+        </div>
+
+        <div class="panel">
+          <span class="panel-label">Sign in to your account</span>
+          <form action = "#" th:action="@{/login}" method="post">
+          <div class="field-group">
+            <div class="field">
+              <svg class="field-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 4l6 5 6-5M2 4h12v9H2V4z" stroke="#0f1b2d" stroke-width="1.2" stroke-linejoin="round"/>
+              </svg>
+              <input type="email" placeholder="Email address" name="email"/>
+            </div>
+            <div class="field">
+              <svg class="field-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="3" y="7" width="10" height="8" rx="1" stroke="#0f1b2d" stroke-width="1.2"/>
+                <path d="M5 7V5a3 3 0 016 0v2" stroke="#0f1b2d" stroke-width="1.2" stroke-linecap="round"/>
+              </svg>
+              <input type="password" placeholder="Password" name="password"/>
+            </div>
+          </div>
+          <div class="field-divider"></div>
+
+          <button class="btn-signin">Sign In</button>
+          </form>
+        </div>
+
+        <div class="join-panel">
+          <div class="join-text">
+            <h3>Not a member yet?</h3>
+            <p>Join for exclusive rates &amp; benefits</p>
+          </div>
+          <a href="#" class="btn-join">Join Now</a>
+        </div>
+
+      </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+      <span class="footer-brand">The Ocean's Waters</span>
+      <div class="footer-links">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="#">Contact</a>
+        <a href="#">Help</a>
+      </div>
+      <span class="footer-copy">&copy; 2025 The Ocean's Waters Hotel</span>
+    </footer>
+
+  </div>
+
+</body>
+</html>

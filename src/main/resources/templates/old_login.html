@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Spring MVC</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+</head>
+<body>
+<h1><a href="/">The Ocean's Waters Hotel</a></h1>
+<form action = "#" th:action="@{/login}" method="post">
+  <p>Email: <input type="text" th:value="${email}" name="email"/></p>
+  <p>Password: <input type="text" th:value="${password}" name="password"/></p>
+  <p>Name: <input type="text" th:value="${username}" name="username"/></p>
+  <p>Phone Number: <input type="text" th:value="${phoneNumber}" name="phoneNumber"/></p>
+  <p>
+    <input type="submit" name="signIn" value="Sign In"/>
+    <input type="submit" name="createAccount" value="Join Now"/>
+  </p>
+</form>
+</body>
+</html>
