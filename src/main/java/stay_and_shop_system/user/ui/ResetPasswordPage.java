@@ -33,6 +33,7 @@ public class ResetPasswordPage extends JFrame {
     static final String EMAIL_EMPTY = "Warning: email field is empty.";
     static final String PASSWORD_EMPTY = "Warning: password field is empty.";
     static final String ACCOUNT_NOT_FOUND = "Error: account not found.";
+    static final String INVALID_EMAIL = "Warning: please enter a valid email.";
     static final String INVALID_PRIVILEGES = "Error: you do not have the required privileges to access the features on this page.";
     static final String PASSWORD_CHANGE_SUCCESS = "Successfully changed password!";
     static final String FUBAR = "Whoops! Something went catastrophically wrong.";
@@ -111,6 +112,7 @@ public class ResetPasswordPage extends JFrame {
                     dialogMessage = switch (res) {
                         case 0 -> PASSWORD_CHANGE_SUCCESS;
                         case 1 -> ACCOUNT_NOT_FOUND;
+                        case 3 -> INVALID_EMAIL;
                         case -1 -> FUBAR;
                         default -> RESPONSE_MISSING;
                     };
