@@ -1,52 +1,79 @@
 package stay_and_shop_system.store.ui;
 
 import stay_and_shop_system.*;
+import stay_and_shop_system.store.StoreService;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 
 public class StorePage extends JFrame {
     private static final long serialVersionUID = 1L;
+
+    private JPanel popupPane;
+    private JPanel mainPane;
+    private JPanel pagePane;
     private JPanel contentPane;
+
+    private final StoreService storeService = new StoreService();
 
     public StorePage() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(Main.WINDOW_W, Main.WINDOW_H);
         setLocationRelativeTo(null); // Centers the JFrame
         setTitle(Main.APP_TITLE);
-        contentPane = new JPanel();
-        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-        setContentPane(contentPane);
-        contentPane.setLayout(null);
 
-        JButton homeButton = new JButton(Main.HOME_TEXT);
-        homeButton.setBounds(0, 0, 140, 22);
-        homeButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                HomePage2 newFrame = new HomePage2(); //Opening the second JFrame
-                dispose(); //Disposing the First JFrame
+        Object[] uiObjects = SetupUI.initializeScreen(popupPane, mainPane, this);
+        popupPane = (JPanel) uiObjects[0];
+        mainPane = (JPanel) uiObjects[1];
+
+        pagePane = new JPanel(new GridBagLayout());
+        pagePane.setBackground(ColorPalette.OCEAN_DARKBLUE);
+
+        JScrollPane pageScrollPane = new JScrollPane(pagePane);
+        pageScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        pageScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        pageScrollPane.setBorder(null);
+        pageScrollPane.setViewportBorder(null);
+        pageScrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
+            @Override
+            protected void configureScrollBarColors() {
+                this.thumbColor = ColorPalette.SATURATED_LIGHTBLUE;
+                this.trackColor = ColorPalette.OCEAN_DARKBLUE;
             }
         });
-        contentPane.add(homeButton);
 
-        JLabel lblNewLabel = new JLabel("Storefront goes here");
-        lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        lblNewLabel.setBounds(112, 31, 416, 22);
-        contentPane.add(lblNewLabel);
+        mainPane.add(pageScrollPane, BorderLayout.CENTER);
 
-        // This component may need to be changed into something that can actually be entered.
-        JTextField searchField = new JTextField();
-        searchField.setText("Search...");
-        searchField.setBounds(150, 1, 159, 20);
-        contentPane.add(searchField);
+        contentPane = new JPanel(new GridBagLayout());
+        contentPane.setBackground(ColorPalette.DESATURATED_DARKBLUE);
+        contentPane.setBorder(new EmptyBorder(30, 30, 30, 30));
 
-        JButton btnNewButton = new JButton("View Cart");
-        btnNewButton.setBounds(516, 0, 88, 22);
-        contentPane.add(btnNewButton);
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 0;
+        c.gridy = GridBagConstraints.RELATIVE;
+        c.insets = new Insets(12, 0, 12, 0);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.weightx = 1;
 
+        JLabel titleLabel = new JLabel("Store");
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setForeground(ColorPalette.OCEAN_LIGHTBLUE);
+        titleLabel.setFont(new Font("Serif", Font.BOLD, 30));
+        titleLabel.setPreferredSize(new Dimension(700, 45));
+        contentPane.add(titleLabel, c);
+
+        JLabel subtitleLabel = new JLabel("Subtitle");
+        subtitleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        subtitleLabel.setForeground(ColorPalette.DESATURATED_LIGHTBLUE);
+        subtitleLabel.setFont(new Font("Serif", Font.PLAIN, 18));
+        contentPane.add(subtitleLabel, c);
+
+        pagePane.add(contentPane);
         setVisible(true);
     }
 }
