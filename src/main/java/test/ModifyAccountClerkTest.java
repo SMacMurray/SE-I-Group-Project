@@ -10,7 +10,7 @@ public class ModifyAccountClerkTest {
 
     @BeforeEach
     void setup() {
-        clerk = new GuestClerk("clerk@test.com", "Old Name", "oldpass".hashCode(), "111", "pay1");
+        clerk = new GuestClerk("clerk@test.com", "Old Name", "oldpass".hashCode(), "+1 909 909 9999", "pay1");
     }
 
     @Test
@@ -27,8 +27,8 @@ public class ModifyAccountClerkTest {
 
     @Test
     void modifyClerkPhoneNumber() {
-        clerk.setPhoneNumber("999-999-9999");
-        assertEquals("999-999-9999", clerk.getPhoneNumber());
+        clerk.setPhoneNumber("+1 909-909-9999");
+        assertEquals("+1 909-909-9999", clerk.getPhoneNumber());
     }
 
     @Test
@@ -41,10 +41,10 @@ public class ModifyAccountClerkTest {
     void clerkKeepsUpdatedMultipleFields() {
         clerk.setName("Jeff");
         clerk.setEmail("jeff@test.com");
-        clerk.setPhoneNumber("123");
+        clerk.setPhoneNumber("+1 909 909 9999");
 
         assertEquals("Jeff", clerk.getName());
         assertEquals("jeff@test.com", clerk.getEmail());
-        assertEquals("123", clerk.getPhoneNumber());
+        assertEquals("+1 909 909 9999", clerk.getPhoneNumber());
     }
 }
