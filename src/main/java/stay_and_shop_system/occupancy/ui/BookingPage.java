@@ -612,7 +612,7 @@ public class BookingPage extends JFrame{
 		}
 	}
 	public String makeBedTypesString(List<Room.BedType> bTs) {
-		String bStr = bTs.getFirst().toString();
+		String bStr = bTs.get(0).toString();
 		for (int i = 1; i < bTs.size(); ++i) {
 			bStr += ", " + bTs.get(i);
 		}

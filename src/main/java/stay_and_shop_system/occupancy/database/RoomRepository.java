@@ -103,7 +103,7 @@ public class RoomRepository {
             List<Room.BedType> bedTypesList = r.getBedTypes().stream()
                     .distinct()
                     .collect(Collectors.toList());
-            String bedTypes = bedTypesList.getFirst().toString();
+            String bedTypes = bedTypesList.get(0).toString();
             for( int i = 1; i < bedTypesList.size(); ++i) {
                 bedTypes += ", " + bedTypesList.get(i);
                 System.out.println("rich");
