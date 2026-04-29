@@ -1,25 +1,17 @@
 package stay_and_shop_system;
 
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import stay_and_shop_system.occupancy.Room;
 import stay_and_shop_system.occupancy.database.ReservationRepository;
 import stay_and_shop_system.occupancy.database.RoomRepository;
+import stay_and_shop_system.spring_boot.SpringBootApp;
 import stay_and_shop_system.user.UserRepository;
-import stay_and_shop_system.user.User;
 
 import java.awt.EventQueue;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 import javax.swing.JFrame;
 import com.formdev.flatlaf.FlatLightLaf;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+
 public class Main extends JFrame {
     //static Dimension ScreenSize = Toolkit.getDefaultToolkit().getScreenSize();
     public static int WINDOW_W = 1000;
@@ -36,7 +28,7 @@ public class Main extends JFrame {
         UserRepository.initAccountTable();
         RoomRepository.createTable();
 
-        SpringApplication.run(Main.class, args);
+        SpringBootApp.main(args);
 
         EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -49,8 +41,4 @@ public class Main extends JFrame {
         });
     }
 
-    @GetMapping("/")
-    public String home (Model model){
-        return "home";
-    }
 }
