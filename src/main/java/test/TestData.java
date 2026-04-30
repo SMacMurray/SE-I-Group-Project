@@ -23,20 +23,21 @@ public class TestData {
     }
     @Test
     void addUsers() {
-        AccountController.createClerk("testClerk@email.com", "Joey Jr", "password", "+1 123-456-7890");
-        UserRepository.createEmployeeAccount("testAdmin@email.com", "Joey Jr", Objects.hash("password"), "+1 123-456-7890", User.UserType.ADMIN.ordinal());
+        AccountController.createClerk("testClerk@email.com", "Joey Jr", "password", "+1 909-999-9999");
+        UserRepository.createEmployeeAccount("testAdmin@email.com", "Joey Jr", Objects.hash("password"), "+1 909-909-9999", User.UserType.ADMIN.ordinal());
     }
     // For UI loading time testing.
     @Test
     void load150Rooms() {
         for (int i = 100; i < 400; ++i) {
+            int bedCount = (int)((Math.random() * 100) % 4);
             List< Room.BedType> bedTypes = new ArrayList<>();
-            for (int j = 0; j < (Math.random() * 100) % 4; ++j)  {
+            for (int j = 0; j < bedCount; ++j)  {
                 bedTypes.add(Room.BedType.values()[(int)(Math.random() * 100) % 4]);
             }
             Room.QualityLevel qualityLevel = Room.QualityLevel.values()[(int)(Math.random() * 100) % 4];
             Room.RoomSize roomSize = Room.RoomSize.values()[(int)(Math.random() * 100) % 6];
-            Room r = new Room(i, (int)(Math.random() * 100), (int)(Math.random() * 100), Math.random() * 100,
+            Room r = new Room(i, bedCount, bedCount, Math.random() * 100,
                     !(Math.random() < 0.50), bedTypes,
                     qualityLevel, roomSize
                     );
