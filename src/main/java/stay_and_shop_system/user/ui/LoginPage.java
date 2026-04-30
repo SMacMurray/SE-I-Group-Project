@@ -30,6 +30,7 @@ public class LoginPage extends JFrame {
     static final String PASSWORD_FIELD = "Password";
     static final String USERNAME_FIELD = "Username";
     static final String PHONENUMBER_FIELD = "Phone";
+    static final String REQUIRED = " *REQUIRED";
     static final String EMAIL_EMPTY = "Warning: email field is empty.";
     static final String USERNAME_EMPTY = "Warning: username field is empty.";
     static final String PASSWORD_EMPTY = "Warning: password field is empty.";
@@ -177,6 +178,12 @@ public class LoginPage extends JFrame {
                         dispose();
                     }
                 }
+                if (!dialogMessage.equals(LOGIN_SUCCESS)){
+                    emailField.setPrompt(EMAIL_FIELD + REQUIRED);
+                    passwordField.setPrompt(PASSWORD_FIELD + REQUIRED);
+                    usernameField.setPrompt(USERNAME_FIELD);
+                    phoneNumberField.setPrompt(PHONENUMBER_FIELD);
+                }
                 JOptionPane.showMessageDialog(contentPane, dialogMessage);
             }
         });
@@ -222,6 +229,12 @@ public class LoginPage extends JFrame {
                         HomePage2 newFrame = new HomePage2();
                         dispose();
                     }
+                }
+                if (!dialogMessage.equals(ACCOUNT_CREATE_SUCCESS)){
+                    emailField.setPrompt(EMAIL_FIELD + REQUIRED);
+                    passwordField.setPrompt(PASSWORD_FIELD + REQUIRED);
+                    usernameField.setPrompt(USERNAME_FIELD + REQUIRED);
+                    phoneNumberField.setPrompt(PHONENUMBER_FIELD + REQUIRED);
                 }
                 JOptionPane.showMessageDialog(contentPane, dialogMessage);
             }
