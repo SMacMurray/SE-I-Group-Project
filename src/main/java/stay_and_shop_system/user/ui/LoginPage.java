@@ -167,6 +167,7 @@ public class LoginPage extends JFrame {
                     dialogMessage = switch (res) {
                         case 0 -> LOGIN_SUCCESS;
                         case 1 -> LOGIN_FAILURE;
+                        case 3 -> INVALID_EMAIL;
                         default -> RESPONSE_MISSING;
                     };
 

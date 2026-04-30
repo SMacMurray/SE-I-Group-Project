@@ -49,5 +49,10 @@ C:\Users\Scott\IdeaProjects\SE-I-Group-Project\src\main\java\stay_and_shop_syste
 C:\Users\Scott\IdeaProjects\SE-I-Group-Project\src\main\java\stay_and_shop_system\user\ui\UserHomePage.java
 C:\Users\Scott\IdeaProjects\SE-I-Group-Project\src\main\java\stay_and_shop_system\user\User.java
 C:\Users\Scott\IdeaProjects\SE-I-Group-Project\src\main\java\stay_and_shop_system\user\UserRepository.java
+C:\Users\Scott\IdeaProjects\SE-I-Group-Project\src\main\java\test\CancelReservationTesting.java
 C:\Users\Scott\IdeaProjects\SE-I-Group-Project\src\main\java\test\CreateAccountTesting.java
+C:\Users\Scott\IdeaProjects\SE-I-Group-Project\src\main\java\test\LoadTesting.java
+C:\Users\Scott\IdeaProjects\SE-I-Group-Project\src\main\java\test\ModifyReservationTesting.java
 C:\Users\Scott\IdeaProjects\SE-I-Group-Project\src\main\java\test\ReserveRoomTesting.java
+C:\Users\Scott\IdeaProjects\SE-I-Group-Project\src\main\java\test\SearchAvailableRoomTesting.java
+C:\Users\Scott\IdeaProjects\SE-I-Group-Project\src\main\java\test\TestData.java
