@@ -1,15 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Spring MVC</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Ocean's Waters Hotel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" th:href="hotel.css" href="../static/hotel.css"/>
+  <script th:src="hotel.js" src="../static/hotel.js" defer></script>
 </head>
 <body>
-<h1><a href="/">The Ocean's Waters Hotel</a></h1>
-<video autoplay muted loop width="500" height="500">
-  <source src="../iphone_ringtone_cat.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+
+<!-- OVERLAY -->
+<div class="overlay" id="overlay"></div>
+
+<!-- SIDE PANEL -->
+<aside class="side-panel" id="sidePanel" aria-label="Navigation menu">
+  <div class="sp-user">
+    <div class="sp-avatar">
+      <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="18" cy="13" r="7" fill="white"/>
+        <path d="M4 34c0-7.732 6.268-14 14-14s14 6.268 14 14" fill="white"/>
+      </svg>
+    </div>
+    <p class="sp-status">Not Logged In</p>
+  </div>
+
+  <nav class="sp-nav">
+    <a href="/login">
+      <svg viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="1.3" xmlns="http://www.w3.org/2000/svg">
+        <path d="M8 2a3 3 0 100 6 3 3 0 000-6zM2 13c0-3.314 2.686-5 6-5s6 1.686 6 5" stroke-linecap="round"/>
+      </svg>
+      Sign In
+    </a>
+    <a href="/my_billing">
+      <svg viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="1.3" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="4" width="12" height="9" rx="1"/>
+        <path d="M5 4V3a3 3 0 016 0v1" stroke-linecap="round"/>
+        <circle cx="8" cy="8.5" r="1" fill="white" stroke="none"/>
+      </svg>
+      Check My Bill
+    </a>
+    <a href="/my_reservations">
+      <svg viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="1.3" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="3" width="12" height="11" rx="1"/>
+        <path d="M5 1v4M11 1v4M2 7h12" stroke-linecap="round"/>
+      </svg>
+      View My Reservations
+    </a>
+    <div class="sp-nav-divider"></div>
+    <a href="/shop">
+      <svg viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="1.3" xmlns="http://www.w3.org/2000/svg">
+        <path d="M2 3h1.5l1.8 7h7.4l1.3-5H5.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="7" cy="13.5" r="1" fill="white" stroke="none"/>
+        <circle cx="11.5" cy="13.5" r="1" fill="white" stroke="none"/>
+      </svg>
+      Shop
+    </a>
+  </nav>
+
+  <div class="sp-search">
+    <div class="sp-search-wrap">
+      <input type="text" placeholder="Search…"/>
+      <svg class="sp-search-icon" viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="1.4" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="6.5" cy="6.5" r="4.5"/>
+        <path d="M10 10l4 4" stroke-linecap="round"/>
+      </svg>
+    </div>
+  </div>
+</aside>
+
+<div class="page-wrap">
+
+  <!-- HEADER -->
+  <header>
+    <div class="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </div>
+    <a href="/" class="header-logo">The <em>Ocean's</em> Waters Hotel</a>
+    <a href="/search_rooms" class="header-cta">Book Room</a>
+  </header>
+
+  <!-- MAIN -->
+  <main>
+    <div class="login-card">
+
+      <div class="card-head">
+        <h1 class="card-title">Error: <br/><em>Page Under Construction!</em></h1>
+        <div class="card-rule"></div>
+      </div>
+
+      <div class="panel">
+        <span class="panel-label">Please enjoy this cat instead or continue browsing <em>The Ocean's Waters.</em></span>
+        <iframe src="https://player.vimeo.com/video/1187908492?title=0&amp;byline=0&amp;portrait=0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" width="100%" height="100%" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" title="iphone_ringtone_cat"></iframe>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <span class="footer-brand">The Ocean's Waters</span>
+    <span class="footer-copy">COPYRIGHT LOLOLOL</span>
+  </footer>
+
+</div>
+
 </body>
 </html>

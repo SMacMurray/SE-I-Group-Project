@@ -18,7 +18,7 @@ public class Main extends JFrame {
     public static int WINDOW_H = 800;
     public static String APP_TITLE = "The Ocean's Waters Hotel: the illustrious hotel/luxury shopping experience!";
     public static String HOME_TEXT = "Store Logo Here";
-    // Use this to indicate what user is currently logged in, or null for logged out.
+
 
 
     public static void main(String[] args) {
