@@ -209,6 +209,51 @@ public class UserRepository {
 		return false;
 	}
 
+	public static boolean updateCurrentUserInformation(String oldEmail, String newEmail, String username, String phoneNumber, Integer passwordHash) {
+		String sql;
+
+		if (passwordHash == null) {
+			sql = """
+            UPDATE Users
+            SET email = ?, name = ?, phoneNumber = ?
+            WHERE email = ?
+            """;
+		} else {
+			sql = """
+            UPDATE Users
+            SET email = ?, name = ?, phoneNumber = ?, password = ?
+            WHERE email = ?
+            """;
+		}
+
+		try (var connection = DatabaseConnection.connect();
+			 var stmt = connection.prepareStatement(sql)) {
+
+			stmt.setString(1, newEmail);
+			stmt.setString(2, username);
+			stmt.setString(3, phoneNumber);
+
+			if (passwordHash == null) {
+				stmt.setString(4, oldEmail);
+			} else {
+				stmt.setInt(4, passwordHash);
+				stmt.setString(5, oldEmail);
+			}
+
+			int rowsUpdated = stmt.executeUpdate();
+
+			if (rowsUpdated > 0) {
+				return getUser(newEmail); // refreshes SessionAccount
+			}
+
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+
+		return false;
+	}
+
 	// Finds user regardless of passwor
 	public static boolean findUserWithoutPassword(String email) {
 		String sql = """
