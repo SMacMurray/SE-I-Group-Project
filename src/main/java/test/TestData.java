@@ -31,6 +31,9 @@ public class TestData {
     void load150Rooms() {
         for (int i = 100; i < 400; ++i) {
             int bedCount = (int)((Math.random() * 100) % 4);
+            if (bedCount == 0) {
+                bedCount = 1;
+            }
             List< Room.BedType> bedTypes = new ArrayList<>();
             for (int j = 0; j < bedCount; ++j)  {
                 bedTypes.add(Room.BedType.values()[(int)(Math.random() * 100) % 4]);
