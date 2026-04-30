@@ -5,6 +5,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import stay_and_shop_system.occupancy.Room;
 import stay_and_shop_system.occupancy.database.RoomRepository;
+import stay_and_shop_system.store.Product;
+import stay_and_shop_system.store.StoreRepository;
 import stay_and_shop_system.user.AccountController;
 import stay_and_shop_system.user.User;
 import stay_and_shop_system.user.UserRepository;
@@ -20,6 +22,7 @@ public class TestData {
         UserRepository.initAccountTable();
         RoomRepository.dropTable();
         RoomRepository.createTable();
+        StoreRepository.createTable();
     }
     @Test
     void addUsers() {
@@ -47,6 +50,13 @@ public class TestData {
 
             }
         }
+    }
+    @Test
+    void addProducts() {
+        StoreRepository.addProduct(new Product(1, 20.0, "Cheese sourced from a local farm", "Gourmet Cheese"));
+        StoreRepository.addProduct(new Product(2, 50.0, "Curb chain faux gold necklace", "Gold Necklace"));
+        StoreRepository.addProduct(new Product(3, 30.0, "\"Ocean's Water\" branded shirt", "Ocean's Water T-Shirt"));
+        StoreRepository.addProduct(new Product(4, 20.0, "\"Ocean's Water\" branded miscellaneous fishing bobs and lures", "Ocean's Water Fishing Accessories Set"));
     }
     @AfterAll
     static void dropTables() {
