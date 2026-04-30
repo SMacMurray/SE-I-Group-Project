@@ -452,11 +452,11 @@ public class SetupUI {
         c.insets = new Insets(0, 0, 0, 0);
         sidebarPanel.add(buttonsScrollPane, c);
 
-        JPanel searchPane = makeSearchBar();
-        c.gridx = 0;
-        c.gridy = 4;
-        c.fill = GridBagConstraints.NONE;
-        sidebarPanel.add(searchPane, c);
+//        JPanel searchPane = makeSearchBar();
+//        c.gridx = 0;
+//        c.gridy = 4;
+//        c.fill = GridBagConstraints.NONE;
+//        sidebarPanel.add(searchPane, c);
 
         return sidebarPanel;
 //        throw new RuntimeException("TODO: finish setupPopup");
