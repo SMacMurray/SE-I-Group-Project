@@ -21,7 +21,11 @@ public class StorePage extends JFrame {
 
     private final StoreService storeService = new StoreService();
 
-    public StorePage() {
+    private final String guestEmail;
+
+    public StorePage(String guestEmail) {
+        this.guestEmail = guestEmail;
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(Main.WINDOW_W, Main.WINDOW_H);
         setLocationRelativeTo(null); // Centers the JFrame

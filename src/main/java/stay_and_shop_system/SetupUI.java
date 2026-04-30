@@ -294,7 +294,7 @@ public class SetupUI {
                         JOptionPane.showMessageDialog(null, "There are no reservations attached to this guest Id");
                     }
                     else {
-                        StorePage newFrame = new StorePage();
+                        StorePage newFrame = new StorePage(reservationList.getFirst().getGuestEmail());
                         frame.dispose();
                         throw new RuntimeException("TODO: Gavin needs to finish the Shopping");
                     }
@@ -352,7 +352,7 @@ public class SetupUI {
                         if (reservationList.isEmpty()) {
                             JOptionPane.showMessageDialog(null, "There are no reservations attached to this guest Id");
                         } else {
-                            StorePage newFrame = new StorePage();
+                            StorePage newFrame = new StorePage(reservationList.getFirst().getGuestEmail());
                             frame.dispose();
                             throw new RuntimeException("TODO: Gavin needs to finish the Shopping");
                         }
